@@ -16,7 +16,7 @@ public class SecurityMapper {
         registerResponseDTO.setName(user.getName());
         registerResponseDTO.setRole(user.getRole());
         registerResponseDTO.setUuid(user.getUuid());
-        registerResponseDTO.setUuid(user.getUuid());
+        registerResponseDTO.setSurname(user.getSurname());
         return registerResponseDTO;
     }
 
@@ -24,11 +24,11 @@ public class SecurityMapper {
         User user = new User();
         user.setPassword(requestDTO.getPassword());
         user.setName(requestDTO.getName());
-        user.setRole(requestDTO.getRole());
         user.setEmail(requestDTO.getEmail());
         user.setSubscriptionStart(requestDTO.getSubscriptionStart());
         user.setSubscriptionEnd(requestDTO.getSubscriptionEnd());
         user.setRole(requestDTO.getRole());
+        user.setSurname(requestDTO.getSurname());
         return user;
 
     }
