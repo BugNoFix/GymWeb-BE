@@ -5,6 +5,7 @@ import com.marcominaudo.gymweb.repository.UserRepository;
 import com.marcominaudo.gymweb.security.jwt.JWTUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.InternalAuthenticationServiceException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -33,7 +34,8 @@ public class AuthService {
     public String login(User user) {
         UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(user.getEmail(), user.getPassword());
         authenticationManager.authenticate(authToken);
-        User userDB = userRepository.findByEmail(user.getEmail());
+
+        User userDB = userRepository.findByEmail(user.getEmail()).get();
         return jwtUtil.generateToken(userDB);
 
     }
