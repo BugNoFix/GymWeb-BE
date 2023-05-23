@@ -29,7 +29,7 @@ public class UserBuilder {
 
     private Role role;
 
-    public UserBuilder userBuilder(){
+    public UserBuilder builder(){
         return new UserBuilder();
     }
 
