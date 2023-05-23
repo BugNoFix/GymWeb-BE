@@ -1,5 +1,6 @@
 package com.marcominaudo.gymweb.exception;
 
+import com.marcominaudo.gymweb.exception.exceptions.InvalidRegisterFormException;
 import com.marcominaudo.gymweb.exception.model.ErrorMessage;
 import com.marcominaudo.gymweb.exception.model.builder.ErrorMessageBuilder;
 import org.springframework.http.HttpStatus;
@@ -15,7 +16,7 @@ import java.time.LocalDateTime;
 @RestControllerAdvice
 public class RestResponseEntityExceptionHandler {
 
-    @ExceptionHandler({BadCredentialsException.class, InternalAuthenticationServiceException.class})
+    @ExceptionHandler({BadCredentialsException.class, InternalAuthenticationServiceException.class, InvalidRegisterFormException.class})
     public ResponseEntity<ErrorMessage> Exceptions(Exception ex){
         ErrorMessageBuilder errorMessageBuilder = new ErrorMessageBuilder();
         ErrorMessage errorMessage;

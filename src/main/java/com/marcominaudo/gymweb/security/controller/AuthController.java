@@ -1,5 +1,6 @@
 package com.marcominaudo.gymweb.security.controller;
 
+import com.marcominaudo.gymweb.exception.exceptions.InvalidRegisterFormException;
 import com.marcominaudo.gymweb.model.User;
 import com.marcominaudo.gymweb.security.controller.dto.LoginResponseDTO;
 import com.marcominaudo.gymweb.security.controller.dto.RegisterResponseDTO;
@@ -25,7 +26,7 @@ public class AuthController {
     private SecurityMapper securityMapper;
 
     @PostMapping("/register")
-    public ResponseEntity<RegisterResponseDTO> register(@RequestBody RequestDTO requestDTO){
+    public ResponseEntity<RegisterResponseDTO> register(@RequestBody RequestDTO requestDTO) throws InvalidRegisterFormException {
         User user = securityMapper.RequestDTOtoUser(requestDTO);
         User userDB = authService.register(user);
 
