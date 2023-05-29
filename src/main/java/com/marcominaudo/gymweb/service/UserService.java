@@ -10,16 +10,23 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+
 @Service
-public class CustomerService {
-    @Autowired
-    UserBodyDetailsRepository userBodyDetailsRepository;
+public class UserService {
 
     @Autowired
     Utils utils;
 
     @Autowired
     UserRepository userRepository;
+
+    @Autowired
+    UserBodyDetailsRepository userBodyDetailsRepository;
+
+    public User getUser(){
+        return utils.getUser();
+    }
+
     public List<UserBodyDetails> getBodyDetails(int page, int size) {
         User user = utils.getUser();
         long id = user.getId();

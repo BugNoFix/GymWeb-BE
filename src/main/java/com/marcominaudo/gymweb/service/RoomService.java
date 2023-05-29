@@ -6,6 +6,8 @@ import com.marcominaudo.gymweb.repository.RoomRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class RoomService {
 
@@ -38,4 +40,15 @@ public class RoomService {
         return  roomRepository.save(roomDB);
 
     }
+
+    public List<Room> allRooms() {
+        return roomRepository.findByIsActive(true);
+    }
+
+    /*
+    public Room getRoomInfo(long roomId, Room room) {
+
+    }
+
+     */
 }
