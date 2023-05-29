@@ -6,6 +6,7 @@ import com.marcominaudo.gymweb.repository.RoomRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -45,10 +46,7 @@ public class RoomService {
         return roomRepository.findByIsActive(true);
     }
 
-    /*
-    public Room getRoomInfo(long roomId, Room room) {
 
-    }
 
-     */
+
 }

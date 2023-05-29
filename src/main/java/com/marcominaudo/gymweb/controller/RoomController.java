@@ -42,12 +42,4 @@ public class RoomController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    /*
-    @PostMapping("/room/{roomId}")
-    public ResponseEntity<Booking> roomInfo(@PathVariable("roomId") long roomId, Room room){ // Serve per la data
-        Room room = roomService.getRoomInfo(roomId);
-        return new ResponseEntity<>(response, HttpStatus.OK);
-    }
-
-     */
 }

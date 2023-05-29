@@ -3,14 +3,17 @@ package com.marcominaudo.gymweb.service;
 import com.marcominaudo.gymweb.exception.exceptions.BookingException;
 import com.marcominaudo.gymweb.exception.exceptions.RoomException;
 import com.marcominaudo.gymweb.model.Booking;
+import com.marcominaudo.gymweb.model.Role;
 import com.marcominaudo.gymweb.model.builder.BookingBuilder;
 import com.marcominaudo.gymweb.repository.BookingRepository;
+import com.marcominaudo.gymweb.utilis.object.WorkShift;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicReference;
@@ -74,5 +77,20 @@ public class BookingService {
         if(date1.isEqual(date1))
             return true;
         return false;
+    }
+
+    public Map<WorkShift, String> bookingInfoPt(long roomId, LocalDateTime day) {
+        List<Booking> bookings = bookingRepository.findByRoomIdAndDay(roomId, day);
+        List<Booking> bookingPts = bookings.stream().filter(b -> b.getUser().getRole() == Role.PT).toList();
+
+        Map<WorkShift, String> workShifts = new LinkedHashMap<>();
+        bookingPts.stream().forEach(b -> {
+            //List<LocalDateTime> workShift = new ArrayList<>();
+            //workShift.add(0, b.getStartTime());
+            //workShift.add(1, b.getEndTime());
+            WorkShift workShift = new WorkShift(b.getStartTime(), b.getEndTime());
+            workShifts.put(workShift, b.getUser().getName());
+        });
+        return workShifts;
     }
 }
