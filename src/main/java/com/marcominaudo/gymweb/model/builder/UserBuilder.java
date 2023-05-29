@@ -4,6 +4,8 @@ import com.marcominaudo.gymweb.model.Role;
 import com.marcominaudo.gymweb.model.User;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 public class UserBuilder {
 
@@ -28,6 +30,8 @@ public class UserBuilder {
     private boolean privacy;
 
     private Role role;
+
+    List<User> following = new ArrayList<>();
 
     public UserBuilder builder(){
         return new UserBuilder();
@@ -88,7 +92,12 @@ public class UserBuilder {
         return this;
     }
 
+    public UserBuilder following(List<User> following){
+        this.following = following;
+        return this;
+    }
+
     public User build(){
-        return new User(id, uuid, email, name, surname, password, subscriptionStart, subscriptionEnd, created, privacy, role);
+        return new User(id, uuid, email, name, surname, password, subscriptionStart, subscriptionEnd, created, privacy, role, following);
     }
 }

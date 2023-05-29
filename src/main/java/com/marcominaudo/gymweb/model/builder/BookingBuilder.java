@@ -19,7 +19,7 @@ public class BookingBuilder {
 
     Room room;
 
-    public BookingBuilder bookingBuilder(){
+    public BookingBuilder builder(){
         return new BookingBuilder();
     }
 
