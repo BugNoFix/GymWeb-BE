@@ -1,5 +1,7 @@
 package com.marcominaudo.gymweb.service;
 
+import com.marcominaudo.gymweb.exception.exceptions.BodyDetailsException;
+import com.marcominaudo.gymweb.exception.exceptions.UserException;
 import com.marcominaudo.gymweb.model.User;
 import com.marcominaudo.gymweb.model.UserBodyDetails;
 import com.marcominaudo.gymweb.repository.UserBodyDetailsRepository;
@@ -44,5 +46,13 @@ public class UserService {
         User user = utils.getUser();
         user.setPrivacy(value);
         return userRepository.save(user);
+    }
+
+    public List<UserBodyDetails> getBodyDetailsOfCustomer(int page, int size, String uuid) throws UserException, BodyDetailsException {
+        User user = userRepository.findByUuid(uuid).orElseThrow(()-> new UserException("User not exist")); //TODO: implementare utils.getUserByUuid()
+        if(!user.isPrivacy())
+            throw new BodyDetailsException("The customer has not consented to the display of their data");
+        Pageable pageSetting = PageRequest.of(page, size);
+        return userBodyDetailsRepository.findByUserId(user.getId(), pageSetting);
     }
 }

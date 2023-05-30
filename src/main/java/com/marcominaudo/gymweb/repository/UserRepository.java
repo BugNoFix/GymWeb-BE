@@ -13,6 +13,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
     @Query("SELECT u FROM User u join fetch u.following WHERE u.id = :customerId") // Todo: ricreare la query per la jointable
     List<User> findPtsByCustomerId(long customerId);
 
+    Optional<User> findByUuid(String uuid);
     //@Query()
     //Boolean isPtOfCustomer(long customerId, long ptId);
     // TODO : creare questa query

@@ -1,5 +1,6 @@
 package com.marcominaudo.gymweb.repository;
 
+import ch.qos.logback.core.property.FileExistsPropertyDefiner;
 import com.marcominaudo.gymweb.model.WorkoutPlan;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -7,9 +8,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 
 public interface WorkoutPlanRepository extends JpaRepository<WorkoutPlan, Long> {
-    List<WorkoutPlan> findByUserId(long userId, Pageable page);
+    List<WorkoutPlan> findByUserIdOrderByUploadTime(long userId, Pageable page);
 
-    WorkoutPlan findFirstByUserId(long id);
-
+    WorkoutPlan findFirstByUserIdOrderByUploadTime(long id);
 
 }

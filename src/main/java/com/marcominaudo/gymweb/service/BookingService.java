@@ -85,9 +85,6 @@ public class BookingService {
 
         Map<WorkShift, String> workShifts = new LinkedHashMap<>();
         bookingPts.stream().forEach(b -> {
-            //List<LocalDateTime> workShift = new ArrayList<>();
-            //workShift.add(0, b.getStartTime());
-            //workShift.add(1, b.getEndTime());
             WorkShift workShift = new WorkShift(b.getStartTime(), b.getEndTime());
             workShifts.put(workShift, b.getUser().getName());
         });

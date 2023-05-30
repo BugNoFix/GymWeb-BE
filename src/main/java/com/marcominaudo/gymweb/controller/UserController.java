@@ -1,5 +1,7 @@
 package com.marcominaudo.gymweb.controller;
 
+import com.marcominaudo.gymweb.exception.exceptions.BodyDetailsException;
+import com.marcominaudo.gymweb.exception.exceptions.UserException;
 import com.marcominaudo.gymweb.model.User;
 import com.marcominaudo.gymweb.model.UserBodyDetails;
 import com.marcominaudo.gymweb.service.UserService;
@@ -7,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -37,6 +40,12 @@ public class UserController {
     public ResponseEntity<UserBodyDetails> bodyDetails(@RequestBody UserBodyDetails userBodyDetails){
         UserBodyDetails body = userService.setBodyDetails(userBodyDetails);
         return new ResponseEntity<>(body, HttpStatus.OK);
+    }
+
+    @GetMapping("/bodyDetails/{uuid}") // accessibile al pt
+    public ResponseEntity<List<UserBodyDetails>> bodyDetails(@RequestParam(name = "page", defaultValue = "0") int page, @RequestParam(name = "size", defaultValue = "5") int size, @PathVariable("uuid") String uuid) throws UserException, BodyDetailsException {
+        List<UserBodyDetails> userBodyDetails = userService.getBodyDetailsOfCustomer(page, size, uuid);
+        return new ResponseEntity<>(userBodyDetails, HttpStatus.OK);
     }
 
     @GetMapping("/privacy")
