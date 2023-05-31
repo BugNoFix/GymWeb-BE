@@ -11,6 +11,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.Arrays;
 import java.util.List;
 
 @Service
@@ -27,7 +28,6 @@ public class WorkoutPlanService {
     public WorkoutPlan getWorkoutPlan() {
         User user = utils.getUser();
         return workoutPlanRepository.findFirstByUserIdOrderByUploadTime(user.getId());
-
     }
 
     public List<WorkoutPlan> getWorkoutPlans(int page, int size) {
@@ -37,11 +37,12 @@ public class WorkoutPlanService {
     }
 
     public WorkoutPlan saveFile(MultipartFile file, String uuid) {
-        User user = utils.getUserByUuid(uuid);
-        String path = filesStorageService.save(file, user.getUuid());
+        User customer = utils.getUserByUuid(uuid);
+        User pt = utils.getUser();
+        String path = filesStorageService.save(file, customer.getUuid());
         WorkoutPlan workoutPlan = new WorkoutPlanBuilder().builder()
                 .path(path)
-                .user(user)
+                .user(Arrays.asList(customer, pt))
                 .build();
         return workoutPlanRepository.save(workoutPlan);
     }

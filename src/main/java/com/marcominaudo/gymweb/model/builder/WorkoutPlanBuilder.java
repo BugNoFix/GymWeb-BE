@@ -4,6 +4,8 @@ import com.marcominaudo.gymweb.model.User;
 import com.marcominaudo.gymweb.model.WorkoutPlan;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 public class WorkoutPlanBuilder {
     private long id;
@@ -11,7 +13,7 @@ public class WorkoutPlanBuilder {
     private String path;
 
     private LocalDateTime uploadTime;
-    User user;
+    List<User> user = new ArrayList<>();
 
     public WorkoutPlanBuilder builder(){
         return new WorkoutPlanBuilder();
@@ -26,7 +28,7 @@ public class WorkoutPlanBuilder {
         return this;
     }
 
-    public WorkoutPlanBuilder user(User user){
+    public WorkoutPlanBuilder user(List<User> user){
         this.user = user;
         return this;
     }
