@@ -5,17 +5,13 @@ import lombok.SneakyThrows;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Service;
-import org.springframework.util.FileSystemUtils;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
 import java.io.IOException;
-import java.net.MalformedURLException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.UUID;
-import java.util.stream.Stream;
 
 @Service
 public class FilesStorageService {
@@ -60,25 +56,6 @@ public class FilesStorageService {
                 return resource;
             }
             throw new FileStorageException("Can't load the file");
-    }
-
-    @SneakyThrows
-    public Stream<Path> loadAll() {
-        try {
-            return Files.walk(this.root, 1).filter(path -> !path.equals(this.root)).map(this.root::relativize);
-        } catch (IOException e) {
-            throw new FileStorageException("Could not load the files");
-        }
-    }
-
-    @SneakyThrows
-    public Stream<Path> loadAllOfUser(String uuid) {
-        try {
-            Path pathFile = root.resolve(uuid);
-            return Files.walk(this.root, 2).filter(path -> !path.equals(this.root) && path.equals(pathFile)).map(this.root::relativize);
-        } catch (IOException e) {
-            throw new FileStorageException("Could not load the files");
-        }
     }
 }
 

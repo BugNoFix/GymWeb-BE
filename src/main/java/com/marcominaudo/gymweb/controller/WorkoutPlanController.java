@@ -1,9 +1,7 @@
 package com.marcominaudo.gymweb.controller;
 
 import com.marcominaudo.gymweb.model.WorkoutPlan;
-import com.marcominaudo.gymweb.service.BookingService;
 import com.marcominaudo.gymweb.service.WorkoutPlanService;
-import jakarta.annotation.Resource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -40,6 +38,14 @@ public class WorkoutPlanController {
     public ResponseEntity<WorkoutPlan> uploadWorkoutPlan(@RequestParam("file") MultipartFile file, @PathVariable("uuid") String uuid){
         WorkoutPlan workoutPlan = workoutPlanService.saveFile(file, uuid);
         return new ResponseEntity<>(workoutPlan, HttpStatus.OK);
+    }
 
+    /*
+     * Show all workoutPlan of customer
+    */
+    @GetMapping("all/{uuid}")
+    public ResponseEntity<List<WorkoutPlan>> workoutPlansOfCustomer(@RequestParam(name = "page", defaultValue = "0") int page, @RequestParam(name = "size", defaultValue = "5") int size, @PathVariable("uuid") String uuid){
+        List<WorkoutPlan> workoutPlans = workoutPlanService.getWorkoutPlansOfCustomer(page, size, uuid);
+        return new ResponseEntity<>(workoutPlans, HttpStatus.OK);
     }
 }
