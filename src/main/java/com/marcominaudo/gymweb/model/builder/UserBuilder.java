@@ -31,7 +31,8 @@ public class UserBuilder {
 
     private Role role;
 
-    List<User> following = new ArrayList<>();
+    boolean isActive = true;
+    User pt;
 
     public UserBuilder builder(){
         return new UserBuilder();
@@ -92,12 +93,17 @@ public class UserBuilder {
         return this;
     }
 
-    public UserBuilder following(List<User> following){
-        this.following = following;
+    public UserBuilder pt(User pt){
+        this.pt = pt;
+        return this;
+    }
+
+    public UserBuilder isActive(boolean isActive){
+        this.isActive = isActive;
         return this;
     }
 
     public User build(){
-        return new User(id, uuid, email, name, surname, password, subscriptionStart, subscriptionEnd, created, privacy, role, following);
+        return new User(id, uuid, email, name, surname, password, subscriptionStart, subscriptionEnd, created, privacy, role, pt, isActive);
     }
 }

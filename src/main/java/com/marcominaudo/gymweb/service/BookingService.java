@@ -6,7 +6,7 @@ import com.marcominaudo.gymweb.model.Booking;
 import com.marcominaudo.gymweb.model.Role;
 import com.marcominaudo.gymweb.model.builder.BookingBuilder;
 import com.marcominaudo.gymweb.repository.BookingRepository;
-import com.marcominaudo.gymweb.utilis.object.WorkShift;
+import com.marcominaudo.gymweb.utilis.object.Shift;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,6 +17,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicReference;
+
 
 @Service
 public class BookingService {
@@ -79,15 +80,15 @@ public class BookingService {
         return false;
     }
 
-    public Map<WorkShift, String> bookingInfoPt(long roomId, LocalDateTime day) {
+    public Map<Shift, String> bookingInfoPt(long roomId, LocalDateTime day, Role role) {
         List<Booking> bookings = bookingRepository.findByRoomIdAndDay(roomId, day);
-        List<Booking> bookingPts = bookings.stream().filter(b -> b.getUser().getRole() == Role.PT).toList();
+        List<Booking> bookingPts = bookings.stream().filter(b -> b.getUser().getRole() == role).toList();
 
-        Map<WorkShift, String> workShifts = new LinkedHashMap<>();
+        Map<Shift, String> shifts = new LinkedHashMap<>();
         bookingPts.stream().forEach(b -> {
-            WorkShift workShift = new WorkShift(b.getStartTime(), b.getEndTime());
-            workShifts.put(workShift, b.getUser().getName());
+            Shift workShift = new Shift(b.getStartTime(), b.getEndTime());
+            shifts.put(workShift, b.getUser().getName());
         });
-        return workShifts;
+        return shifts;
     }
 }

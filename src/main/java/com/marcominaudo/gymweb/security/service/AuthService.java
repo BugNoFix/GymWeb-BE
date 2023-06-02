@@ -1,9 +1,11 @@
 package com.marcominaudo.gymweb.security.service;
 
 import com.marcominaudo.gymweb.exception.exceptions.InvalidRegisterFormException;
+import com.marcominaudo.gymweb.model.Role;
 import com.marcominaudo.gymweb.model.User;
 import com.marcominaudo.gymweb.repository.UserRepository;
 import com.marcominaudo.gymweb.security.jwt.JWTUtil;
+import com.marcominaudo.gymweb.service.Utils;
 import org.apache.commons.validator.routines.EmailValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -24,6 +26,9 @@ public class AuthService {
 
     @Autowired
     AuthenticationManager authenticationManager;
+
+    @Autowired
+    Utils utils;
 
     public User register(User user) throws InvalidRegisterFormException {
         registerFormValidator(user);
@@ -46,5 +51,17 @@ public class AuthService {
 
         User userDB = userRepository.findByEmail(user.getEmail()).get();
         return jwtUtil.generateToken(userDB);
+    }
+
+    public User setRole(Role role, String uuid) {
+        User user = utils.getUserByUuid(uuid);
+        user.setRole(role);
+        return userRepository.save(user);
+    }
+
+    public User setUserIsActive(String uuid, boolean isActive) {
+        User user = utils.getUserByUuid(uuid);
+        user.setIsActive(isActive);
+        return userRepository.save(user);
     }
 }

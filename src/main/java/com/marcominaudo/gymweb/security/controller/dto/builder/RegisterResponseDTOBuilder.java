@@ -15,6 +15,8 @@ public class RegisterResponseDTOBuilder {
 
     private String uuid;
 
+    private boolean isActive = true;
+
     public RegisterResponseDTOBuilder builder (){
         return new RegisterResponseDTOBuilder();
     }
@@ -44,8 +46,13 @@ public class RegisterResponseDTOBuilder {
         return this;
     }
 
+    public RegisterResponseDTOBuilder isActive(boolean isActive){
+        this.isActive = isActive;
+        return this;
+    }
+
     public RegisterResponseDTO build(){
-        return new RegisterResponseDTO(name, surname, email, role, uuid);
+        return new RegisterResponseDTO(name, surname, email, role, uuid, isActive);
     }
 
 }

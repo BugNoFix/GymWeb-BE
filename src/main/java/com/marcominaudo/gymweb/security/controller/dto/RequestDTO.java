@@ -24,4 +24,6 @@ public class RequestDTO {
 
     private LocalDateTime subscriptionEnd;
     private Role role;
+
+    private boolean isActive = true;
 }

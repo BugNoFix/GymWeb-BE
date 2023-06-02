@@ -19,6 +19,7 @@ public class SecurityMapper {
             .role(user.getRole())
             .surname(user.getSurname())
             .name(user.getName())
+            .isActive(user.getIsActive())
             .build();
     }
 
@@ -31,6 +32,7 @@ public class SecurityMapper {
             .subscriptionStart(requestDTO.getSubscriptionStart())
             .subscriptionEnd(requestDTO.getSubscriptionEnd())
             .role(requestDTO.getRole())
+            .isActive(requestDTO.isActive())
             .build();
     }
 }

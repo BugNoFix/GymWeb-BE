@@ -10,9 +10,12 @@ import com.marcominaudo.gymweb.security.service.AuthService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -40,6 +43,21 @@ public class AuthController {
         String jwt = authService.login(user);
 
         LoginResponseDTO response = securityMapper.toLoginResponseDTO(jwt);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    @PostMapping("/update/role/{uuid}")
+    public ResponseEntity<RegisterResponseDTO> updateRole(@RequestBody RequestDTO requestDTO, @PathVariable("uuid") String uuid) {
+        User userDB = authService.setRole(requestDTO.getRole(), uuid);
+
+        RegisterResponseDTO response = securityMapper.toRegisterResponseDTO(userDB);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    @GetMapping("/activeUser/{uuid}")
+    public ResponseEntity<RegisterResponseDTO> activeUser(@PathVariable("uuid") String uuid, @RequestParam(name = "isActive", defaultValue = "false") boolean isActive) {
+        User userDB = authService.setUserIsActive(uuid, isActive);
+        RegisterResponseDTO response = securityMapper.toRegisterResponseDTO(userDB);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 }

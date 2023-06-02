@@ -12,18 +12,18 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class WorkShift {
+public class Shift {
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    LocalDateTime startWorkShift;
+    LocalDateTime startShift;
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    LocalDateTime endWorkShift;
+    LocalDateTime endShift;
 
     public String toString(){
         List<LocalDateTime> list =new ArrayList<>();
-        list.add(startWorkShift);
-        list.add(endWorkShift);
+        list.add(startShift);
+        list.add(endShift);
         return list.toString();
     }
 }

@@ -10,10 +10,14 @@ import java.util.Optional;
 public interface UserRepository extends JpaRepository<User, Long> {
     Optional<User> findByEmail(String username);
 
-    @Query("SELECT u FROM User u join fetch u.following WHERE u.id = :customerId") // Todo: ricreare la query per la jointable
-    List<User> findPtsByCustomerId(long customerId);
+    @Query("SELECT u FROM User u join fetch u.pt WHERE u.id = :customerId") //TODO: da testare
+    User findPtByCustomerId(long customerId);
+
+    @Query("SELECT u FROM User u join fetch u.pt WHERE u.pt.id = :ptId") //TODO: da testare
+    List<User> findCustomersByPtId(long ptId);
 
     Optional<User> findByUuid(String uuid);
+
     //@Query()
     //Boolean isPtOfCustomer(long customerId, long ptId);
     // TODO : creare questa query

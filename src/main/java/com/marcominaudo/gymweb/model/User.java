@@ -59,17 +59,22 @@ public class User implements UserDetails {
     private LocalDateTime created;
 
     @Column(nullable = false)
-    private boolean privacy;
+    private Boolean privacy;
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private Role role;
 
-    @ManyToMany
-    @JoinTable(name = "customer_pt",
-            joinColumns = {@JoinColumn(name = "customer_id")},
-            inverseJoinColumns = {@JoinColumn(name = "pt_id")})
-    List<User> following = new ArrayList<>();
+    // Un personal trainer ha piu clienti
+    //@OneToMany
+    //List<User> customers = new ArrayList<>();
+
+    //Piu clienti hanno un solo pt
+    @ManyToOne
+    @JoinColumn(name = "customer_id")
+    User pt;
+
+    Boolean isActive = true;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -103,7 +108,7 @@ public class User implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return true;
+        return isActive.booleanValue();
     }
 
     @PrePersist

@@ -18,4 +18,6 @@ public class RegisterResponseDTO {
     private Role role;
 
     private String uuid;
+
+    private boolean isActive;
 }

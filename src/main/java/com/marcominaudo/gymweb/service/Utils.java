@@ -21,9 +21,9 @@ public class Utils {
         return userRepository.findByEmail(user.getEmail()).get();
     }
 
-    public List<User> getPtsOfCustomer(){
+    public User getPtOfCustomer(){
         long customerId = getUser().getId();
-        return userRepository.findPtsByCustomerId(customerId);
+        return userRepository.findPtByCustomerId(customerId);
     }
 
     public boolean isPtOfCustomer(long ptId){
