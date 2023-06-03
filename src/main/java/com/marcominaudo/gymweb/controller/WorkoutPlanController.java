@@ -3,6 +3,9 @@ package com.marcominaudo.gymweb.controller;
 import com.marcominaudo.gymweb.controller.dto.workoutPlan.WorkoutPlanDTO;
 import com.marcominaudo.gymweb.controller.dto.workoutPlan.WorkoutPlanMapper;
 import com.marcominaudo.gymweb.model.WorkoutPlan;
+import com.marcominaudo.gymweb.security.customAnnotation.Admin;
+import com.marcominaudo.gymweb.security.customAnnotation.Customer;
+import com.marcominaudo.gymweb.security.customAnnotation.Pt;
 import com.marcominaudo.gymweb.service.WorkoutPlanService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -27,6 +30,11 @@ public class WorkoutPlanController {
     @Autowired
     WorkoutPlanMapper workoutPlanMapper;
 
+    /*
+    * Get last workout plan
+    * */
+    @Pt
+    @Customer
     @GetMapping
     public ResponseEntity<WorkoutPlanDTO> workoutPlan(){
         WorkoutPlan workoutPlan = workoutPlanService.getWorkoutPlan();
@@ -34,13 +42,22 @@ public class WorkoutPlanController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    @GetMapping("/all")
+    /*
+    * Get all workout plans
+    * */
+    @Pt
+    @Customer
+    @GetMapping("/all") //Todo: ritornare totale pagine nel dto
     public ResponseEntity<List<WorkoutPlanDTO>> workoutPlans(@RequestParam(name = "page", defaultValue = "0") int page, @RequestParam(name = "size", defaultValue = "5") int size){
         List<WorkoutPlan> workoutPlans = workoutPlanService.getWorkoutPlans(page, size);
         List<WorkoutPlanDTO> response = workoutPlans.stream().map(workoutPlan -> workoutPlanMapper.WorkoutPlanToDTO(workoutPlan)).toList();
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
+    /*
+    * Upload workout plan for customer
+    * */
+    @Pt
     @PostMapping("/{uuid}")
     public ResponseEntity<WorkoutPlanDTO> uploadWorkoutPlan(@RequestParam("file") MultipartFile file, @PathVariable("uuid") String uuid){
         WorkoutPlan workoutPlan = workoutPlanService.saveFile(file, uuid);
@@ -51,6 +68,8 @@ public class WorkoutPlanController {
     /*
      * Show all workoutPlan of customer
     */
+    @Admin
+    @Pt
     @GetMapping("all/{uuid}")
     public ResponseEntity<List<WorkoutPlanDTO>> workoutPlansOfCustomer(@RequestParam(name = "page", defaultValue = "0") int page, @RequestParam(name = "size", defaultValue = "5") int size, @PathVariable("uuid") String uuid){
         List<WorkoutPlan> workoutPlans = workoutPlanService.getWorkoutPlansOfCustomer(page, size, uuid);

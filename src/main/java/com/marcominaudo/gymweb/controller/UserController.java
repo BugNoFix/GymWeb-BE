@@ -8,11 +8,14 @@ import com.marcominaudo.gymweb.exception.exceptions.BodyDetailsException;
 import com.marcominaudo.gymweb.exception.exceptions.UserException;
 import com.marcominaudo.gymweb.model.User;
 import com.marcominaudo.gymweb.model.UserBodyDetails;
+import com.marcominaudo.gymweb.security.customAnnotation.Admin;
+import com.marcominaudo.gymweb.security.customAnnotation.All;
+import com.marcominaudo.gymweb.security.customAnnotation.Customer;
+import com.marcominaudo.gymweb.security.customAnnotation.Pt;
 import com.marcominaudo.gymweb.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -32,6 +35,11 @@ public class UserController {
 
     @Autowired
     UserMapper userMapper;
+
+    /*
+    * Get logged user data
+    * */
+    @All
     @GetMapping
     public ResponseEntity<UserResponseDTO> user(){
         User user = userService.getUser();
@@ -39,7 +47,10 @@ public class UserController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    //@PreAuthorize("hasRole('ADMIN')")
+    /*
+    * Get body details of logged user
+    * */
+    @Customer
     @GetMapping("/bodyDetails")
     public ResponseEntity<List<UserBodyDetailsDTO>> bodyDetails(@RequestParam(name = "page", defaultValue = "0") int page, @RequestParam(name = "size", defaultValue = "5") int size){
         List<UserBodyDetails> userBodyDetails = userService.getBodyDetails(page, size);
@@ -47,6 +58,10 @@ public class UserController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
+    /*
+    * Insert body details of logged user
+    * */
+    @Customer
     @PostMapping("/bodyDetails")
     public ResponseEntity<UserBodyDetailsDTO> bodyDetails(@RequestBody UserBodyDetailsDTO userBodyDetailsDTO){
         UserBodyDetails userBodyDetails = userMapper.DTOToBodyDetails(userBodyDetailsDTO);
@@ -55,13 +70,21 @@ public class UserController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    @GetMapping("/bodyDetails/{uuid}") // accessibile al pt
+    /*
+    * Get body details of specific user
+    * */
+    @Pt
+    @GetMapping("/bodyDetails/{uuid}")
     public ResponseEntity<List<UserBodyDetailsDTO>> bodyDetails(@RequestParam(name = "page", defaultValue = "0") int page, @RequestParam(name = "size", defaultValue = "5") int size, @PathVariable("uuid") String uuid) throws UserException, BodyDetailsException {
         List<UserBodyDetails> userBodyDetails = userService.getBodyDetailsOfCustomer(page, size, uuid);
         List<UserBodyDetailsDTO> response = userMapper.listOfBodyDetailsToDTO(userBodyDetails);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
+    /*
+    * Set and get privacy
+    * */
+    @Customer
     @GetMapping("/privacy")
     public ResponseEntity<UserResponseDTO> privacy(@RequestParam(name = "value", defaultValue = "false") boolean value){
         User user = userService.setPrivacy(value);
@@ -69,6 +92,10 @@ public class UserController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
+    /*
+    * Update specific user
+    * */
+    @Admin
     @PostMapping("/update/{uuid}")
     public ResponseEntity<UserResponseDTO> updateUser(@RequestBody UserRequestDTO userRequestDTO, @PathVariable("uuid") String uuid) {
         User userRequest = userMapper.UserRequestDTOToUser(userRequestDTO);

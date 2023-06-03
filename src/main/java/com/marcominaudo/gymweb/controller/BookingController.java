@@ -6,6 +6,10 @@ import com.marcominaudo.gymweb.exception.exceptions.BookingException;
 import com.marcominaudo.gymweb.exception.exceptions.RoomException;
 import com.marcominaudo.gymweb.model.Booking;
 import com.marcominaudo.gymweb.model.Role;
+import com.marcominaudo.gymweb.security.customAnnotation.Admin;
+import com.marcominaudo.gymweb.security.customAnnotation.All;
+import com.marcominaudo.gymweb.security.customAnnotation.Customer;
+import com.marcominaudo.gymweb.security.customAnnotation.Pt;
 import com.marcominaudo.gymweb.service.BookingService;
 import com.marcominaudo.gymweb.utilis.object.Shift;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,7 +33,11 @@ public class BookingController {
     @Autowired
     BookingMapper bookingMapper;
 
-
+    /*
+    * Create a new booking
+    * */
+    @Pt
+    @Customer
     @PostMapping()
     public ResponseEntity<BookingDTO> booking(@RequestBody BookingDTO bookingDTO) throws BookingException, RoomException {
         Booking booking = bookingMapper.DTOToBooking(bookingDTO);
@@ -39,7 +47,11 @@ public class BookingController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    @PostMapping("/pt") // Quali sono i pt in un giorno
+    /*
+    * Gets all pt booked of one day
+    * */
+    @All
+    @PostMapping("/pt")
     public ResponseEntity<Map<Shift, String>> bookingInfoPt(@RequestBody BookingDTO bookingDTO) {
         LocalDateTime startTime = bookingDTO.getStartTime();
         long roomId = bookingDTO.getRoomId();
@@ -47,7 +59,12 @@ public class BookingController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    @PostMapping("/customers") // Quali sono i CUSTOMER in un giorno
+    /*
+    * Gets all customer booked of one day
+    * */
+    @Pt
+    @Admin
+    @PostMapping("/customers")
     public ResponseEntity<Map<Shift, String>> bookingInfoCustomer(@RequestBody BookingDTO bookingDTO) {
         LocalDateTime startTime = bookingDTO.getStartTime();
         long roomId = bookingDTO.getRoomId();

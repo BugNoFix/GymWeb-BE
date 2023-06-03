@@ -1,5 +1,6 @@
 package com.marcominaudo.gymweb.controller;
 
+import com.marcominaudo.gymweb.security.customAnnotation.All;
 import com.marcominaudo.gymweb.service.FilesStorageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
@@ -22,6 +23,10 @@ public class FileController {
     @Autowired
     FilesStorageService filesStorageService;
 
+    /*
+    * Download file
+    * */
+    @All
     @GetMapping("/{folder}/{filename}")
     public ResponseEntity<Resource> download(@PathVariable("folder") String folder, @PathVariable("filename") String filename) throws IOException {
         Resource file = filesStorageService.load(folder, filename);
