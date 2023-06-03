@@ -3,6 +3,7 @@ package com.marcominaudo.gymweb.controller.dto.user;
 import com.marcominaudo.gymweb.model.User;
 import com.marcominaudo.gymweb.model.UserBodyDetails;
 import com.marcominaudo.gymweb.model.builder.UserBuilder;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -47,8 +48,15 @@ public class UserMapper {
         return userBodyDetailsDTO;
     }
 
-    public List<UserBodyDetailsDTO> listOfBodyDetailsToDTO(List<UserBodyDetails> userBodyDetailsList){
-        return userBodyDetailsList.stream().map(this::bodyDetailsToDTO).toList();
+    public SearchUserBodyDetailsDTO listOfBodyDetailsToDTO(Page<UserBodyDetails> searchUserBodyDetails){
+        SearchUserBodyDetailsDTO searchUserBodyDetailsDTO = new SearchUserBodyDetailsDTO();
+
+        List<UserBodyDetailsDTO> userBodyDetailDTOs = searchUserBodyDetails.getContent().stream().map(this::bodyDetailsToDTO).toList();
+
+        searchUserBodyDetailsDTO.setUserBodyDetails(userBodyDetailDTOs);
+        searchUserBodyDetailsDTO.setTotalPages(searchUserBodyDetails.getTotalPages());
+        searchUserBodyDetailsDTO.setTotalElements(searchUserBodyDetails.getTotalElements());
+        return searchUserBodyDetailsDTO;
     }
 
     public UserBodyDetails DTOToBodyDetails(UserBodyDetailsDTO userBodyDetailsDTO){

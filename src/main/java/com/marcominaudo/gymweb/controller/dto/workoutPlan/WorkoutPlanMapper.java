@@ -20,9 +20,9 @@ public class WorkoutPlanMapper {
         List<WorkoutPlan> workoutPlans = searchInfo.getContent();
         List<WorkoutPlanDTO> workoutPlanDTOs = workoutPlans.stream().map(workoutPlan -> workoutPlanToDTO(workoutPlan)).toList();
 
-        searchWorkoutPlansDTO.setWorkoutPlanDTOs(workoutPlanDTOs);
+        searchWorkoutPlansDTO.setWorkoutPlans(workoutPlanDTOs);
         searchWorkoutPlansDTO.setTotalPages(searchInfo.getTotalPages());
-        searchWorkoutPlansDTO.setTotalActivities(searchInfo.getTotalElements());
+        searchWorkoutPlansDTO.setTotalElements(searchInfo.getTotalElements());
         return searchWorkoutPlansDTO;
     }
 }

@@ -1,4 +1,4 @@
-package com.marcominaudo.gymweb.controller.dto.workoutPlan;
+package com.marcominaudo.gymweb.controller.dto.room;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -9,9 +9,8 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class SearchWorkoutPlansDTO {
-
-    List<WorkoutPlanDTO> workoutPlans;
+public class SearchRoomDTO {
+    List<RoomDTO> rooms;
 
     int totalPages;
 

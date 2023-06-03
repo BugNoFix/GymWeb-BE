@@ -1,5 +1,6 @@
 package com.marcominaudo.gymweb.controller;
 
+import com.marcominaudo.gymweb.controller.dto.user.SearchUserBodyDetailsDTO;
 import com.marcominaudo.gymweb.controller.dto.user.UserBodyDetailsDTO;
 import com.marcominaudo.gymweb.controller.dto.user.UserMapper;
 import com.marcominaudo.gymweb.controller.dto.user.UserRequestDTO;
@@ -8,12 +9,13 @@ import com.marcominaudo.gymweb.exception.exceptions.BodyDetailsException;
 import com.marcominaudo.gymweb.exception.exceptions.UserException;
 import com.marcominaudo.gymweb.model.User;
 import com.marcominaudo.gymweb.model.UserBodyDetails;
-import com.marcominaudo.gymweb.security.customAnnotation.OnlyAdminAccess;
 import com.marcominaudo.gymweb.security.customAnnotation.FreeAccess;
+import com.marcominaudo.gymweb.security.customAnnotation.OnlyAdminAccess;
 import com.marcominaudo.gymweb.security.customAnnotation.OnlyCustomerAccess;
 import com.marcominaudo.gymweb.security.customAnnotation.OnlyPtAccess;
 import com.marcominaudo.gymweb.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -23,8 +25,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.util.List;
 
 
 @RestController
@@ -52,9 +52,9 @@ public class UserController {
     * */
     @OnlyCustomerAccess
     @GetMapping("/bodyDetails")
-    public ResponseEntity<List<UserBodyDetailsDTO>> bodyDetails(@RequestParam(name = "page", defaultValue = "0") int page, @RequestParam(name = "size", defaultValue = "5") int size){
-        List<UserBodyDetails> userBodyDetails = userService.getBodyDetails(page, size);
-        List<UserBodyDetailsDTO> response = userMapper.listOfBodyDetailsToDTO(userBodyDetails);
+    public ResponseEntity<SearchUserBodyDetailsDTO> bodyDetails(@RequestParam(name = "page", defaultValue = "0") int page, @RequestParam(name = "size", defaultValue = "5") int size){
+        Page<UserBodyDetails> userBodyDetails = userService.getBodyDetails(page, size);
+        SearchUserBodyDetailsDTO response = userMapper.listOfBodyDetailsToDTO(userBodyDetails);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
@@ -75,9 +75,9 @@ public class UserController {
     * */
     @OnlyPtAccess
     @GetMapping("/bodyDetails/{uuid}")
-    public ResponseEntity<List<UserBodyDetailsDTO>> bodyDetails(@RequestParam(name = "page", defaultValue = "0") int page, @RequestParam(name = "size", defaultValue = "5") int size, @PathVariable("uuid") String uuid) throws UserException, BodyDetailsException {
-        List<UserBodyDetails> userBodyDetails = userService.getBodyDetailsOfCustomer(page, size, uuid);
-        List<UserBodyDetailsDTO> response = userMapper.listOfBodyDetailsToDTO(userBodyDetails);
+    public ResponseEntity<SearchUserBodyDetailsDTO> bodyDetails(@RequestParam(name = "page", defaultValue = "0") int page, @RequestParam(name = "size", defaultValue = "5") int size, @PathVariable("uuid") String uuid) throws UserException, BodyDetailsException {
+        Page<UserBodyDetails> userBodyDetails = userService.getBodyDetailsOfCustomer(page, size, uuid);
+        SearchUserBodyDetailsDTO response = userMapper.listOfBodyDetailsToDTO(userBodyDetails);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 

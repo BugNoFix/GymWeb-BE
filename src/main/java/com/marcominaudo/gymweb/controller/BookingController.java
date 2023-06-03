@@ -7,7 +7,6 @@ import com.marcominaudo.gymweb.exception.exceptions.RoomException;
 import com.marcominaudo.gymweb.model.Booking;
 import com.marcominaudo.gymweb.model.Role;
 import com.marcominaudo.gymweb.security.customAnnotation.AdminAndPtAccess;
-import com.marcominaudo.gymweb.security.customAnnotation.OnlyAdminAccess;
 import com.marcominaudo.gymweb.security.customAnnotation.FreeAccess;
 import com.marcominaudo.gymweb.security.customAnnotation.OnlyCustomerAccess;
 import com.marcominaudo.gymweb.security.customAnnotation.OnlyPtAccess;
@@ -44,7 +43,7 @@ public class BookingController {
         Booking booking = bookingMapper.DTOToBooking(bookingDTO);
         long roomId = bookingDTO.getRoomId();
         Booking bookingDB = bookingService.newBooking(booking, roomId);
-        BookingDTO response = bookingMapper.BookingToDTO(bookingDB);
+        BookingDTO response = bookingMapper.bookingToDTO(bookingDB);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
@@ -71,4 +70,6 @@ public class BookingController {
         Map<Shift, String> response = bookingService.bookingInfo(roomId, startTime, Role.CUSTOMER);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
+
+    //TODO: get all booking of a user
 }

@@ -1,17 +1,16 @@
-package com.marcominaudo.gymweb.controller.dto.workoutPlan;
+package com.marcominaudo.gymweb.controller.dto.user;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.List;
-
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class SearchWorkoutPlansDTO {
+public class SearchUserBodyDetailsDTO {
 
-    List<WorkoutPlanDTO> workoutPlans;
+    List<UserBodyDetailsDTO> userBodyDetails;
 
     int totalPages;
 

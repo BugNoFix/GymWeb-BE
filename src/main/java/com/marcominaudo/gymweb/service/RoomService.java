@@ -4,10 +4,10 @@ import com.marcominaudo.gymweb.exception.exceptions.RoomException;
 import com.marcominaudo.gymweb.model.Room;
 import com.marcominaudo.gymweb.repository.RoomRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-
-import java.time.LocalDateTime;
-import java.util.List;
 
 @Service
 public class RoomService {
@@ -42,8 +42,9 @@ public class RoomService {
 
     }
 
-    public List<Room> allRooms() {
-        return roomRepository.findByIsActive(true);
+    public Page<Room> allRooms(int page, int size) {
+        Pageable pageSetting = PageRequest.of(page, size);
+        return roomRepository.findByIsActive(true, pageSetting);
     }
 
 

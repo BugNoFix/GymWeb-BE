@@ -1,5 +1,6 @@
 package com.marcominaudo.gymweb.service;
 
+import com.marcominaudo.gymweb.controller.dto.user.SearchUserBodyDetailsDTO;
 import com.marcominaudo.gymweb.exception.exceptions.BodyDetailsException;
 import com.marcominaudo.gymweb.exception.exceptions.UserException;
 import com.marcominaudo.gymweb.model.User;
@@ -8,6 +9,7 @@ import com.marcominaudo.gymweb.repository.UserBodyDetailsRepository;
 import com.marcominaudo.gymweb.repository.UserRepository;
 import org.apache.commons.lang3.BooleanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -30,7 +32,7 @@ public class UserService {
         return utils.getUser();
     }
 
-    public List<UserBodyDetails> getBodyDetails(int page, int size) {
+    public Page<UserBodyDetails> getBodyDetails(int page, int size) {
         User user = utils.getUser();
         long id = user.getId();
         Pageable pageSetting = PageRequest.of(page, size);
@@ -49,7 +51,7 @@ public class UserService {
         return userRepository.save(user);
     }
 
-    public List<UserBodyDetails> getBodyDetailsOfCustomer(int page, int size, String uuid) throws UserException, BodyDetailsException {
+    public Page<UserBodyDetails> getBodyDetailsOfCustomer(int page, int size, String uuid) throws UserException, BodyDetailsException {
         User user = userRepository.findByUuid(uuid).orElseThrow(()-> new UserException("User not exist")); //TODO: implementare utils.getUserByUuid()
         if(BooleanUtils.isFalse(user.getPrivacy()))
             throw new BodyDetailsException("The customer has not consented to the display of their data");
