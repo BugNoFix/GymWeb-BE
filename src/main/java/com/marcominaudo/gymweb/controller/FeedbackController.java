@@ -4,7 +4,7 @@ import com.marcominaudo.gymweb.controller.dto.feedback.FeedbackDTO;
 import com.marcominaudo.gymweb.controller.dto.feedback.FeedbackMapper;
 import com.marcominaudo.gymweb.exception.exceptions.FeedbackCreationException;
 import com.marcominaudo.gymweb.model.Feedback;
-import com.marcominaudo.gymweb.security.customAnnotation.Customer;
+import com.marcominaudo.gymweb.security.customAnnotation.OnlyCustomerAccess;
 import com.marcominaudo.gymweb.service.FeedbackService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -27,7 +27,7 @@ public class FeedbackController {
     /*
     * Create feedback for pt
     */
-    @Customer
+    @OnlyCustomerAccess
     @PostMapping()
     public ResponseEntity<FeedbackDTO> feedback(@RequestBody FeedbackDTO feedbackDTO) throws FeedbackCreationException {
         String text = feedbackDTO.getText();

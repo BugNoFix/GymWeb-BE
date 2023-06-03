@@ -6,10 +6,11 @@ import com.marcominaudo.gymweb.exception.exceptions.BookingException;
 import com.marcominaudo.gymweb.exception.exceptions.RoomException;
 import com.marcominaudo.gymweb.model.Booking;
 import com.marcominaudo.gymweb.model.Role;
-import com.marcominaudo.gymweb.security.customAnnotation.Admin;
-import com.marcominaudo.gymweb.security.customAnnotation.All;
-import com.marcominaudo.gymweb.security.customAnnotation.Customer;
-import com.marcominaudo.gymweb.security.customAnnotation.Pt;
+import com.marcominaudo.gymweb.security.customAnnotation.AdminAndPtAccess;
+import com.marcominaudo.gymweb.security.customAnnotation.OnlyAdminAccess;
+import com.marcominaudo.gymweb.security.customAnnotation.FreeAccess;
+import com.marcominaudo.gymweb.security.customAnnotation.OnlyCustomerAccess;
+import com.marcominaudo.gymweb.security.customAnnotation.OnlyPtAccess;
 import com.marcominaudo.gymweb.service.BookingService;
 import com.marcominaudo.gymweb.utilis.object.Shift;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,8 +37,8 @@ public class BookingController {
     /*
     * Create a new booking
     * */
-    @Pt
-    @Customer
+    @OnlyPtAccess
+    @OnlyCustomerAccess
     @PostMapping()
     public ResponseEntity<BookingDTO> booking(@RequestBody BookingDTO bookingDTO) throws BookingException, RoomException {
         Booking booking = bookingMapper.DTOToBooking(bookingDTO);
@@ -50,7 +51,7 @@ public class BookingController {
     /*
     * Gets all pt booked of one day
     * */
-    @All
+    @FreeAccess
     @PostMapping("/pt")
     public ResponseEntity<Map<Shift, String>> bookingInfoPt(@RequestBody BookingDTO bookingDTO) {
         LocalDateTime startTime = bookingDTO.getStartTime();
@@ -62,8 +63,7 @@ public class BookingController {
     /*
     * Gets all customer booked of one day
     * */
-    @Pt
-    @Admin
+    @AdminAndPtAccess
     @PostMapping("/customers")
     public ResponseEntity<Map<Shift, String>> bookingInfoCustomer(@RequestBody BookingDTO bookingDTO) {
         LocalDateTime startTime = bookingDTO.getStartTime();

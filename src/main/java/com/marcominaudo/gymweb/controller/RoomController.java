@@ -4,8 +4,8 @@ import com.marcominaudo.gymweb.controller.dto.room.RoomDTO;
 import com.marcominaudo.gymweb.controller.dto.room.RoomMapper;
 import com.marcominaudo.gymweb.exception.exceptions.RoomException;
 import com.marcominaudo.gymweb.model.Room;
-import com.marcominaudo.gymweb.security.customAnnotation.Admin;
-import com.marcominaudo.gymweb.security.customAnnotation.All;
+import com.marcominaudo.gymweb.security.customAnnotation.OnlyAdminAccess;
+import com.marcominaudo.gymweb.security.customAnnotation.FreeAccess;
 import com.marcominaudo.gymweb.service.RoomService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -31,7 +31,7 @@ public class RoomController {
     /*
     * Create room
     * */
-    @Admin
+    @OnlyAdminAccess
     @PostMapping()
     public ResponseEntity<RoomDTO> room(@RequestBody RoomDTO roomDTO) throws RoomException {
         Room room = roomMapper.DTOToRoom(roomDTO);
@@ -43,7 +43,7 @@ public class RoomController {
     /*
     * Update room
     * */
-    @Admin
+    @OnlyAdminAccess
     @PostMapping("/update")
     public ResponseEntity<RoomDTO> roomUpdate(@RequestBody RoomDTO roomDTO) throws RoomException {
         Room room = roomMapper.DTOToRoom(roomDTO);
@@ -55,7 +55,7 @@ public class RoomController {
     /*
     * Get all rooms
     * */
-    @All
+    @FreeAccess
     @GetMapping("/all")
     public ResponseEntity<List<RoomDTO>> allRooms()  {
         List<Room> rooms = roomService.allRooms();

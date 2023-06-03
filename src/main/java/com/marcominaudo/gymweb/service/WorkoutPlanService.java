@@ -5,6 +5,7 @@ import com.marcominaudo.gymweb.model.WorkoutPlan;
 import com.marcominaudo.gymweb.model.builder.WorkoutPlanBuilder;
 import com.marcominaudo.gymweb.repository.WorkoutPlanRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -29,7 +30,7 @@ public class WorkoutPlanService {
         return workoutPlanRepository.findFirstByUserIdOrderByUploadTime(user.getId());
     }
 
-    public List<WorkoutPlan> getWorkoutPlans(int page, int size) {
+    public Page<WorkoutPlan> getWorkoutPlans(int page, int size) {
         User user = utils.getUser();
         Pageable pageSetting = PageRequest.of(page, size);
         return workoutPlanRepository.findByUserIdOrderByUploadTime(user.getId(), pageSetting);
@@ -46,7 +47,7 @@ public class WorkoutPlanService {
         return workoutPlanRepository.save(workoutPlan);
     }
 
-    public List<WorkoutPlan> getWorkoutPlansOfCustomer(int page, int size, String uuid) {
+    public Page<WorkoutPlan> getWorkoutPlansOfCustomer(int page, int size, String uuid) {
         User user = utils.getUserByUuid(uuid);
         Pageable pageSetting = PageRequest.of(page, size);
         return workoutPlanRepository.findByUserIdOrderByUploadTime(user.getId(), pageSetting);
