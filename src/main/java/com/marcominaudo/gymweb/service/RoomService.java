@@ -28,7 +28,7 @@ public class RoomService {
     }
 
     public Room createRoom(Room room) throws RoomException {
-        if(room.getSize() <= 0 || room.getName().isEmpty())
+        if(room.getSize() <= 0 || room.getName().isEmpty()) //TODO: migliorare il messaggio di errore
             throw new RoomException("Missing data");
         return roomRepository.save(room);
     }

@@ -1,5 +1,7 @@
 package com.marcominaudo.gymweb.controller;
 
+import com.marcominaudo.gymweb.controller.dto.booking.BookingDTO;
+import com.marcominaudo.gymweb.controller.dto.booking.BookingMapper;
 import com.marcominaudo.gymweb.exception.exceptions.BookingException;
 import com.marcominaudo.gymweb.exception.exceptions.RoomException;
 import com.marcominaudo.gymweb.model.Booking;
@@ -9,12 +11,12 @@ import com.marcominaudo.gymweb.utilis.object.Shift;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.time.LocalDateTime;
 import java.util.Map;
 
 @RestController
@@ -24,21 +26,32 @@ public class BookingController {
     @Autowired
     BookingService bookingService;
 
-    @PostMapping("/{roomId}")
-    public ResponseEntity<Booking> booking(@RequestBody Booking booking, @PathVariable("roomId") long roomId) throws BookingException, RoomException {
-        Booking response = bookingService.newBooking(booking, roomId);
+    @Autowired
+    BookingMapper bookingMapper;
+
+
+    @PostMapping()
+    public ResponseEntity<BookingDTO> booking(@RequestBody BookingDTO bookingDTO) throws BookingException, RoomException {
+        Booking booking = bookingMapper.DTOToBooking(bookingDTO);
+        long roomId = bookingDTO.getRoomId();
+        Booking bookingDB = bookingService.newBooking(booking, roomId);
+        BookingDTO response = bookingMapper.BookingToDTO(bookingDB);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    @PostMapping("/{roomId}/pt") // Quali sono i pt in un giorno
-    public ResponseEntity<Map<Shift, String>> bookingInfoPt(@RequestBody Booking booking, @PathVariable("roomId") long roomId) {
-        Map<Shift, String> response = bookingService.bookingInfoPt(roomId, booking.getStartTime(), Role.PT); // TODO: uso il booking solo per la data, usare dto
+    @PostMapping("/pt") // Quali sono i pt in un giorno
+    public ResponseEntity<Map<Shift, String>> bookingInfoPt(@RequestBody BookingDTO bookingDTO) {
+        LocalDateTime startTime = bookingDTO.getStartTime();
+        long roomId = bookingDTO.getRoomId();
+        Map<Shift, String> response = bookingService.bookingInfo(roomId, startTime, Role.PT);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    @PostMapping("/{roomId}/customers") // Quali sono i CUSTOMER in un giorno
-    public ResponseEntity<Map<Shift, String>> bookingInfoCustomer(@RequestBody Booking booking, @PathVariable("roomId") long roomId) {
-        Map<Shift, String> response = bookingService.bookingInfoPt(roomId, booking.getStartTime(), Role.CUSTOMER); // TODO: uso il booking solo per la data, usare dto
+    @PostMapping("/customers") // Quali sono i CUSTOMER in un giorno
+    public ResponseEntity<Map<Shift, String>> bookingInfoCustomer(@RequestBody BookingDTO bookingDTO) {
+        LocalDateTime startTime = bookingDTO.getStartTime();
+        long roomId = bookingDTO.getRoomId();
+        Map<Shift, String> response = bookingService.bookingInfo(roomId, startTime, Role.CUSTOMER);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 }

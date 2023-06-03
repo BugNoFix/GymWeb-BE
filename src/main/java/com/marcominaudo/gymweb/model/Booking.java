@@ -29,11 +29,9 @@ public class Booking {
     private LocalDateTime subscriptionTime;
 
     @Column(nullable = false)
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime startTime;
 
     @Column(nullable = false)
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime endTime;
 
     @ManyToOne(cascade = CascadeType.PERSIST)

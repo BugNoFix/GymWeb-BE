@@ -1,5 +1,9 @@
 package com.marcominaudo.gymweb.controller;
 
+import com.marcominaudo.gymweb.controller.dto.user.UserBodyDetailsDTO;
+import com.marcominaudo.gymweb.controller.dto.user.UserMapper;
+import com.marcominaudo.gymweb.controller.dto.user.UserRequestDTO;
+import com.marcominaudo.gymweb.controller.dto.user.UserResponseDTO;
 import com.marcominaudo.gymweb.exception.exceptions.BodyDetailsException;
 import com.marcominaudo.gymweb.exception.exceptions.UserException;
 import com.marcominaudo.gymweb.model.User;
@@ -26,40 +30,50 @@ public class UserController {
     @Autowired
     UserService userService;
 
+    @Autowired
+    UserMapper userMapper;
     @GetMapping
-    public ResponseEntity<User> user(){
+    public ResponseEntity<UserResponseDTO> user(){
         User user = userService.getUser();
-        return new ResponseEntity<>(user, HttpStatus.OK);
+        UserResponseDTO response = userMapper.UserToUserResponseDTO(user);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     //@PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/bodyDetails")
-    public ResponseEntity<List<UserBodyDetails>> bodyDetails(@RequestParam(name = "page", defaultValue = "0") int page, @RequestParam(name = "size", defaultValue = "5") int size){
+    public ResponseEntity<List<UserBodyDetailsDTO>> bodyDetails(@RequestParam(name = "page", defaultValue = "0") int page, @RequestParam(name = "size", defaultValue = "5") int size){
         List<UserBodyDetails> userBodyDetails = userService.getBodyDetails(page, size);
-        return new ResponseEntity<>(userBodyDetails, HttpStatus.OK);
+        List<UserBodyDetailsDTO> response = userMapper.listOfBodyDetailsToDTO(userBodyDetails);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @PostMapping("/bodyDetails")
-    public ResponseEntity<UserBodyDetails> bodyDetails(@RequestBody UserBodyDetails userBodyDetails){
+    public ResponseEntity<UserBodyDetailsDTO> bodyDetails(@RequestBody UserBodyDetailsDTO userBodyDetailsDTO){
+        UserBodyDetails userBodyDetails = userMapper.DTOToBodyDetails(userBodyDetailsDTO);
         UserBodyDetails body = userService.setBodyDetails(userBodyDetails);
-        return new ResponseEntity<>(body, HttpStatus.OK);
+        UserBodyDetailsDTO response = userMapper.bodyDetailsToDTO(body);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @GetMapping("/bodyDetails/{uuid}") // accessibile al pt
-    public ResponseEntity<List<UserBodyDetails>> bodyDetails(@RequestParam(name = "page", defaultValue = "0") int page, @RequestParam(name = "size", defaultValue = "5") int size, @PathVariable("uuid") String uuid) throws UserException, BodyDetailsException {
+    public ResponseEntity<List<UserBodyDetailsDTO>> bodyDetails(@RequestParam(name = "page", defaultValue = "0") int page, @RequestParam(name = "size", defaultValue = "5") int size, @PathVariable("uuid") String uuid) throws UserException, BodyDetailsException {
         List<UserBodyDetails> userBodyDetails = userService.getBodyDetailsOfCustomer(page, size, uuid);
-        return new ResponseEntity<>(userBodyDetails, HttpStatus.OK);
+        List<UserBodyDetailsDTO> response = userMapper.listOfBodyDetailsToDTO(userBodyDetails);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @GetMapping("/privacy")
-    public ResponseEntity<User> privacy(@RequestParam(name = "value", defaultValue = "false") boolean value){
-        User body = userService.setPrivacy(value);
-        return new ResponseEntity<>(body, HttpStatus.OK);
+    public ResponseEntity<UserResponseDTO> privacy(@RequestParam(name = "value", defaultValue = "false") boolean value){
+        User user = userService.setPrivacy(value);
+        UserResponseDTO response = userMapper.UserToUserResponseDTO(user);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @PostMapping("/update/{uuid}")
-    public ResponseEntity<User> updateUser(@RequestBody User user, @PathVariable("uuid") String uuid) {
-        User userdb = userService.updateUser(user, uuid);
-        return new ResponseEntity<>(userdb, HttpStatus.OK);
+    public ResponseEntity<UserResponseDTO> updateUser(@RequestBody UserRequestDTO userRequestDTO, @PathVariable("uuid") String uuid) {
+        User userRequest = userMapper.UserRequestDTOToUser(userRequestDTO);
+        User userdb = userService.updateUser(userRequest, uuid);
+        UserResponseDTO response = userMapper.UserToUserResponseDTO(userdb);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 }

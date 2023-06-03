@@ -2,7 +2,7 @@ package com.marcominaudo.gymweb.security.controller.dto.builder;
 
 import com.marcominaudo.gymweb.model.Role;
 import com.marcominaudo.gymweb.security.controller.dto.RegisterResponseDTO;
-
+//TODO: devo eliminarlo? lo uso solo una volta e gli altri dto non hanno un un builder
 public class RegisterResponseDTOBuilder {
 
     private String name;

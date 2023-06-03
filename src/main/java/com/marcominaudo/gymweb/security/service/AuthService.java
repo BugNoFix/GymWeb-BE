@@ -13,6 +13,8 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+
 @Service
 public class AuthService {
     @Autowired
@@ -62,6 +64,19 @@ public class AuthService {
     public User setUserIsActive(String uuid, boolean isActive) {
         User user = utils.getUserByUuid(uuid);
         user.setIsActive(isActive);
+        return userRepository.save(user);
+    }
+
+    public User setPassword(String uuid, String password) {
+        User user = utils.getUserByUuid(uuid);
+        user.setPassword(passwordEncoder.encode(password));
+        return userRepository.save(user);
+    }
+
+    public User setSubscription(String uuid, LocalDateTime subscriptionStart, LocalDateTime subscriptionEnd) {
+        User user = utils.getUserByUuid(uuid);
+        user.setSubscriptionStart(subscriptionStart);
+        user.setSubscriptionEnd(subscriptionEnd);
         return userRepository.save(user);
     }
 }

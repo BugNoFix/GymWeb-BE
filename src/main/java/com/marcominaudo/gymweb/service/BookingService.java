@@ -11,7 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -80,7 +79,7 @@ public class BookingService {
         return false;
     }
 
-    public Map<Shift, String> bookingInfoPt(long roomId, LocalDateTime day, Role role) {
+    public Map<Shift, String> bookingInfo(long roomId, LocalDateTime day, Role role) {
         List<Booking> bookings = bookingRepository.findByRoomIdAndDay(roomId, day);
         List<Booking> bookingPts = bookings.stream().filter(b -> b.getUser().getRole() == role).toList();
 

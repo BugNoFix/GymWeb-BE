@@ -71,8 +71,6 @@ public class UserService {
             userDB.setSurname(user.getSurname());
         if(user.getEmail() != null && !user.getEmail().isEmpty())
             userDB.setSurname(user.getSurname());
-        if(user.getPassword() != null && !user.getPassword().isEmpty())
-            userDB.setSurname(user.getPassword()); //TODO: criptare pass
         if(user.getPt() != null && user.getPt().getUuid() != null){
             User pt = utils.getUserByUuid(user.getPt().getUuid());
             userDB.setPt(pt);

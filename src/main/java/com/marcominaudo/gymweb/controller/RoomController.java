@@ -1,5 +1,7 @@
 package com.marcominaudo.gymweb.controller;
 
+import com.marcominaudo.gymweb.controller.dto.room.RoomDTO;
+import com.marcominaudo.gymweb.controller.dto.room.RoomMapper;
 import com.marcominaudo.gymweb.exception.exceptions.BookingException;
 import com.marcominaudo.gymweb.exception.exceptions.RoomException;
 import com.marcominaudo.gymweb.model.Booking;
@@ -24,21 +26,29 @@ public class RoomController {
     @Autowired
     RoomService roomService;
 
-    @PostMapping("/new")
-    public ResponseEntity<Room> room(@RequestBody Room room) throws RoomException {
-        Room response = roomService.createRoom(room);
+    @Autowired
+    RoomMapper roomMapper;
+
+    @PostMapping()
+    public ResponseEntity<RoomDTO> room(@RequestBody RoomDTO roomDTO) throws RoomException {
+        Room room = roomMapper.DTOToRoom(roomDTO);
+        Room roomDB = roomService.createRoom(room);
+        RoomDTO response = roomMapper.RoomToDTO(roomDB);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @PostMapping("/update")
-    public ResponseEntity<Room> roomUpdate(@RequestBody Room room) throws RoomException {
-        Room response = roomService.updateRoom(room);
+    public ResponseEntity<RoomDTO> roomUpdate(@RequestBody RoomDTO roomDTO) throws RoomException {
+        Room room = roomMapper.DTOToRoom(roomDTO);
+        Room roomDB = roomService.updateRoom(room);
+        RoomDTO response = roomMapper.RoomToDTO(roomDB);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @GetMapping("/all")
-    public ResponseEntity<List<Room>> allRooms()  {
-        List<Room> response = roomService.allRooms();
+    public ResponseEntity<List<RoomDTO>> allRooms()  {
+        List<Room> rooms = roomService.allRooms();
+        List<RoomDTO> response = rooms.stream().map(room -> roomMapper.RoomToDTO(room)).toList();
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 

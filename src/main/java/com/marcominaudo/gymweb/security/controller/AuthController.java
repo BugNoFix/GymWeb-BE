@@ -18,6 +18,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.time.LocalDateTime;
+
 @RestController
 @RequestMapping("/api/v1/auth")
 public class AuthController {
@@ -57,6 +59,23 @@ public class AuthController {
     @GetMapping("/activeUser/{uuid}")
     public ResponseEntity<RegisterResponseDTO> activeUser(@PathVariable("uuid") String uuid, @RequestParam(name = "isActive", defaultValue = "false") boolean isActive) {
         User userDB = authService.setUserIsActive(uuid, isActive);
+        RegisterResponseDTO response = securityMapper.toRegisterResponseDTO(userDB);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    @PostMapping ("/setPassword/{uuid}")
+    public ResponseEntity<RegisterResponseDTO> setPassword(@PathVariable("uuid") String uuid, @RequestBody RequestDTO requestDTO) {
+        String password = requestDTO.getPassword();
+        User userDB = authService.setPassword(uuid, password);
+        RegisterResponseDTO response = securityMapper.toRegisterResponseDTO(userDB);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    @PostMapping ("/setSubscription/{uuid}")
+    public ResponseEntity<RegisterResponseDTO> setSubscription(@PathVariable("uuid") String uuid, @RequestBody RequestDTO requestDTO) {
+        LocalDateTime subscriptionStart = requestDTO.getSubscriptionStart();
+        LocalDateTime subscriptionEnd = requestDTO.getSubscriptionEnd();
+        User userDB = authService.setSubscription(uuid, subscriptionStart, subscriptionEnd);
         RegisterResponseDTO response = securityMapper.toRegisterResponseDTO(userDB);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
