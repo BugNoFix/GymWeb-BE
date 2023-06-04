@@ -2,6 +2,7 @@ package com.marcominaudo.gymweb.exception;
 
 import com.marcominaudo.gymweb.exception.exceptions.BookingException;
 import com.marcominaudo.gymweb.exception.exceptions.FeedbackCreationException;
+import com.marcominaudo.gymweb.exception.exceptions.FeedbackException;
 import com.marcominaudo.gymweb.exception.exceptions.InvalidRegisterFormException;
 import com.marcominaudo.gymweb.exception.exceptions.RoomException;
 import com.marcominaudo.gymweb.exception.exceptions.UserException;
@@ -22,7 +23,7 @@ import java.time.LocalDateTime;
 @RestControllerAdvice
 public class RestResponseEntityExceptionHandler {
 
-    @ExceptionHandler({Exception.class, AccessDeniedException.class, DisabledException.class, BadCredentialsException.class, InternalAuthenticationServiceException.class, InvalidRegisterFormException.class, FeedbackCreationException.class, BookingException.class, RoomException.class, UserException.class})
+    @ExceptionHandler({FeedbackException.class, AccessDeniedException.class, DisabledException.class, BadCredentialsException.class, InternalAuthenticationServiceException.class, InvalidRegisterFormException.class, FeedbackCreationException.class, BookingException.class, RoomException.class, UserException.class})
     public ResponseEntity<ErrorMessage> Exceptions(Exception ex){
         ErrorMessageBuilder errorMessageBuilder = new ErrorMessageBuilder();
         ErrorMessage errorMessage;

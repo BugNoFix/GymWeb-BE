@@ -46,7 +46,7 @@ public class WorkoutPlanController {
     * Get all workout plans
     * */
     @CustomerAndPtAccess
-    @GetMapping("/all") //Todo: ritornare totale pagine nel dto
+    @GetMapping("/all")
     public ResponseEntity<SearchWorkoutPlansDTO> workoutPlans(@RequestParam(name = "page", defaultValue = "0") int page, @RequestParam(name = "size", defaultValue = "5") int size){
         Page<WorkoutPlan> searchInfo = workoutPlanService.getWorkoutPlans(page, size);
         SearchWorkoutPlansDTO response = workoutPlanMapper.WorkoutPlansToDTO(searchInfo);

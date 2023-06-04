@@ -7,7 +7,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
-//TODO: implement builder pattern
 @Component
 public class UserMapper {
     public UserResponseDTO UserToUserResponseDTO(User user){

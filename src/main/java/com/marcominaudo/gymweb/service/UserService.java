@@ -51,8 +51,8 @@ public class UserService {
         return userRepository.save(user);
     }
 
-    public Page<UserBodyDetails> getBodyDetailsOfCustomer(int page, int size, String uuid) throws UserException, BodyDetailsException {
-        User user = userRepository.findByUuid(uuid).orElseThrow(()-> new UserException("User not exist")); //TODO: implementare utils.getUserByUuid()
+    public Page<UserBodyDetails> getBodyDetailsOfCustomer(int page, int size, String uuid) throws BodyDetailsException {
+        User user = utils.getUserByUuid(uuid);
         if(BooleanUtils.isFalse(user.getPrivacy()))
             throw new BodyDetailsException("The customer has not consented to the display of their data");
         Pageable pageSetting = PageRequest.of(page, size);

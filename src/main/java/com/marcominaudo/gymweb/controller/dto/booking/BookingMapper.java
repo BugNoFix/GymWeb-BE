@@ -20,9 +20,9 @@ public class BookingMapper {
         return bookingDTO;
     }
 
-    public SearchBookingDTO BookingsToDTO(Page<BookingDTO> searchInfo){
+    public SearchBookingDTO bookingsToDTO(Page<Booking> searchInfo){
         SearchBookingDTO searchBookingDTO = new SearchBookingDTO();
-        List<Booking> bookings = searchInfo.getContent().stream().map(this::DTOToBooking).toList();
+        List<BookingDTO> bookings = searchInfo.getContent().stream().map(this::bookingToDTO).toList();
 
         searchBookingDTO.setBookings(searchBookingDTO.getBookings());
         searchBookingDTO.setTotalPages(searchInfo.getTotalPages());

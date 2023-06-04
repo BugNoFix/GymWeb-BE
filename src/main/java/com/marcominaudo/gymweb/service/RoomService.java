@@ -19,7 +19,7 @@ public class RoomService {
     public boolean RoomIsValid(long roomId) throws RoomException {
         Room room = getRoom(roomId);
         if(!room.isActive())
-            new RoomException("Room not active");
+            throw new RoomException("Room not active");
         return true;
     }
 
@@ -28,7 +28,9 @@ public class RoomService {
     }
 
     public Room createRoom(Room room) throws RoomException {
-        if(room.getSize() <= 0 || room.getName().isEmpty()) //TODO: migliorare il messaggio di errore
+        if(room.getSize() <= 0 )
+            throw new RoomException("Size not valid data");
+        if(room.getName().isEmpty())
             throw new RoomException("Missing data");
         return roomRepository.save(room);
     }

@@ -1,11 +1,15 @@
 package com.marcominaudo.gymweb.security.filter;
 
+import com.marcominaudo.gymweb.exception.RestResponseEntityExceptionHandler;
+import com.marcominaudo.gymweb.exception.exceptions.UserException;
 import com.marcominaudo.gymweb.security.jwt.JWTUtil;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -14,6 +18,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
+import org.springframework.web.servlet.HandlerExceptionResolver;
 
 import java.io.IOException;
 
@@ -26,6 +31,10 @@ public class JWTFilter extends OncePerRequestFilter {
 
     @Autowired
     private UserDetailsService userDetailsService;
+
+    @Autowired
+    @Qualifier("handlerExceptionResolver")
+    private HandlerExceptionResolver resolver;
 
     /*
     * Validate token
@@ -45,8 +54,8 @@ public class JWTFilter extends OncePerRequestFilter {
             UserDetails user = userDetailsService.loadUserByUsername(userEmail);
             // User not enabled
             if (!user.isEnabled()){
-                filterChain.doFilter(request, response);
-                throw new DisabledException("User not active"); //TODO: devere come farlo arrivare al client
+                throw new DisabledException("User not active");
+                  //TODO: devere come farlo arrivare al client
             }
             if (jwtUtil.isTokenValid(jwt, user)) {
                 UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
