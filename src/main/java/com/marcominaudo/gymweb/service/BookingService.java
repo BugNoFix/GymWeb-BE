@@ -82,12 +82,11 @@ public class BookingService {
             throw new BookingException("Booking over room limit", timeSlotFull);
 
         // Check if the user has a booking in the same period
-        /*
+
         User user = utils.getUser();
         long bookingsOfUser = bookingRepository.findAllByUserIdAndBetweenBookingDate(user.getId(), startDate, endDate);
         if(bookingsOfUser > 0)
             throw new BookingException("User is already booked");
-            */
 
         return true;
 
