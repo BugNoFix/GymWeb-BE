@@ -14,6 +14,8 @@ public class ErrorMessageBuilder {
 
     private String message;
 
+    private Object object;
+
     public ErrorMessageBuilder time(LocalDateTime time){
         this.time = time;
         return this;
@@ -35,11 +37,16 @@ public class ErrorMessageBuilder {
         this.message = message;
         return this;
     }
+
+    public ErrorMessageBuilder object(Object object){
+        this.object = object;
+        return this;
+    }
     public ErrorMessageBuilder builder(){
         return new ErrorMessageBuilder();
     }
 
     public ErrorMessage build(){
-        return new ErrorMessage(time, status, error, message);
+        return new ErrorMessage(time, status, error, message, object);
     }
 }

@@ -4,6 +4,7 @@ import com.marcominaudo.gymweb.exception.exceptions.BookingException;
 import com.marcominaudo.gymweb.exception.exceptions.RoomException;
 import com.marcominaudo.gymweb.model.Booking;
 import com.marcominaudo.gymweb.model.Role;
+import com.marcominaudo.gymweb.model.Room;
 import com.marcominaudo.gymweb.model.User;
 import com.marcominaudo.gymweb.model.builder.BookingBuilder;
 import com.marcominaudo.gymweb.repository.BookingRepository;
@@ -59,6 +60,9 @@ public class BookingService {
         // Check is room is valid
         roomService.RoomIsValid(roomId);
 
+        // Get room
+        Room room = roomService.getRoom(roomId);
+
         // Check if the number of user is greater of room size
         List<Booking> bookings = bookingRepository.findAllBetweenBookingDate(startDate, endDate, roomId);
         // Create map for count number of user booked in one slot time (15 minutes)
@@ -71,16 +75,23 @@ public class BookingService {
             slots.put(slot.get(), customers);
         }
         // Check if for each slot time the users is minor of room size
-        List<Booking> incompatibleBookings = bookings.stream().filter(b -> b.getRoom().getSize() <= slots.get(b.getStartTime())).toList();
-        if(!incompatibleBookings.isEmpty())
-            throw new BookingException("Booking over room limit" + incompatibleBookings);//TODO: controllare l'output
+        List<LocalDateTime> timeSlotFull = slots.keySet().stream()
+                .filter(key -> slots.get(key) >= room.getSize()) // Get time slot when the room is full
+                .toList();
+        if(!timeSlotFull.isEmpty())
+            throw new BookingException("Booking over room limit", timeSlotFull);
 
         // Check if the user has a booking in the same period
+        /*
         User user = utils.getUser();
         long bookingsOfUser = bookingRepository.findAllByUserIdAndBetweenBookingDate(user.getId(), startDate, endDate);
         if(bookingsOfUser > 0)
             throw new BookingException("User is already booked");
+            */
+
         return true;
+
+
     }
 
     private boolean dateIsAfterOrEqual(LocalDateTime date1, LocalDateTime date2){
