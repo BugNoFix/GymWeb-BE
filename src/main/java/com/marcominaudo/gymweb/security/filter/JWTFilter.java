@@ -32,10 +32,6 @@ public class JWTFilter extends OncePerRequestFilter {
     @Autowired
     private UserDetailsService userDetailsService;
 
-    @Autowired
-    @Qualifier("handlerExceptionResolver")
-    private HandlerExceptionResolver resolver;
-
     /*
     * Validate token
     */
@@ -53,12 +49,14 @@ public class JWTFilter extends OncePerRequestFilter {
             filterChain.doFilter(request, response);
             return;
         }
+
         String userEmail = jwtUtil.extractEmail(jwt);
         if (userEmail != null && SecurityContextHolder.getContext().getAuthentication() == null) {
             UserDetails user = userDetailsService.loadUserByUsername(userEmail);
             // User not enabled
             if (!user.isEnabled()){
-                throw new DisabledException("User not active");
+                filterChain.doFilter(request, response);
+                return;
                   //TODO: devere come farlo arrivare al client
             }
             UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
