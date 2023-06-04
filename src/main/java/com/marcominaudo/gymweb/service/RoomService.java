@@ -16,7 +16,7 @@ public class RoomService {
     RoomRepository roomRepository;
 
 
-    public boolean RoomIsValid(long roomId) throws RoomException {
+    public boolean roomIsValid(long roomId) throws RoomException {
         Room room = getRoom(roomId);
         if(!room.isActive())
             throw new RoomException("Room not active");

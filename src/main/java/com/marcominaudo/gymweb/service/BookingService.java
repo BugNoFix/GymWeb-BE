@@ -2,6 +2,7 @@ package com.marcominaudo.gymweb.service;
 
 import com.marcominaudo.gymweb.exception.exceptions.BookingException;
 import com.marcominaudo.gymweb.exception.exceptions.RoomException;
+import com.marcominaudo.gymweb.exception.exceptions.UserException;
 import com.marcominaudo.gymweb.model.Booking;
 import com.marcominaudo.gymweb.model.Role;
 import com.marcominaudo.gymweb.model.Room;
@@ -58,7 +59,7 @@ public class BookingService {
             throw new BookingException("Minute slot is invalid");
 
         // Check is room is valid
-        roomService.RoomIsValid(roomId);
+        roomService.roomIsValid(roomId);
 
         // Get room
         Room room = roomService.getRoom(roomId);
@@ -121,7 +122,7 @@ public class BookingService {
         return shifts;
     }
 
-    public Page<Booking> bookingOfCustomer(String uuidCustomer, int size, int page, LocalDateTime day) {
+    public Page<Booking> bookingOfCustomer(String uuidCustomer, int size, int page, LocalDateTime day) throws UserException {
         User customer = utils.getUserByUuid(uuidCustomer);
         Pageable pageSetting = PageRequest.of(page, size);
         return bookingRepository.findAllBookingOfUserInOneDay(customer.getId(), pageSetting, day);

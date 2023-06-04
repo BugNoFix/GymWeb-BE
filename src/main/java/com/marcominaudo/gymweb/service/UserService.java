@@ -51,7 +51,7 @@ public class UserService {
         return userRepository.save(user);
     }
 
-    public Page<UserBodyDetails> getBodyDetailsOfCustomer(int page, int size, String uuid) throws BodyDetailsException {
+    public Page<UserBodyDetails> getBodyDetailsOfCustomer(int page, int size, String uuid) throws BodyDetailsException, UserException {
         User user = utils.getUserByUuid(uuid);
         if(BooleanUtils.isFalse(user.getPrivacy()))
             throw new BodyDetailsException("The customer has not consented to the display of their data");
@@ -59,7 +59,7 @@ public class UserService {
         return userBodyDetailsRepository.findByUserId(user.getId(), pageSetting);
     }
 
-    public User updateUser(User user, String uuid) {
+    public User updateUser(User user, String uuid) throws UserException {
         User userDB = utils.getUserByUuid(uuid);
         if(user.getIsActive() != null)
             userDB.setIsActive(user.getIsActive());

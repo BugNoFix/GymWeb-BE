@@ -1,6 +1,7 @@
 package com.marcominaudo.gymweb.security.service;
 
 import com.marcominaudo.gymweb.exception.exceptions.InvalidRegisterFormException;
+import com.marcominaudo.gymweb.exception.exceptions.UserException;
 import com.marcominaudo.gymweb.model.Role;
 import com.marcominaudo.gymweb.model.User;
 import com.marcominaudo.gymweb.repository.UserRepository;
@@ -55,25 +56,25 @@ public class AuthService {
         return jwtUtil.generateToken(userDB);
     }
 
-    public User setRole(Role role, String uuid) {
+    public User setRole(Role role, String uuid) throws UserException {
         User user = utils.getUserByUuid(uuid);
         user.setRole(role);
         return userRepository.save(user);
     }
 
-    public User setUserIsActive(String uuid, boolean isActive) {
+    public User setUserIsActive(String uuid, boolean isActive) throws UserException {
         User user = utils.getUserByUuid(uuid);
         user.setIsActive(isActive);
         return userRepository.save(user);
     }
 
-    public User setPassword(String uuid, String password) {
+    public User setPassword(String uuid, String password) throws UserException {
         User user = utils.getUserByUuid(uuid);
         user.setPassword(passwordEncoder.encode(password));
         return userRepository.save(user);
     }
 
-    public User setSubscription(String uuid, LocalDateTime subscriptionStart, LocalDateTime subscriptionEnd) {
+    public User setSubscription(String uuid, LocalDateTime subscriptionStart, LocalDateTime subscriptionEnd) throws UserException {
         User user = utils.getUserByUuid(uuid);
         user.setSubscriptionStart(subscriptionStart);
         user.setSubscriptionEnd(subscriptionEnd);

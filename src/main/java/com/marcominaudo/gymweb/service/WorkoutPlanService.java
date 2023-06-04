@@ -1,5 +1,6 @@
 package com.marcominaudo.gymweb.service;
 
+import com.marcominaudo.gymweb.exception.exceptions.UserException;
 import com.marcominaudo.gymweb.model.User;
 import com.marcominaudo.gymweb.model.WorkoutPlan;
 import com.marcominaudo.gymweb.model.builder.WorkoutPlanBuilder;
@@ -36,7 +37,7 @@ public class WorkoutPlanService {
         return workoutPlanRepository.findByUserIdOrderByUploadTime(user.getId(), pageSetting);
     }
 
-    public WorkoutPlan saveFile(MultipartFile file, String uuid) {
+    public WorkoutPlan saveFile(MultipartFile file, String uuid) throws UserException {
         User customer = utils.getUserByUuid(uuid);
         User pt = utils.getUser();
         String path = filesStorageService.save(file, customer.getUuid());
@@ -47,7 +48,7 @@ public class WorkoutPlanService {
         return workoutPlanRepository.save(workoutPlan);
     }
 
-    public Page<WorkoutPlan> getWorkoutPlansOfCustomer(int page, int size, String uuid) {
+    public Page<WorkoutPlan> getWorkoutPlansOfCustomer(int page, int size, String uuid) throws UserException {
         User user = utils.getUserByUuid(uuid);
         Pageable pageSetting = PageRequest.of(page, size);
         return workoutPlanRepository.findByUserIdOrderByUploadTime(user.getId(), pageSetting);

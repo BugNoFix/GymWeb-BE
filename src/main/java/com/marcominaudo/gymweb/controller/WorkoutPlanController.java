@@ -3,9 +3,8 @@ package com.marcominaudo.gymweb.controller;
 import com.marcominaudo.gymweb.controller.dto.workoutPlan.SearchWorkoutPlansDTO;
 import com.marcominaudo.gymweb.controller.dto.workoutPlan.WorkoutPlanDTO;
 import com.marcominaudo.gymweb.controller.dto.workoutPlan.WorkoutPlanMapper;
+import com.marcominaudo.gymweb.exception.exceptions.UserException;
 import com.marcominaudo.gymweb.model.WorkoutPlan;
-import com.marcominaudo.gymweb.security.customAnnotation.OnlyAdminAccess;
-import com.marcominaudo.gymweb.security.customAnnotation.OnlyCustomerAccess;
 import com.marcominaudo.gymweb.security.customAnnotation.CustomerAndPtAccess;
 import com.marcominaudo.gymweb.security.customAnnotation.OnlyPtAccess;
 import com.marcominaudo.gymweb.service.WorkoutPlanService;
@@ -58,8 +57,9 @@ public class WorkoutPlanController {
     * */
     @OnlyPtAccess
     @PostMapping("/{uuid}")
-    public ResponseEntity<WorkoutPlanDTO> uploadWorkoutPlan(@RequestParam("file") MultipartFile file, @PathVariable("uuid") String uuid){
-        WorkoutPlan workoutPlan = workoutPlanService.saveFile(file, uuid);
+    public ResponseEntity<WorkoutPlanDTO> uploadWorkoutPlan(@RequestParam("file") MultipartFile file, @PathVariable("uuid") String uuid) throws UserException {
+        WorkoutPlan workoutPlan;
+        workoutPlan = workoutPlanService.saveFile(file, uuid);
         WorkoutPlanDTO response = workoutPlanMapper.workoutPlanToDTO(workoutPlan);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
@@ -69,7 +69,7 @@ public class WorkoutPlanController {
     */
     @CustomerAndPtAccess
     @GetMapping("all/{uuid}")
-    public ResponseEntity<SearchWorkoutPlansDTO> workoutPlansOfCustomer(@RequestParam(name = "page", defaultValue = "0") int page, @RequestParam(name = "size", defaultValue = "5") int size, @PathVariable("uuid") String uuid){
+    public ResponseEntity<SearchWorkoutPlansDTO> workoutPlansOfCustomer(@RequestParam(name = "page", defaultValue = "0") int page, @RequestParam(name = "size", defaultValue = "5") int size, @PathVariable("uuid") String uuid) throws UserException {
         Page<WorkoutPlan> searchInfo = workoutPlanService.getWorkoutPlansOfCustomer(page, size, uuid);
         SearchWorkoutPlansDTO response = workoutPlanMapper.WorkoutPlansToDTO(searchInfo);
         return new ResponseEntity<>(response, HttpStatus.OK);

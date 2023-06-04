@@ -5,6 +5,7 @@ import com.marcominaudo.gymweb.controller.dto.feedback.FeedbackMapper;
 import com.marcominaudo.gymweb.controller.dto.feedback.SearchFeedbackDTO;
 import com.marcominaudo.gymweb.exception.exceptions.FeedbackCreationException;
 import com.marcominaudo.gymweb.exception.exceptions.FeedbackException;
+import com.marcominaudo.gymweb.exception.exceptions.UserException;
 import com.marcominaudo.gymweb.model.Feedback;
 import com.marcominaudo.gymweb.security.customAnnotation.FreeAccess;
 import com.marcominaudo.gymweb.security.customAnnotation.OnlyCustomerAccess;
@@ -38,8 +39,7 @@ public class FeedbackController {
     @PostMapping()
     public ResponseEntity<FeedbackDTO> feedback(@RequestBody FeedbackDTO feedbackDTO) throws FeedbackCreationException {
         String text = feedbackDTO.getText();
-        String uuidPt = feedbackDTO.getUserUuid();
-        Feedback feedback = feedbackService.save(text, uuidPt);
+        Feedback feedback = feedbackService.save(text);
         FeedbackDTO response = feedbackMapper.feedbackToDTO(feedback);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
@@ -49,7 +49,7 @@ public class FeedbackController {
     * */
     @FreeAccess
     @GetMapping("/{uuidPt}")
-    public ResponseEntity<SearchFeedbackDTO> feedbackOfPt(@PathVariable("uuidPt") String uuidPt, @RequestParam(name = "page", defaultValue = "0") int page, @RequestParam(name = "size", defaultValue = "5") int size) throws FeedbackException {
+    public ResponseEntity<SearchFeedbackDTO> feedbackOfPt(@PathVariable("uuidPt") String uuidPt, @RequestParam(name = "page", defaultValue = "0") int page, @RequestParam(name = "size", defaultValue = "5") int size) throws FeedbackException, UserException {
         Page<Feedback> feedback = feedbackService.getsAll(uuidPt, page, size);
         SearchFeedbackDTO response = feedbackMapper.feedbacksToDTO(feedback);
         return new ResponseEntity<>(response, HttpStatus.OK);

@@ -8,8 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
-import java.util.List;
-
 @Component
 public class Utils {
 
@@ -23,7 +21,7 @@ public class Utils {
 
     public User getPtOfCustomer(){
         long customerId = getUser().getId();
-        return userRepository.findPtByCustomerId(customerId);
+        return userRepository.findPtByCustomerId(customerId).getPt();
     }
 
     public boolean isPtOfCustomer(long ptId){
@@ -32,8 +30,7 @@ public class Utils {
         return true;
     }
 
-    @SneakyThrows
-    public User getUserByUuid(String uuid) {
+    public User getUserByUuid(String uuid) throws UserException {
        return userRepository.findByUuid(uuid).orElseThrow(() -> new UserException("User not exist"));
     }
 }

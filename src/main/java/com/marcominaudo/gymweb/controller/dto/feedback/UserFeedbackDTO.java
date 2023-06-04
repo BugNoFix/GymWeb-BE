@@ -1,20 +1,19 @@
 package com.marcominaudo.gymweb.controller.dto.feedback;
 
+import com.marcominaudo.gymweb.model.Role;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
-import java.util.List;
-
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class FeedbackDTO {
-    private String text;
+public class UserFeedbackDTO {
+    private String userUuid;
 
-    private LocalDateTime createdTime;
+    private String name;
 
-    List<UserFeedbackDTO> UserFeedbackDTOs;
+    private String surname;
 
+    private Role role;
 }

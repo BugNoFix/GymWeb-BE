@@ -1,6 +1,7 @@
 package com.marcominaudo.gymweb.security.controller;
 
 import com.marcominaudo.gymweb.exception.exceptions.InvalidRegisterFormException;
+import com.marcominaudo.gymweb.exception.exceptions.UserException;
 import com.marcominaudo.gymweb.model.User;
 import com.marcominaudo.gymweb.security.controller.dto.LoginResponseDTO;
 import com.marcominaudo.gymweb.security.controller.dto.RegisterResponseDTO;
@@ -53,7 +54,7 @@ public class AuthController {
     }
 
     @PostMapping("/update/role/{uuid}")
-    public ResponseEntity<RegisterResponseDTO> updateRole(@RequestBody RequestDTO requestDTO, @PathVariable("uuid") String uuid) {
+    public ResponseEntity<RegisterResponseDTO> updateRole(@RequestBody RequestDTO requestDTO, @PathVariable("uuid") String uuid) throws UserException {
         User userDB = authService.setRole(requestDTO.getRole(), uuid);
 
         RegisterResponseDTO response = securityMapper.toRegisterResponseDTO(userDB);
@@ -61,14 +62,14 @@ public class AuthController {
     }
 
     @GetMapping("/activeUser/{uuid}")
-    public ResponseEntity<RegisterResponseDTO> activeUser(@PathVariable("uuid") String uuid, @RequestParam(name = "isActive", defaultValue = "false") boolean isActive) {
+    public ResponseEntity<RegisterResponseDTO> activeUser(@PathVariable("uuid") String uuid, @RequestParam(name = "isActive", defaultValue = "false") boolean isActive) throws UserException {
         User userDB = authService.setUserIsActive(uuid, isActive);
         RegisterResponseDTO response = securityMapper.toRegisterResponseDTO(userDB);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @PostMapping ("/setPassword/{uuid}")
-    public ResponseEntity<RegisterResponseDTO> setPassword(@PathVariable("uuid") String uuid, @RequestBody RequestDTO requestDTO) {
+    public ResponseEntity<RegisterResponseDTO> setPassword(@PathVariable("uuid") String uuid, @RequestBody RequestDTO requestDTO) throws UserException {
         String password = requestDTO.getPassword();
         User userDB = authService.setPassword(uuid, password);
         RegisterResponseDTO response = securityMapper.toRegisterResponseDTO(userDB);
@@ -76,7 +77,7 @@ public class AuthController {
     }
 
     @PostMapping ("/setSubscription/{uuid}")
-    public ResponseEntity<RegisterResponseDTO> setSubscription(@PathVariable("uuid") String uuid, @RequestBody RequestDTO requestDTO) {
+    public ResponseEntity<RegisterResponseDTO> setSubscription(@PathVariable("uuid") String uuid, @RequestBody RequestDTO requestDTO) throws UserException {
         LocalDateTime subscriptionStart = requestDTO.getSubscriptionStart();
         LocalDateTime subscriptionEnd = requestDTO.getSubscriptionEnd();
         User userDB = authService.setSubscription(uuid, subscriptionStart, subscriptionEnd);

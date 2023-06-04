@@ -7,6 +7,8 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.PrePersist;
 import lombok.AllArgsConstructor;
@@ -14,6 +16,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Data
@@ -30,9 +33,13 @@ public class Feedback {
     @Column(nullable = false)
     private LocalDateTime createdTime;
 
-    @ManyToOne(cascade = CascadeType.PERSIST)
-    @JoinColumn(name = "userId", nullable = false)
-    User user;
+    @ManyToMany
+    @JoinTable(
+            name = "feedback_user",
+            joinColumns = @JoinColumn(name = "feedbackId"),
+            inverseJoinColumns = @JoinColumn(name = "userId"))
+    //@JoinColumn(name = "userId", nullable = false)
+    List<User> user;
 
     @PrePersist
     public void prePersist() {

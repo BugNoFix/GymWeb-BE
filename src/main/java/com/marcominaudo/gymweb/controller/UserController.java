@@ -97,11 +97,12 @@ public class UserController {
     * */
     @OnlyAdminAccess
     @PostMapping("/update/{uuid}")
-    public ResponseEntity<UserResponseDTO> updateUser(@RequestBody UserRequestDTO userRequestDTO, @PathVariable("uuid") String uuid) {
+    public ResponseEntity<UserResponseDTO> updateUser(@RequestBody UserRequestDTO userRequestDTO, @PathVariable("uuid") String uuid) throws UserException {
         User userRequest = userMapper.UserRequestDTOToUser(userRequestDTO);
         User userdb = userService.updateUser(userRequest, uuid);
         UserResponseDTO response = userMapper.UserToUserResponseDTO(userdb);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
+
 
 }

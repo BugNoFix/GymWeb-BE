@@ -23,7 +23,6 @@ public class FileController {
     /*
     * Download file
     * */
-    @FreeAccess
     @GetMapping("/{folder}/{filename}")
     public ResponseEntity<Resource> download(@PathVariable("folder") String folder, @PathVariable("filename") String filename) throws IOException {
         Resource file = filesStorageService.load(folder, filename);

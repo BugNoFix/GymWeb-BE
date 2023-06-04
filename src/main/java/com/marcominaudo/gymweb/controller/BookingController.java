@@ -5,6 +5,7 @@ import com.marcominaudo.gymweb.controller.dto.booking.BookingMapper;
 import com.marcominaudo.gymweb.controller.dto.booking.SearchBookingDTO;
 import com.marcominaudo.gymweb.exception.exceptions.BookingException;
 import com.marcominaudo.gymweb.exception.exceptions.RoomException;
+import com.marcominaudo.gymweb.exception.exceptions.UserException;
 import com.marcominaudo.gymweb.model.Booking;
 import com.marcominaudo.gymweb.model.Role;
 import com.marcominaudo.gymweb.security.customAnnotation.AdminAndPtAccess;
@@ -80,7 +81,7 @@ public class BookingController {
     * */
     @AdminAndPtAccess
     @PostMapping("/{uuidCustomer}")
-    public ResponseEntity<SearchBookingDTO> bookingOfCustomer(@RequestBody BookingDTO bookingDTO, @PathVariable("uuidCustomer") String uuidCustomer, @RequestParam(name = "page", defaultValue = "0") int page, @RequestParam(name = "size", defaultValue = "5") int size) {
+    public ResponseEntity<SearchBookingDTO> bookingOfCustomer(@RequestBody BookingDTO bookingDTO, @PathVariable("uuidCustomer") String uuidCustomer, @RequestParam(name = "page", defaultValue = "0") int page, @RequestParam(name = "size", defaultValue = "5") int size) throws UserException {
         LocalDateTime day = bookingDTO.getStartTime();
         Page<Booking> bookingsDB = bookingService.bookingOfCustomer(uuidCustomer, size, page, day);
         SearchBookingDTO response = bookingMapper.bookingsToDTO(bookingsDB);

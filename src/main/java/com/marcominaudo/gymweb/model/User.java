@@ -71,7 +71,7 @@ public class User implements UserDetails {
 
     //Piu clienti hanno un solo pt
     @ManyToOne
-    @JoinColumn(name = "customer_id")
+    @JoinColumn(name = "pt_id")
     User pt;
 
     Boolean isActive = true;

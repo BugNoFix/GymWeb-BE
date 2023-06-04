@@ -10,9 +10,9 @@ import java.util.List;
 @NoArgsConstructor
 public class SearchUserBodyDetailsDTO {
 
-    List<UserBodyDetailsDTO> userBodyDetails;
+    private List<UserBodyDetailsDTO> userBodyDetails;
 
-    int totalPages;
+    private int totalPages;
 
-    long totalElements;
+    private long totalElements;
 }
