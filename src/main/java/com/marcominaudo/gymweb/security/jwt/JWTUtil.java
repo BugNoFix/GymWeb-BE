@@ -58,8 +58,14 @@ public class JWTUtil {
                 .compact();
     }
 
-    public boolean isTokenValid(String jwt, UserDetails user) {
-        return user != null && !isTokenExpired(jwt);
+    public boolean isTokenValid(String jwt)  {
+        try {
+            Jwts.parser().setSigningKey(getSignInKey()).parseClaimsJws(jwt);
+            return true;
+        }
+        catch(Exception e){
+            return false;
+        }
     }
     private Key getSignInKey() {
         // Encrypt secret key with sha256

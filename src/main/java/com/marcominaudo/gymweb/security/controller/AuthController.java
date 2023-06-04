@@ -6,6 +6,7 @@ import com.marcominaudo.gymweb.security.controller.dto.LoginResponseDTO;
 import com.marcominaudo.gymweb.security.controller.dto.RegisterResponseDTO;
 import com.marcominaudo.gymweb.security.controller.dto.RequestDTO;
 import com.marcominaudo.gymweb.security.controller.dto.SecurityMapper;
+import com.marcominaudo.gymweb.security.jwt.JWTUtil;
 import com.marcominaudo.gymweb.security.service.AuthService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -29,6 +30,9 @@ public class AuthController {
 
     @Autowired
     private SecurityMapper securityMapper;
+    
+    @Autowired
+    JWTUtil jwtUtil;
 
     @PostMapping("/register")
     public ResponseEntity<RegisterResponseDTO> register(@RequestBody RequestDTO requestDTO) throws InvalidRegisterFormException {
@@ -39,7 +43,7 @@ public class AuthController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    @PostMapping("/login")
+    @PostMapping(value = "/login", produces = "application/json")
     public ResponseEntity<LoginResponseDTO> login(@RequestBody RequestDTO requestDTO){
         User user = securityMapper.RequestDTOtoUser(requestDTO);
         String jwt = authService.login(user);
@@ -77,6 +81,12 @@ public class AuthController {
         LocalDateTime subscriptionEnd = requestDTO.getSubscriptionEnd();
         User userDB = authService.setSubscription(uuid, subscriptionStart, subscriptionEnd);
         RegisterResponseDTO response = securityMapper.toRegisterResponseDTO(userDB);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    @GetMapping ("/validateToken/{token}")
+    public ResponseEntity<Boolean> setSubscription(@PathVariable("token") String token) {
+        boolean response = jwtUtil.isTokenValid(token);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 }
