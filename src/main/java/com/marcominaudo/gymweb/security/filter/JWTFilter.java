@@ -1,6 +1,7 @@
 package com.marcominaudo.gymweb.security.filter;
 
 import com.marcominaudo.gymweb.exception.RestResponseEntityExceptionHandler;
+import com.marcominaudo.gymweb.exception.exceptions.JWTException;
 import com.marcominaudo.gymweb.exception.exceptions.UserException;
 import com.marcominaudo.gymweb.security.jwt.JWTUtil;
 import jakarta.servlet.FilterChain;
@@ -32,6 +33,10 @@ public class JWTFilter extends OncePerRequestFilter {
     @Autowired
     private UserDetailsService userDetailsService;
 
+    @Autowired
+    @Qualifier("handlerExceptionResolver")
+    private HandlerExceptionResolver resolver;
+
     /*
     * Validate token
     */
@@ -40,13 +45,16 @@ public class JWTFilter extends OncePerRequestFilter {
         // Take header that contain jwt and check if exist
         String authHeader = request.getHeader("Authorization");
         if (authHeader == null || !authHeader.startsWith("Bearer ")) {
-            filterChain.doFilter(request, response);
+            resolver.resolveException(request, response, null, new JWTException("Missing jwt"));
             return;
         }
         // Take data from token and check if it is valid
         String jwt = authHeader.substring(7);
-        if(!jwtUtil.isTokenValid(jwt)){
-            filterChain.doFilter(request, response);
+        try{
+            jwtUtil.isTokenValid(jwt);
+        }
+        catch (JWTException e){
+            resolver.resolveException(request, response, null, e);
             return;
         }
 
@@ -55,7 +63,7 @@ public class JWTFilter extends OncePerRequestFilter {
             UserDetails user = userDetailsService.loadUserByUsername(userEmail);
             // User not enabled
             if (!user.isEnabled()){
-                filterChain.doFilter(request, response);
+                resolver.resolveException(request, response, null, new UserException("User is not enable"));
                 return;
                   //TODO: devere come farlo arrivare al client
             }

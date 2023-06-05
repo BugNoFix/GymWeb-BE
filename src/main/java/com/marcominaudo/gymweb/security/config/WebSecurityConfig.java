@@ -25,7 +25,9 @@ public class WebSecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-            .csrf().disable().exceptionHandling().authenticationEntryPoint(authEntryPoint).and()
+            .csrf().disable()
+                .exceptionHandling().authenticationEntryPoint(authEntryPoint)
+                .and()
                 .authorizeHttpRequests()
                 .requestMatchers("/api/v1/auth/**").permitAll()
                 .requestMatchers("/api/v1/**").authenticated() // Con il preauthorize non serve

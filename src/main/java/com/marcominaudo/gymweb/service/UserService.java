@@ -1,6 +1,5 @@
 package com.marcominaudo.gymweb.service;
 
-import com.marcominaudo.gymweb.controller.dto.user.SearchUserBodyDetailsDTO;
 import com.marcominaudo.gymweb.exception.exceptions.BodyDetailsException;
 import com.marcominaudo.gymweb.exception.exceptions.UserException;
 import com.marcominaudo.gymweb.model.User;
@@ -14,7 +13,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 
 @Service
 public class UserService {
@@ -77,8 +75,6 @@ public class UserService {
             User pt = utils.getUserByUuid(user.getPt().getUuid());
             userDB.setPt(pt);
         }
-
         return userRepository.save(userDB);
-
     }
 }

@@ -1,6 +1,7 @@
 package com.marcominaudo.gymweb.security.controller;
 
 import com.marcominaudo.gymweb.exception.exceptions.InvalidRegisterFormException;
+import com.marcominaudo.gymweb.exception.exceptions.JWTException;
 import com.marcominaudo.gymweb.exception.exceptions.UserException;
 import com.marcominaudo.gymweb.model.User;
 import com.marcominaudo.gymweb.security.controller.dto.LoginResponseDTO;
@@ -86,8 +87,15 @@ public class AuthController {
     }
 
     @GetMapping ("/validateToken/{token}")
-    public ResponseEntity<Boolean> setSubscription(@PathVariable("token") String token) {
-        boolean response = jwtUtil.isTokenValid(token);
+    public ResponseEntity<Boolean> setSubscription(@PathVariable("token") String token){
+        boolean response;
+        try{
+            jwtUtil.isTokenValid(token);
+            response = true;
+        }
+        catch (JWTException e){
+            response = false;
+        }
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 }

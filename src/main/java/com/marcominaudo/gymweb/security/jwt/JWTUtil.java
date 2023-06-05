@@ -1,13 +1,20 @@
 package com.marcominaudo.gymweb.security.jwt;
 
+import com.marcominaudo.gymweb.exception.exceptions.JWTException;
 import com.marcominaudo.gymweb.model.User;
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.UnsupportedJwtException;
 import io.jsonwebtoken.security.Keys;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
+import org.springframework.web.servlet.HandlerExceptionResolver;
 
 import java.security.Key;
 import java.util.Date;
@@ -21,6 +28,7 @@ public class JWTUtil {
     private String secretKey;
     @Value("${application.security.jwt.expiration}")
     private long jwtExpiration;
+
 
     private Claims extractAllClaims(String token) {
         return Jwts
@@ -58,13 +66,18 @@ public class JWTUtil {
                 .compact();
     }
 
-    public boolean isTokenValid(String jwt)  {
+    public void isTokenValid(String jwt) throws JWTException {
         try {
             Jwts.parser().setSigningKey(getSignInKey()).parseClaimsJws(jwt);
-            return true;
         }
-        catch(Exception e){
-            return false;
+        catch (io.jsonwebtoken.security.SecurityException | MalformedJwtException e) {
+            throw new JWTException("Invalid JWT signature.");
+        }
+        catch (ExpiredJwtException e) {
+            throw new JWTException("Expired JWT token");
+        }
+        catch (UnsupportedJwtException e) {
+            throw new JWTException("Unsupported JWT token.");
         }
     }
     private Key getSignInKey() {

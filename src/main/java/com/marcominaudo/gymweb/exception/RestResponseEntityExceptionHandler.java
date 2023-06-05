@@ -4,6 +4,7 @@ import com.marcominaudo.gymweb.exception.exceptions.BookingException;
 import com.marcominaudo.gymweb.exception.exceptions.FeedbackCreationException;
 import com.marcominaudo.gymweb.exception.exceptions.FeedbackException;
 import com.marcominaudo.gymweb.exception.exceptions.InvalidRegisterFormException;
+import com.marcominaudo.gymweb.exception.exceptions.JWTException;
 import com.marcominaudo.gymweb.exception.exceptions.RoomException;
 import com.marcominaudo.gymweb.exception.exceptions.UserException;
 import com.marcominaudo.gymweb.exception.model.ErrorMessage;
@@ -25,7 +26,7 @@ import java.util.List;
 @RestControllerAdvice
 public class RestResponseEntityExceptionHandler {
 
-    @ExceptionHandler({JwtException.class, FeedbackException.class, AccessDeniedException.class, DisabledException.class, BadCredentialsException.class, InternalAuthenticationServiceException.class, InvalidRegisterFormException.class, FeedbackCreationException.class, RoomException.class, UserException.class})
+    @ExceptionHandler({JWTException.class, FeedbackException.class, AccessDeniedException.class, DisabledException.class, BadCredentialsException.class, InternalAuthenticationServiceException.class, InvalidRegisterFormException.class, FeedbackCreationException.class, RoomException.class, UserException.class})
     public ResponseEntity<ErrorMessage> exceptions(Exception ex){
         ErrorMessage errorMessage = createErrorMessage(ex);
         return new ResponseEntity<>(errorMessage, HttpStatus.BAD_REQUEST);
