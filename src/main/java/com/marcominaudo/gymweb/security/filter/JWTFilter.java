@@ -45,7 +45,7 @@ public class JWTFilter extends OncePerRequestFilter {
         // Take header that contain jwt and check if exist
         String authHeader = request.getHeader("Authorization");
         if (authHeader == null || !authHeader.startsWith("Bearer ")) {
-            resolver.resolveException(request, response, null, new JWTException("Missing jwt"));
+            filterChain.doFilter(request, response);
             return;
         }
         // Take data from token and check if it is valid
