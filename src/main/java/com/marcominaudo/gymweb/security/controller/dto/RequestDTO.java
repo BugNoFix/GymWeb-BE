@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Data
@@ -20,9 +21,10 @@ public class RequestDTO {
 
     private String password;
 
-    private LocalDateTime subscriptionStart;
+    private LocalDate subscriptionStart;
 
-    private LocalDateTime subscriptionEnd;
+    private LocalDate subscriptionEnd;
+
     private Role role;
 
     private boolean isActive = true;

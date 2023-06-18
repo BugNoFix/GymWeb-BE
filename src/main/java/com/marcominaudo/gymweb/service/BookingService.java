@@ -16,7 +16,9 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.lang.reflect.Array;
 import java.time.LocalDateTime;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -110,14 +112,14 @@ public class BookingService {
         return false;
     }
 
-    public Map<Shift, String> bookingInfo(long roomId, LocalDateTime day, Role role) {
+    public Map<Shift, List<String>> bookingInfo(long roomId, LocalDateTime day, Role role) {
         List<Booking> bookings = bookingRepository.findByRoomIdAndDay(roomId, day);
         List<Booking> bookingPts = bookings.stream().filter(b -> b.getUser().getRole() == role).toList();
 
-        Map<Shift, String> shifts = new LinkedHashMap<>();
+        Map<Shift, List<String>> shifts = new LinkedHashMap<>();
         bookingPts.stream().forEach(b -> {
             Shift workShift = new Shift(b.getStartTime(), b.getEndTime());
-            shifts.put(workShift, b.getUser().getName());
+            shifts.put(workShift, Arrays.asList(b.getUser().getName(), b.getUser().getSurname()));
         });
         return shifts;
     }

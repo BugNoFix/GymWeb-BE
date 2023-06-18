@@ -13,6 +13,7 @@ public class RoomMapper {
         roomDTO.setSize(room.getSize());
         roomDTO.setName(room.getName());
         roomDTO.setActive(room.isActive());
+        roomDTO.setId(room.getId());
         return roomDTO;
     }
 
@@ -28,6 +29,7 @@ public class RoomMapper {
 
     public Room DTOToRoom(RoomDTO roomDTO){
         Room room = new Room();
+        room.setId(roomDTO.getId());
         room.setActive(roomDTO.isActive());
         room.setSize(roomDTO.getSize());
         room.setName(roomDTO.getName());

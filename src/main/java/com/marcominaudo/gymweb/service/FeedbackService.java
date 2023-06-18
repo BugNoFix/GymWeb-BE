@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.Arrays;
@@ -39,7 +40,7 @@ public class FeedbackService {
         User pt = utils.getUserByUuid(uuidPt);
         if(!pt.getRole().equals(Role.PT))
             throw new FeedbackException("It is't a pt");
-        Pageable pageSetting = PageRequest.of(page, size);
+        Pageable pageSetting = PageRequest.of(page, size, Sort.by("createdTime").descending());
         return feedbackRepository.findByUserId(pt.getId(), pageSetting);
     }
 }

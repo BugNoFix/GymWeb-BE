@@ -1,9 +1,11 @@
 package com.marcominaudo.gymweb.controller.dto.user;
 
+import com.marcominaudo.gymweb.model.Role;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Data
@@ -18,12 +20,16 @@ public class UserResponseDTO {
 
     private String surname;
 
-    private LocalDateTime subscriptionStart;
+    private LocalDate subscriptionStart;
 
-    private LocalDateTime subscriptionEnd;
+    private LocalDate subscriptionEnd;
 
     private Boolean privacy;
 
     String uuidPt;
+
+    private Role role;
+
+    private boolean active;
 
 }

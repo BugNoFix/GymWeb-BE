@@ -28,7 +28,7 @@ import java.time.LocalDateTime;
 @RestController
 @RequestMapping("/api/v1/auth")
 public class AuthController {
-
+//TODO: metere authorization annotation
     @Autowired
     private AuthService authService;
 
@@ -56,6 +56,7 @@ public class AuthController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
+    /*
     @PostMapping("/update/role/{uuid}")
     public ResponseEntity<RegisterResponseDTO> updateRole(@RequestBody RequestDTO requestDTO, @PathVariable("uuid") String uuid) throws UserException {
         User userDB = authService.setRole(requestDTO.getRole(), uuid);
@@ -63,6 +64,7 @@ public class AuthController {
         RegisterResponseDTO response = securityMapper.toRegisterResponseDTO(userDB);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
+
 
     @GetMapping("/activeUser/{uuid}")
     public ResponseEntity<RegisterResponseDTO> activeUser(@PathVariable("uuid") String uuid, @RequestParam(name = "isActive", defaultValue = "false") boolean isActive) throws UserException {
@@ -87,6 +89,8 @@ public class AuthController {
         RegisterResponseDTO response = securityMapper.toRegisterResponseDTO(userDB);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
+
+     */
 
     @GetMapping ("/validateToken/{token}")
     public ResponseEntity<Boolean> setSubscription(@PathVariable("token") String token){

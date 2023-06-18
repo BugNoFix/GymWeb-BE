@@ -14,6 +14,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Service
@@ -32,7 +33,6 @@ public class AuthService {
 
     @Autowired
     Utils utils;
-
     public User register(User user) throws InvalidRegisterFormException {
         registerFormValidator(user);
         user.setPassword(passwordEncoder.encode(user.getPassword()));
@@ -74,7 +74,7 @@ public class AuthService {
         return userRepository.save(user);
     }
 
-    public User setSubscription(String uuid, LocalDateTime subscriptionStart, LocalDateTime subscriptionEnd) throws UserException {
+    public User setSubscription(String uuid, LocalDate subscriptionStart, LocalDate subscriptionEnd) throws UserException {
         User user = utils.getUserByUuid(uuid);
         user.setSubscriptionStart(subscriptionStart);
         user.setSubscriptionEnd(subscriptionEnd);

@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -40,13 +41,13 @@ public class RoomService {
         roomDB.setActive(room.isActive());
         roomDB.setName(room.getName());
         roomDB.setSize(room.getSize());
-        return  roomRepository.save(roomDB);
+        return roomRepository.save(roomDB);
 
     }
 
     public Page<Room> allRooms(int page, int size) {
-        Pageable pageSetting = PageRequest.of(page, size);
-        return roomRepository.findByIsActive(true, pageSetting);
+        Pageable pageSetting = PageRequest.of(page, size, Sort.by("id").descending());
+        return roomRepository.findAll(pageSetting);
     }
 
 

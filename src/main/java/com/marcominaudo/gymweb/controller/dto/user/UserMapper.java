@@ -1,5 +1,6 @@
 package com.marcominaudo.gymweb.controller.dto.user;
 
+import com.marcominaudo.gymweb.model.Role;
 import com.marcominaudo.gymweb.model.User;
 import com.marcominaudo.gymweb.model.UserBodyDetails;
 import com.marcominaudo.gymweb.model.builder.UserBuilder;
@@ -18,6 +19,9 @@ public class UserMapper {
         userResponseDTO.setUuid(user.getUuid());
         userResponseDTO.setSubscriptionStart(user.getSubscriptionStart());
         userResponseDTO.setSubscriptionEnd(user.getSubscriptionEnd());
+        userResponseDTO.setRole(user.getRole());
+        if(user.getRole().equals(Role.ADMIN))
+            userResponseDTO.setActive(user.getIsActive());
         if(user.getPt() != null)
             userResponseDTO.setUuidPt(user.getPt().getUuid());
         return userResponseDTO;
@@ -28,9 +32,12 @@ public class UserMapper {
                 .email(userRequestDTO.getEmail())
                 .name(userRequestDTO.getName())
                 .surname(userRequestDTO.getSurname())
-                .privacy(userRequestDTO.getPrivacy())
+                .privacy(userRequestDTO.isPrivacy())
                 .isActive(userRequestDTO.isActive)
-                .uuid(userRequestDTO.getUuidPt())
+                .subscriptionStart(userRequestDTO.getSubscriptionStart())
+                .subscriptionEnd(userRequestDTO.getSubscriptionEnd())
+                .role(userRequestDTO.getRole())
+                .password(userRequestDTO.getPassword())
                 .build();
     }
 

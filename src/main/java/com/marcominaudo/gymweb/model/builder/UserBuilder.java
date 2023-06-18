@@ -3,6 +3,7 @@ package com.marcominaudo.gymweb.model.builder;
 import com.marcominaudo.gymweb.model.Role;
 import com.marcominaudo.gymweb.model.User;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -21,9 +22,9 @@ public class UserBuilder {
 
     private String password;
 
-    private LocalDateTime subscriptionStart;
+    private LocalDate subscriptionStart;
 
-    private LocalDateTime subscriptionEnd;
+    private LocalDate subscriptionEnd;
 
     private LocalDateTime created;
 
@@ -68,12 +69,12 @@ public class UserBuilder {
         return this;
     }
 
-    public UserBuilder subscriptionStart(LocalDateTime subscriptionStart){
+    public UserBuilder subscriptionStart(LocalDate subscriptionStart){
         this.subscriptionStart = subscriptionStart;
         return this;
     }
 
-    public UserBuilder subscriptionEnd(LocalDateTime subscriptionEnd){
+    public UserBuilder subscriptionEnd(LocalDate subscriptionEnd){
         this.subscriptionEnd = subscriptionEnd;
         return this;
     }

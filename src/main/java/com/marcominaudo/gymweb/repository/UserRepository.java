@@ -1,6 +1,10 @@
 package com.marcominaudo.gymweb.repository;
 
+import com.marcominaudo.gymweb.model.Role;
 import com.marcominaudo.gymweb.model.User;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
@@ -17,6 +21,8 @@ public interface UserRepository extends JpaRepository<User, Long> {
     List<User> findCustomersByPtId(long ptId);
 
     Optional<User> findByUuid(String uuid);
+
+    Page<User> findByRole(Role role, Pageable pageSetting);
 
     //@Query()
     //Boolean isPtOfCustomer(long customerId, long ptId);

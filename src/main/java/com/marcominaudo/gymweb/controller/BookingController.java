@@ -19,6 +19,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -27,8 +28,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Map;
 
+@CrossOrigin
 @RestController
 @RequestMapping("/api/v1/booking")
 public class BookingController {
@@ -56,24 +59,26 @@ public class BookingController {
     * Gets all pt booked of one day
     * */
     @FreeAccess
-    @PostMapping("/pt")
-    public ResponseEntity<Map<Shift, String>> allPtBookingOfDay(@RequestBody BookingDTO bookingDTO) {
+    @PostMapping("/pt")//TODO: change login map key value
+    public ResponseEntity<List<BookingDTO>> allPtBookingOfDay(@RequestBody BookingDTO bookingDTO) {
         LocalDateTime startTime = bookingDTO.getStartTime();
         long roomId = bookingDTO.getRoomId();
-        Map<Shift, String> response = bookingService.bookingInfo(roomId, startTime, Role.PT);
-        return new ResponseEntity<>(response, HttpStatus.OK);
+        Map<Shift, List<String>> map = bookingService.bookingInfo(roomId, startTime, Role.PT);
+        List<BookingDTO> bookingDTOs = bookingMapper.mapToDTO(map);
+        return new ResponseEntity<>(bookingDTOs, HttpStatus.OK);
     }
 
     /*
     * Gets all customer booked of one day
     * */
     @AdminAndPtAccess
-    @PostMapping("/customers")
-    public ResponseEntity<Map<Shift, String>> allCustomersBookingOfDay(@RequestBody BookingDTO bookingDTO) {
+    @PostMapping("/customers") //TODO: change login map key value
+    public ResponseEntity<List<BookingDTO>> allCustomersBookingOfDay(@RequestBody BookingDTO bookingDTO) {
         LocalDateTime startTime = bookingDTO.getStartTime();
         long roomId = bookingDTO.getRoomId();
-        Map<Shift, String> response = bookingService.bookingInfo(roomId, startTime, Role.CUSTOMER);
-        return new ResponseEntity<>(response, HttpStatus.OK);
+        Map<Shift, List<String>> map = bookingService.bookingInfo(roomId, startTime, Role.CUSTOMER);
+        List<BookingDTO> bookingDTOs = bookingMapper.mapToDTO(map);
+        return new ResponseEntity<>(bookingDTOs, HttpStatus.OK);
     }
 
     /*

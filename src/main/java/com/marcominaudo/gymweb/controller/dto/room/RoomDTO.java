@@ -14,4 +14,6 @@ public class RoomDTO {
     private boolean isActive;
 
     private int size;
+
+    private long id;
 }
