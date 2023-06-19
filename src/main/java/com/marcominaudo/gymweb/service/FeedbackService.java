@@ -28,7 +28,7 @@ public class FeedbackService {
 
     public Feedback save(String body) throws FeedbackCreationException {
         User pt = utils.getPtOfCustomer();
-        if (!utils.isPtOfCustomer(pt.getId()))
+        if (pt == null)
             throw new FeedbackCreationException("The association pt user not exist");
         Feedback feedback = new Feedback();
         feedback.setText(body);

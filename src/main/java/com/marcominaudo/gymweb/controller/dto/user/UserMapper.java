@@ -20,8 +20,7 @@ public class UserMapper {
         userResponseDTO.setSubscriptionStart(user.getSubscriptionStart());
         userResponseDTO.setSubscriptionEnd(user.getSubscriptionEnd());
         userResponseDTO.setRole(user.getRole());
-        if(user.getRole().equals(Role.ADMIN))
-            userResponseDTO.setActive(user.getIsActive());
+        userResponseDTO.setActive(user.getIsActive());
         if(user.getPt() != null)
             userResponseDTO.setUuidPt(user.getPt().getUuid());
         return userResponseDTO;
@@ -77,4 +76,14 @@ public class UserMapper {
         return userBodyDetails;
     }
 
+    public SearchUserDTO listOfUsersToDTO(Page<User> searchUsers) {
+        SearchUserDTO searchUserDTO = new SearchUserDTO();
+
+        List<UserResponseDTO> userResponseDTOs = searchUsers.getContent().stream().map(this::UserToUserResponseDTO).toList();
+
+        searchUserDTO.setUsers(userResponseDTOs);
+        searchUserDTO.setTotalPages(searchUserDTO.getTotalPages());
+        searchUserDTO.setTotalElements(searchUsers.getTotalElements());
+        return searchUserDTO;
+    }
 }

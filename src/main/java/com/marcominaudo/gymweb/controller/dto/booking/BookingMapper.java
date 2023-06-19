@@ -18,6 +18,8 @@ public class BookingMapper {
         bookingDTO.setStartTime(booking.getStartTime());
         bookingDTO.setEndTime(booking.getEndTime());
         bookingDTO.setSubscriptionTime(booking.getSubscriptionTime());
+        bookingDTO.setSurname(booking.getUser().getSurname());
+        bookingDTO.setName(booking.getUser().getName());
         if(booking.getRoom() != null)
             bookingDTO.setRoomId(booking.getRoom().getId());
         return bookingDTO;

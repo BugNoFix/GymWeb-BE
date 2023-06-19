@@ -96,7 +96,7 @@ public class UserService {
             userDB.setSurname(user.getSurname());
         if(user.getEmail() != null && !user.getEmail().isEmpty())
             userDB.setSurname(user.getSurname());
-        if(uuidPt != null || uuidPt.isEmpty()){
+        if(uuidPt != null && uuidPt.isEmpty()){
             User pt = utils.getUserByUuid(uuidPt);
             userDB.setPt(pt);
         }
@@ -110,9 +110,10 @@ public class UserService {
         return userRepository.save(userDB);
     }
 
-    public List<User> allUserOfPt(String uuidPt) throws UserException {
+    public Page<User> allUserOfPt(String uuidPt, int page, int size) throws UserException {
+        Pageable pageSetting = PageRequest.of(page, size);
         User pt = utils.getUserByUuid(uuidPt);
-        return userRepository.findCustomersByPtId(pt.getId());
+        return userRepository.findCustomersByPtId(pt.getId(), pageSetting);
     }
 
     public User setPt(String uuidCustomer) throws UserException {
@@ -122,14 +123,14 @@ public class UserService {
         return userRepository.save(customer);
     }
 
-    public List<User> getAllUser(int page, int size) {
+    public Page<User> getAllUser(int page, int size) {
         Pageable pageSetting = PageRequest.of(page, size);
-        return userRepository.findAll(pageSetting).getContent();
+        return userRepository.findAll(pageSetting);
     }
 
 
-    public List<User> getAllPt(int page, int size) {
+    public Page<User> getAllPt(int page, int size) {
         Pageable pageSetting = PageRequest.of(page, size);
-        return userRepository.findByRole(Role.PT, pageSetting).getContent();
+        return userRepository.findByRole(Role.PT, pageSetting);
     }
 }

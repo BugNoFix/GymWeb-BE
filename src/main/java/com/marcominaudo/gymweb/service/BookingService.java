@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 
 import java.lang.reflect.Array;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -112,16 +113,20 @@ public class BookingService {
         return false;
     }
 
-    public Map<Shift, List<String>> bookingInfo(long roomId, LocalDateTime day, Role role) {
+    public List<Booking> bookingInfo(long roomId, LocalDateTime day, Role role) {
         List<Booking> bookings = bookingRepository.findByRoomIdAndDay(roomId, day);
         List<Booking> bookingPts = bookings.stream().filter(b -> b.getUser().getRole() == role).toList();
 
-        Map<Shift, List<String>> shifts = new LinkedHashMap<>();
+        List<Booking> bookingsInfo = new ArrayList<>();
         bookingPts.stream().forEach(b -> {
-            Shift workShift = new Shift(b.getStartTime(), b.getEndTime());
-            shifts.put(workShift, Arrays.asList(b.getUser().getName(), b.getUser().getSurname()));
+            Booking booking = new BookingBuilder()
+                    .startTime(b.getStartTime())
+                    .endTime(b.getEndTime())
+                    .user(b.getUser())
+                    .build();
+            bookingsInfo.add(booking);
         });
-        return shifts;
+        return bookingsInfo;
     }
 
     public Page<Booking> bookingOfCustomer(String uuidCustomer, int size, int page, LocalDateTime day) throws UserException {

@@ -8,6 +8,8 @@ import com.marcominaudo.gymweb.security.controller.dto.LoginResponseDTO;
 import com.marcominaudo.gymweb.security.controller.dto.RegisterResponseDTO;
 import com.marcominaudo.gymweb.security.controller.dto.RequestDTO;
 import com.marcominaudo.gymweb.security.controller.dto.SecurityMapper;
+import com.marcominaudo.gymweb.security.customAnnotation.FreeAccess;
+import com.marcominaudo.gymweb.security.customAnnotation.OnlyAdminAccess;
 import com.marcominaudo.gymweb.security.jwt.JWTUtil;
 import com.marcominaudo.gymweb.security.service.AuthService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,13 +24,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @CrossOrigin
 @RestController
 @RequestMapping("/api/v1/auth")
 public class AuthController {
-//TODO: metere authorization annotation
     @Autowired
     private AuthService authService;
 
@@ -38,14 +40,6 @@ public class AuthController {
     @Autowired
     JWTUtil jwtUtil;
 
-    @PostMapping("/register")
-    public ResponseEntity<RegisterResponseDTO> register(@RequestBody RequestDTO requestDTO) throws InvalidRegisterFormException {
-        User user = securityMapper.RequestDTOtoUser(requestDTO);
-        User userDB = authService.register(user);
-
-        RegisterResponseDTO response = securityMapper.toRegisterResponseDTO(userDB);
-        return new ResponseEntity<>(response, HttpStatus.OK);
-    }
 
     @PostMapping(value = "/login", produces = "application/json")
     public ResponseEntity<LoginResponseDTO> login(@RequestBody RequestDTO requestDTO){
@@ -56,7 +50,8 @@ public class AuthController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    /*
+    @OnlyAdminAccess
+    @Deprecated
     @PostMapping("/update/role/{uuid}")
     public ResponseEntity<RegisterResponseDTO> updateRole(@RequestBody RequestDTO requestDTO, @PathVariable("uuid") String uuid) throws UserException {
         User userDB = authService.setRole(requestDTO.getRole(), uuid);
@@ -65,7 +60,8 @@ public class AuthController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-
+    @OnlyAdminAccess
+    @Deprecated
     @GetMapping("/activeUser/{uuid}")
     public ResponseEntity<RegisterResponseDTO> activeUser(@PathVariable("uuid") String uuid, @RequestParam(name = "isActive", defaultValue = "false") boolean isActive) throws UserException {
         User userDB = authService.setUserIsActive(uuid, isActive);
@@ -73,6 +69,8 @@ public class AuthController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
+    @OnlyAdminAccess
+    @Deprecated
     @PostMapping ("/setPassword/{uuid}")
     public ResponseEntity<RegisterResponseDTO> setPassword(@PathVariable("uuid") String uuid, @RequestBody RequestDTO requestDTO) throws UserException {
         String password = requestDTO.getPassword();
@@ -81,19 +79,20 @@ public class AuthController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
+    @OnlyAdminAccess
+    @Deprecated
     @PostMapping ("/setSubscription/{uuid}")
     public ResponseEntity<RegisterResponseDTO> setSubscription(@PathVariable("uuid") String uuid, @RequestBody RequestDTO requestDTO) throws UserException {
-        LocalDateTime subscriptionStart = requestDTO.getSubscriptionStart();
-        LocalDateTime subscriptionEnd = requestDTO.getSubscriptionEnd();
+        LocalDate subscriptionStart = requestDTO.getSubscriptionStart();
+        LocalDate subscriptionEnd = requestDTO.getSubscriptionEnd();
         User userDB = authService.setSubscription(uuid, subscriptionStart, subscriptionEnd);
         RegisterResponseDTO response = securityMapper.toRegisterResponseDTO(userDB);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-     */
-
+    @FreeAccess
     @GetMapping ("/validateToken/{token}")
-    public ResponseEntity<Boolean> setSubscription(@PathVariable("token") String token){
+    public ResponseEntity<Boolean> validateToken(@PathVariable("token") String token){
         boolean response;
         try{
             jwtUtil.isTokenValid(token);

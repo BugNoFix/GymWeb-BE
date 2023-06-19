@@ -59,12 +59,12 @@ public class BookingController {
     * Gets all pt booked of one day
     * */
     @FreeAccess
-    @PostMapping("/pt")//TODO: change login map key value
+    @PostMapping("/pt")
     public ResponseEntity<List<BookingDTO>> allPtBookingOfDay(@RequestBody BookingDTO bookingDTO) {
         LocalDateTime startTime = bookingDTO.getStartTime();
         long roomId = bookingDTO.getRoomId();
-        Map<Shift, List<String>> map = bookingService.bookingInfo(roomId, startTime, Role.PT);
-        List<BookingDTO> bookingDTOs = bookingMapper.mapToDTO(map);
+        List<Booking> booking = bookingService.bookingInfo(roomId, startTime, Role.PT);
+        List<BookingDTO> bookingDTOs = booking.stream().map(b -> bookingMapper.bookingToDTO(b)).toList();
         return new ResponseEntity<>(bookingDTOs, HttpStatus.OK);
     }
 
@@ -72,12 +72,12 @@ public class BookingController {
     * Gets all customer booked of one day
     * */
     @AdminAndPtAccess
-    @PostMapping("/customers") //TODO: change login map key value
+    @PostMapping("/customers")
     public ResponseEntity<List<BookingDTO>> allCustomersBookingOfDay(@RequestBody BookingDTO bookingDTO) {
         LocalDateTime startTime = bookingDTO.getStartTime();
         long roomId = bookingDTO.getRoomId();
-        Map<Shift, List<String>> map = bookingService.bookingInfo(roomId, startTime, Role.CUSTOMER);
-        List<BookingDTO> bookingDTOs = bookingMapper.mapToDTO(map);
+        List<Booking> booking = bookingService.bookingInfo(roomId, startTime, Role.PT);
+        List<BookingDTO> bookingDTOs = booking.stream().map(b -> bookingMapper.bookingToDTO(b)).toList();
         return new ResponseEntity<>(bookingDTOs, HttpStatus.OK);
     }
 

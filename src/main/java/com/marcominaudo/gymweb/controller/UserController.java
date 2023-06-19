@@ -1,6 +1,7 @@
 package com.marcominaudo.gymweb.controller;
 
 import com.marcominaudo.gymweb.controller.dto.user.SearchUserBodyDetailsDTO;
+import com.marcominaudo.gymweb.controller.dto.user.SearchUserDTO;
 import com.marcominaudo.gymweb.controller.dto.user.UserBodyDetailsDTO;
 import com.marcominaudo.gymweb.controller.dto.user.UserMapper;
 import com.marcominaudo.gymweb.controller.dto.user.UserRequestDTO;
@@ -66,14 +67,13 @@ public class UserController {
     }
 
     /*
-     * Get all user data
+     * Get all user
      * */
     @OnlyAdminAccess
     @GetMapping("/all")
-    //TODO: add dto search with pages
-    public ResponseEntity<List<UserResponseDTO>> users(@RequestParam(name = "page", defaultValue = "0") int page, @RequestParam(name = "size", defaultValue = "5") int size){
-        List<User> user = userService.getAllUser(page, size);
-        List<UserResponseDTO> response = user.stream().map(u -> userMapper.UserToUserResponseDTO(u)).toList();
+    public ResponseEntity<SearchUserDTO> users(@RequestParam(name = "page", defaultValue = "0") int page, @RequestParam(name = "size", defaultValue = "5") int size){
+        Page<User> users = userService.getAllUser(page, size);
+        SearchUserDTO response = userMapper.listOfUsersToDTO(users);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
@@ -82,10 +82,9 @@ public class UserController {
      * */
     @OnlyAdminAccess
     @GetMapping("/allPt")
-    //TODO: add dto search with pages
-    public ResponseEntity<List<UserResponseDTO>> pts(@RequestParam(name = "page", defaultValue = "0") int page, @RequestParam(name = "size", defaultValue = "5") int size){
-        List<User> user = userService.getAllPt(page, size);
-        List<UserResponseDTO> response = user.stream().map(u -> userMapper.UserToUserResponseDTO(u)).toList();
+    public ResponseEntity<SearchUserDTO> pts(@RequestParam(name = "page", defaultValue = "0") int page, @RequestParam(name = "size", defaultValue = "5") int size){
+        Page<User> users = userService.getAllPt(page, size);
+        SearchUserDTO response = userMapper.listOfUsersToDTO(users);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
@@ -148,10 +147,9 @@ public class UserController {
 
     @CustomerAndPtAccess
     @GetMapping("/all/{uuidPT}")
-    public ResponseEntity<List<UserResponseDTO>> allUserOfPt( @PathVariable("uuidPT") String uuidPt) throws UserException {
-        List<User> users = userService.allUserOfPt(uuidPt);
-        List<UserResponseDTO> response = new ArrayList<>();
-        users.stream().forEach(u -> response.add(userMapper.UserToUserResponseDTO(u)));
+    public ResponseEntity<SearchUserDTO> allUserOfPt( @PathVariable("uuidPT") String uuidPt,@RequestParam(name = "page", defaultValue = "0") int page, @RequestParam(name = "size", defaultValue = "5") int size) throws UserException {
+        Page<User> users = userService.allUserOfPt(uuidPt, page, size);
+        SearchUserDTO response = userMapper.listOfUsersToDTO(users);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 

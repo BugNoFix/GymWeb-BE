@@ -24,12 +24,6 @@ public class Utils {
         return userRepository.findPtByCustomerId(customerId).getPt();
     }
 
-    public boolean isPtOfCustomer(long ptId){
-        long customerId = getUser().getId();
-        //return userRepository.isPtOfCustomer(customerId, ptId); // TODO: implement this
-        return true;
-    }
-
     public User getUserByUuid(String uuid) throws UserException {
        return userRepository.findByUuid(uuid).orElseThrow(() -> new UserException("User not exist"));
     }

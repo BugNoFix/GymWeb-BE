@@ -1,6 +1,7 @@
 package com.marcominaudo.gymweb.utilis.object;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.marcominaudo.gymweb.model.User;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -14,10 +15,9 @@ import java.util.List;
 @AllArgsConstructor
 public class Shift {
 
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    User user;
     LocalDateTime startShift;
 
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     LocalDateTime endShift;
 
     public String toString(){

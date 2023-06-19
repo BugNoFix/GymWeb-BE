@@ -4,11 +4,9 @@ import com.marcominaudo.gymweb.model.Role;
 import com.marcominaudo.gymweb.model.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Slice;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
-import java.util.List;
 import java.util.Optional;
 
 public interface UserRepository extends JpaRepository<User, Long> {
@@ -17,15 +15,12 @@ public interface UserRepository extends JpaRepository<User, Long> {
     @Query("SELECT u FROM User u WHERE u.id = :customerId")
     User findPtByCustomerId(long customerId);
 
-    @Query("SELECT u FROM User u join fetch u.pt WHERE u.pt.id = :ptId") //TODO: da testare
-    List<User> findCustomersByPtId(long ptId);
+    //@Query("SELECT u FROM User u join fetch u.pt WHERE u.pt.id = :ptId") JPQL
+    @Query(value = "SELECT u.* FROM User u inner join User pt on pt.id = u.pt_id WHERE pt.id = :ptId", nativeQuery = true)
+    Page<User> findCustomersByPtId(long ptId, Pageable pageSetting);
 
     Optional<User> findByUuid(String uuid);
 
     Page<User> findByRole(Role role, Pageable pageSetting);
-
-    //@Query()
-    //Boolean isPtOfCustomer(long customerId, long ptId);
-    // TODO : creare questa query
 
 }
