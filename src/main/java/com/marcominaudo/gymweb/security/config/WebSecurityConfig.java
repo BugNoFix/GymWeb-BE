@@ -31,8 +31,9 @@ public class WebSecurityConfig {
                 .and()
                 .authorizeHttpRequests()
                 .requestMatchers("/api/v1/auth/**").permitAll()
-                .requestMatchers("/api/v1/**").authenticated() // Con il preauthorize non serve
-                .anyRequest().permitAll()
+                .requestMatchers("/download/**").permitAll()
+                .requestMatchers("/api/v1/**").authenticated()
+                .anyRequest().authenticated()
                 .and()
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
         return http.build();

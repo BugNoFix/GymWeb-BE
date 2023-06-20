@@ -13,14 +13,8 @@ public class SecurityMapper {
 
     public User toUser(RequestDTO requestDTO){
         return new UserBuilder().builder()
-            .name(requestDTO.getName())
-            .surname(requestDTO.getSurname())
             .password(requestDTO.getPassword())
             .email(requestDTO.getEmail())
-            .subscriptionStart(requestDTO.getSubscriptionStart())
-            .subscriptionEnd(requestDTO.getSubscriptionEnd())
-            .role(requestDTO.getRole())
-            .isActive(requestDTO.isActive())
             .build();
     }
 }
