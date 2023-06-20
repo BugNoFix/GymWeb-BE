@@ -18,8 +18,6 @@ import org.springframework.data.domain.Sort;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-
 
 @Service
 public class UserService {
@@ -114,13 +112,6 @@ public class UserService {
         Pageable pageSetting = PageRequest.of(page, size);
         User pt = utils.getUserByUuid(uuidPt);
         return userRepository.findCustomersByPtId(pt.getId(), pageSetting);
-    }
-
-    public User setPt(String uuidCustomer) throws UserException {
-        User customer = utils.getUserByUuid(uuidCustomer);
-        User pt = utils.getUser();
-        customer.setPt(pt);
-        return userRepository.save(customer);
     }
 
     public Page<User> getAllUser(int page, int size) {

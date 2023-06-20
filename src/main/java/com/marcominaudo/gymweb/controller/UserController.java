@@ -11,8 +11,6 @@ import com.marcominaudo.gymweb.exception.exceptions.InvalidRegisterFormException
 import com.marcominaudo.gymweb.exception.exceptions.UserException;
 import com.marcominaudo.gymweb.model.User;
 import com.marcominaudo.gymweb.model.UserBodyDetails;
-import com.marcominaudo.gymweb.security.controller.dto.RegisterResponseDTO;
-import com.marcominaudo.gymweb.security.controller.dto.RequestDTO;
 import com.marcominaudo.gymweb.security.customAnnotation.CustomerAndPtAccess;
 import com.marcominaudo.gymweb.security.customAnnotation.FreeAccess;
 import com.marcominaudo.gymweb.security.customAnnotation.OnlyAdminAccess;
@@ -31,9 +29,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @CrossOrigin
 @RestController
@@ -152,15 +147,5 @@ public class UserController {
         SearchUserDTO response = userMapper.listOfUsersToDTO(users);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
-
-    //TODO: get customer with uuid and check id customer is pt's customer (Ptaccess)
-    @OnlyPtAccess
-    @GetMapping("/setPt/{uuidCustomer}")
-    public ResponseEntity<UserResponseDTO> setPt( @PathVariable("uuidCustomer") String uuidCustomer) throws UserException {
-        User user = userService.setPt(uuidCustomer);
-        UserResponseDTO response = userMapper.UserToUserResponseDTO(user);
-        return new ResponseEntity<>(response, HttpStatus.OK);
-    }
-
 
 }

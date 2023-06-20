@@ -32,7 +32,7 @@ public class UserMapper {
                 .name(userRequestDTO.getName())
                 .surname(userRequestDTO.getSurname())
                 .privacy(userRequestDTO.isPrivacy())
-                .isActive(userRequestDTO.isActive)
+                .isActive(userRequestDTO.getActive())
                 .subscriptionStart(userRequestDTO.getSubscriptionStart())
                 .subscriptionEnd(userRequestDTO.getSubscriptionEnd())
                 .role(userRequestDTO.getRole())

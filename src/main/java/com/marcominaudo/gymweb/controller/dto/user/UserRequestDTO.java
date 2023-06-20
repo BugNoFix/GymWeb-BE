@@ -29,5 +29,5 @@ public class UserRequestDTO {
 
     String uuidPt;
 
-    Boolean isActive = true;
+    Boolean active = true;
 }

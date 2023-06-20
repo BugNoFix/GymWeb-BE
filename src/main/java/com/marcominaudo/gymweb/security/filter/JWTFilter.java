@@ -65,15 +65,12 @@ public class JWTFilter extends OncePerRequestFilter {
             if (!user.isEnabled()){
                 resolver.resolveException(request, response, null, new UserException("User is not enable"));
                 return;
-                  //TODO: devere come farlo arrivare al client
             }
             UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
                     user,
                     null,
                     user.getAuthorities()
-            ); // TODO: modificare l'auth token
-            // DOvrebbe aggiugnere le informazione delle request nel token
-            // TODO: Obbligatorio?
+            );
             authToken.setDetails(
                     new WebAuthenticationDetailsSource().buildDetails(request)
             );

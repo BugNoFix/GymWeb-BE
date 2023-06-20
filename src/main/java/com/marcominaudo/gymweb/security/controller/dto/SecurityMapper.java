@@ -2,28 +2,16 @@ package com.marcominaudo.gymweb.security.controller.dto;
 
 import com.marcominaudo.gymweb.model.User;
 import com.marcominaudo.gymweb.model.builder.UserBuilder;
-import com.marcominaudo.gymweb.security.controller.dto.builder.RegisterResponseDTOBuilder;
 import org.springframework.stereotype.Component;
 
 @Component
 public class SecurityMapper {
 
-    public LoginResponseDTO toLoginResponseDTO(String jwt){
+    public LoginResponseDTO toDTO(String jwt){
         return new LoginResponseDTO(jwt);
     }
 
-    public RegisterResponseDTO toRegisterResponseDTO(User user){
-        return new RegisterResponseDTOBuilder()
-            .email(user.getEmail())
-            .uuid(user.getUuid())
-            .role(user.getRole())
-            .surname(user.getSurname())
-            .name(user.getName())
-            .isActive(user.getIsActive())
-            .build();
-    }
-
-    public User RequestDTOtoUser(RequestDTO requestDTO){
+    public User toUser(RequestDTO requestDTO){
         return new UserBuilder().builder()
             .name(requestDTO.getName())
             .surname(requestDTO.getSurname())
