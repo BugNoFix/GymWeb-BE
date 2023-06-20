@@ -10,7 +10,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class SearchUserDTO {
-    private List<UserResponseDTO> users;
+    private List<UserDTO> users;
 
     private int totalPages;
 

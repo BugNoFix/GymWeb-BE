@@ -13,7 +13,7 @@ import java.util.Map;
 @Component
 public class BookingMapper {
 
-    public BookingDTO bookingToDTO(Booking booking){
+    public BookingDTO toDTO(Booking booking){
         BookingDTO bookingDTO = new BookingDTO();
         bookingDTO.setStartTime(booking.getStartTime());
         bookingDTO.setEndTime(booking.getEndTime());
@@ -25,35 +25,22 @@ public class BookingMapper {
         return bookingDTO;
     }
 
-    public SearchBookingDTO bookingsToDTO(Page<Booking> searchInfo){
+    public SearchBookingDTO toDTO(Page<Booking> searchInfo){
         SearchBookingDTO searchBookingDTO = new SearchBookingDTO();
-        List<BookingDTO> bookings = searchInfo.getContent().stream().map(this::bookingToDTO).toList();
+        List<BookingDTO> bookings = searchInfo.getContent().stream().map(this::toDTO).toList(); // Convert each booking in bookingDTO
 
-        searchBookingDTO.setBookings(searchBookingDTO.getBookings());
+        searchBookingDTO.setBookings(bookings);
         searchBookingDTO.setTotalPages(searchInfo.getTotalPages());
         searchBookingDTO.setTotalElements(searchInfo.getTotalElements());
         return searchBookingDTO;
 
     }
 
-    public Booking DTOToBooking(BookingDTO bookingDTO){
+    public Booking toBooking(BookingDTO bookingDTO){
         return new BookingBuilder().builder()
-                .startTime(bookingDTO.getStartTime())
-                .endTime(bookingDTO.getEndTime())
-                .subscriptionTime(bookingDTO.getSubscriptionTime())
-                .build();
-    }
-
-    public List<BookingDTO> mapToDTO(Map<Shift, List<String>> map){
-        List<BookingDTO> bookingDTOs = new ArrayList<>();
-        map.keySet().stream().forEach(key ->{
-            BookingDTO bookingDTO = new BookingDTO();
-            bookingDTO.setStartTime(key.getStartShift());
-            bookingDTO.setEndTime(key.getEndShift());
-            bookingDTO.setName(map.get(key).get(0));
-            bookingDTO.setSurname(map.get(key).get(1));
-            bookingDTOs.add(bookingDTO);
-        });
-       return bookingDTOs;
+            .startTime(bookingDTO.getStartTime())
+            .endTime(bookingDTO.getEndTime())
+            .subscriptionTime(bookingDTO.getSubscriptionTime())
+            .build();
     }
 }

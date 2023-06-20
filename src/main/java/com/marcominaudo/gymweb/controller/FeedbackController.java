@@ -42,7 +42,7 @@ public class FeedbackController {
     public ResponseEntity<FeedbackDTO> feedback(@RequestBody FeedbackDTO feedbackDTO) throws FeedbackCreationException {
         String text = feedbackDTO.getText();
         Feedback feedback = feedbackService.save(text);
-        FeedbackDTO response = feedbackMapper.feedbackToDTO(feedback);
+        FeedbackDTO response = feedbackMapper.toDTO(feedback);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
@@ -53,7 +53,7 @@ public class FeedbackController {
     @GetMapping("/{uuidPt}")
     public ResponseEntity<SearchFeedbackDTO> feedbackOfPt(@PathVariable("uuidPt") String uuidPt, @RequestParam(name = "page", defaultValue = "0") int page, @RequestParam(name = "size", defaultValue = "5") int size) throws FeedbackException, UserException {
         Page<Feedback> feedback = feedbackService.getsAll(uuidPt, page, size);
-        SearchFeedbackDTO response = feedbackMapper.feedbacksToDTO(feedback);
+        SearchFeedbackDTO response = feedbackMapper.toDTO(feedback);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 }

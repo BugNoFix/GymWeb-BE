@@ -15,7 +15,6 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.Arrays;
-import java.util.List;
 
 @Service
 public class FeedbackService {
@@ -32,7 +31,7 @@ public class FeedbackService {
             throw new FeedbackCreationException("The association pt user not exist");
         Feedback feedback = new Feedback();
         feedback.setText(body);
-        feedback.setUser(Arrays.asList(utils.getUser(), pt));
+        feedback.setUsers(Arrays.asList(utils.getUser(), pt));
         return feedbackRepository.save(feedback);
     }
 
@@ -41,6 +40,6 @@ public class FeedbackService {
         if(!pt.getRole().equals(Role.PT))
             throw new FeedbackException("It is't a pt");
         Pageable pageSetting = PageRequest.of(page, size, Sort.by("createdTime").descending());
-        return feedbackRepository.findByUserId(pt.getId(), pageSetting);
+        return feedbackRepository.findByUsersId(pt.getId(), pageSetting);
     }
 }

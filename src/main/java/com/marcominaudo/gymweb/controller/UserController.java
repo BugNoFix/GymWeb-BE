@@ -1,11 +1,11 @@
 package com.marcominaudo.gymweb.controller;
 
-import com.marcominaudo.gymweb.controller.dto.user.SearchUserBodyDetailsDTO;
+import com.marcominaudo.gymweb.controller.dto.bodyDetails.BodyDetailsMapper;
+import com.marcominaudo.gymweb.controller.dto.bodyDetails.SearchUserBodyDetailsDTO;
+import com.marcominaudo.gymweb.controller.dto.bodyDetails.UserBodyDetailsDTO;
 import com.marcominaudo.gymweb.controller.dto.user.SearchUserDTO;
-import com.marcominaudo.gymweb.controller.dto.user.UserBodyDetailsDTO;
+import com.marcominaudo.gymweb.controller.dto.user.UserDTO;
 import com.marcominaudo.gymweb.controller.dto.user.UserMapper;
-import com.marcominaudo.gymweb.controller.dto.user.UserRequestDTO;
-import com.marcominaudo.gymweb.controller.dto.user.UserResponseDTO;
 import com.marcominaudo.gymweb.exception.exceptions.BodyDetailsException;
 import com.marcominaudo.gymweb.exception.exceptions.InvalidRegisterFormException;
 import com.marcominaudo.gymweb.exception.exceptions.UserException;
@@ -40,13 +40,16 @@ public class UserController {
     @Autowired
     UserMapper userMapper;
 
+    @Autowired
+    BodyDetailsMapper bodyDetailsMapper;
+
     @OnlyAdminAccess
     @PostMapping("/create")
-    public ResponseEntity<UserResponseDTO> register(@RequestBody UserRequestDTO userRequestDTO) throws InvalidRegisterFormException {
-        User user = userMapper.UserRequestDTOToUser(userRequestDTO);
+    public ResponseEntity<UserDTO> register(@RequestBody UserDTO userDTO) throws InvalidRegisterFormException {
+        User user = userMapper.toUser(userDTO);
         User userDB = userService.register(user);
 
-        UserResponseDTO response = userMapper.UserToUserResponseDTO(userDB);
+        UserDTO response = userMapper.toDTO(userDB);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
@@ -55,9 +58,9 @@ public class UserController {
     * */
     @FreeAccess
     @GetMapping
-    public ResponseEntity<UserResponseDTO> user(){
+    public ResponseEntity<UserDTO> user(){
         User user = userService.getUser();
-        UserResponseDTO response = userMapper.UserToUserResponseDTO(user);
+        UserDTO response = userMapper.toDTO(user);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
@@ -68,7 +71,7 @@ public class UserController {
     @GetMapping("/all")
     public ResponseEntity<SearchUserDTO> users(@RequestParam(name = "page", defaultValue = "0") int page, @RequestParam(name = "size", defaultValue = "5") int size){
         Page<User> users = userService.getAllUser(page, size);
-        SearchUserDTO response = userMapper.listOfUsersToDTO(users);
+        SearchUserDTO response = userMapper.toDTO(users);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
@@ -79,7 +82,7 @@ public class UserController {
     @GetMapping("/allPt")
     public ResponseEntity<SearchUserDTO> pts(@RequestParam(name = "page", defaultValue = "0") int page, @RequestParam(name = "size", defaultValue = "5") int size){
         Page<User> users = userService.getAllPt(page, size);
-        SearchUserDTO response = userMapper.listOfUsersToDTO(users);
+        SearchUserDTO response = userMapper.toDTO(users);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
@@ -90,7 +93,7 @@ public class UserController {
     @GetMapping("/bodyDetails")
     public ResponseEntity<SearchUserBodyDetailsDTO> bodyDetails(@RequestParam(name = "page", defaultValue = "0") int page, @RequestParam(name = "size", defaultValue = "5") int size){
         Page<UserBodyDetails> userBodyDetails = userService.getBodyDetails(page, size);
-        SearchUserBodyDetailsDTO response = userMapper.listOfBodyDetailsToDTO(userBodyDetails);
+        SearchUserBodyDetailsDTO response = bodyDetailsMapper.toDTO(userBodyDetails);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
@@ -100,9 +103,9 @@ public class UserController {
     @OnlyCustomerAccess
     @PostMapping("/bodyDetails")
     public ResponseEntity<UserBodyDetailsDTO> bodyDetails(@RequestBody UserBodyDetailsDTO userBodyDetailsDTO){
-        UserBodyDetails userBodyDetails = userMapper.DTOToBodyDetails(userBodyDetailsDTO);
+        UserBodyDetails userBodyDetails = bodyDetailsMapper.toBodyDetails(userBodyDetailsDTO);
         UserBodyDetails body = userService.setBodyDetails(userBodyDetails);
-        UserBodyDetailsDTO response = userMapper.bodyDetailsToDTO(body);
+        UserBodyDetailsDTO response = bodyDetailsMapper.toDTO(body);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
@@ -113,7 +116,7 @@ public class UserController {
     @GetMapping("/bodyDetails/{uuid}")
     public ResponseEntity<SearchUserBodyDetailsDTO> bodyDetails(@RequestParam(name = "page", defaultValue = "0") int page, @RequestParam(name = "size", defaultValue = "5") int size, @PathVariable("uuid") String uuid) throws UserException, BodyDetailsException {
         Page<UserBodyDetails> userBodyDetails = userService.getBodyDetailsOfCustomer(page, size, uuid);
-        SearchUserBodyDetailsDTO response = userMapper.listOfBodyDetailsToDTO(userBodyDetails);
+        SearchUserBodyDetailsDTO response = bodyDetailsMapper.toDTO(userBodyDetails);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
@@ -122,9 +125,9 @@ public class UserController {
     * */
     @OnlyCustomerAccess
     @GetMapping("/privacy")
-    public ResponseEntity<UserResponseDTO> privacy(@RequestParam(name = "value", defaultValue = "false") boolean value){
+    public ResponseEntity<UserDTO> privacy(@RequestParam(name = "value", defaultValue = "false") boolean value){
         User user = userService.setPrivacy(value);
-        UserResponseDTO response = userMapper.UserToUserResponseDTO(user);
+        UserDTO response = userMapper.toDTO(user);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
@@ -133,10 +136,10 @@ public class UserController {
     * */
     @OnlyAdminAccess
     @PostMapping("/update/{uuid}")
-    public ResponseEntity<UserResponseDTO> updateUser(@RequestBody UserRequestDTO userRequestDTO, @PathVariable("uuid") String uuid) throws UserException {
-        User userRequest = userMapper.UserRequestDTOToUser(userRequestDTO);
-        User userdb = userService.updateUser(userRequest, uuid, userRequestDTO.getUuidPt());
-        UserResponseDTO response = userMapper.UserToUserResponseDTO(userdb);
+    public ResponseEntity<UserDTO> updateUser(@RequestBody UserDTO userDTO, @PathVariable("uuid") String uuid) throws UserException {
+        User userRequest = userMapper.toUser(userDTO);
+        User userdb = userService.updateUser(userRequest, uuid, userDTO.getUuidPt());
+        UserDTO response = userMapper.toDTO(userdb);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
@@ -144,7 +147,7 @@ public class UserController {
     @GetMapping("/all/{uuidPT}")
     public ResponseEntity<SearchUserDTO> allUserOfPt( @PathVariable("uuidPT") String uuidPt,@RequestParam(name = "page", defaultValue = "0") int page, @RequestParam(name = "size", defaultValue = "5") int size) throws UserException {
         Page<User> users = userService.allUserOfPt(uuidPt, page, size);
-        SearchUserDTO response = userMapper.listOfUsersToDTO(users);
+        SearchUserDTO response = userMapper.toDTO(users);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 

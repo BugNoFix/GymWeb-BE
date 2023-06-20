@@ -1,4 +1,4 @@
-package com.marcominaudo.gymweb.controller.dto.user;
+package com.marcominaudo.gymweb.controller.dto.bodyDetails;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

@@ -8,17 +8,17 @@ import java.util.List;
 
 @Component
 public class WorkoutPlanMapper {
-    public WorkoutPlanDTO workoutPlanToDTO(WorkoutPlan workoutPlan){
+    public WorkoutPlanDTO toDTO(WorkoutPlan workoutPlan){
         WorkoutPlanDTO workoutPlanDTO = new WorkoutPlanDTO();
         workoutPlanDTO.setPath(workoutPlan.getPath());
         workoutPlanDTO.setUploadTime(workoutPlan.getUploadTime());
         return workoutPlanDTO;
     }
 
-    public SearchWorkoutPlansDTO WorkoutPlansToDTO(Page searchInfo){
+    public SearchWorkoutPlansDTO toDTO(Page searchInfo){
         SearchWorkoutPlansDTO searchWorkoutPlansDTO = new SearchWorkoutPlansDTO();
         List<WorkoutPlan> workoutPlans = searchInfo.getContent();
-        List<WorkoutPlanDTO> workoutPlanDTOs = workoutPlans.stream().map(workoutPlan -> workoutPlanToDTO(workoutPlan)).toList();
+        List<WorkoutPlanDTO> workoutPlanDTOs = workoutPlans.stream().map(this::toDTO).toList();
 
         searchWorkoutPlansDTO.setWorkoutPlans(workoutPlanDTOs);
         searchWorkoutPlansDTO.setTotalPages(searchInfo.getTotalPages());

@@ -8,7 +8,7 @@ import java.util.List;
 
 @Component
 public class RoomMapper {
-    public RoomDTO roomToDTO(Room room){
+    public RoomDTO toDTO(Room room){
         RoomDTO roomDTO = new RoomDTO();
         roomDTO.setSize(room.getSize());
         roomDTO.setName(room.getName());
@@ -17,9 +17,9 @@ public class RoomMapper {
         return roomDTO;
     }
 
-    public SearchRoomDTO roomsToDTO(Page<Room> searchInfo){
+    public SearchRoomDTO toDTO(Page<Room> searchInfo){
         SearchRoomDTO searchRoomDTO = new SearchRoomDTO();
-        List<RoomDTO> rooms = searchInfo.getContent().stream().map(room -> roomToDTO(room)).toList();
+        List<RoomDTO> rooms = searchInfo.getContent().stream().map(this::toDTO).toList(); // Covert each room in roomDTO
 
         searchRoomDTO.setRooms(rooms);
         searchRoomDTO.setTotalPages(searchInfo.getTotalPages());
@@ -27,7 +27,7 @@ public class RoomMapper {
         return searchRoomDTO;
     }
 
-    public Room DTOToRoom(RoomDTO roomDTO){
+    public Room toRoom(RoomDTO roomDTO){
         Room room = new Room();
         room.setId(roomDTO.getId());
         room.setActive(roomDTO.isActive());

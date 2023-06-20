@@ -39,7 +39,7 @@ public class WorkoutPlanController {
     @GetMapping
     public ResponseEntity<WorkoutPlanDTO> workoutPlan(){
         WorkoutPlan workoutPlan = workoutPlanService.getWorkoutPlan();
-        WorkoutPlanDTO response = workoutPlanMapper.workoutPlanToDTO(workoutPlan);
+        WorkoutPlanDTO response = workoutPlanMapper.toDTO(workoutPlan);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
@@ -50,7 +50,7 @@ public class WorkoutPlanController {
     @GetMapping("/all")
     public ResponseEntity<SearchWorkoutPlansDTO> workoutPlans(@RequestParam(name = "page", defaultValue = "0") int page, @RequestParam(name = "size", defaultValue = "5") int size){
         Page<WorkoutPlan> searchInfo = workoutPlanService.getWorkoutPlans(page, size);
-        SearchWorkoutPlansDTO response = workoutPlanMapper.WorkoutPlansToDTO(searchInfo);
+        SearchWorkoutPlansDTO response = workoutPlanMapper.toDTO(searchInfo);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
@@ -62,7 +62,7 @@ public class WorkoutPlanController {
     public ResponseEntity<WorkoutPlanDTO> uploadWorkoutPlan(@RequestParam("file") MultipartFile file, @PathVariable("uuid") String uuid) throws UserException {
         WorkoutPlan workoutPlan;
         workoutPlan = workoutPlanService.saveFile(file, uuid);
-        WorkoutPlanDTO response = workoutPlanMapper.workoutPlanToDTO(workoutPlan);
+        WorkoutPlanDTO response = workoutPlanMapper.toDTO(workoutPlan);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
@@ -73,7 +73,7 @@ public class WorkoutPlanController {
     @GetMapping("all/{uuid}")
     public ResponseEntity<SearchWorkoutPlansDTO> workoutPlansOfCustomer(@RequestParam(name = "page", defaultValue = "0") int page, @RequestParam(name = "size", defaultValue = "5") int size, @PathVariable("uuid") String uuid) throws UserException {
         Page<WorkoutPlan> searchInfo = workoutPlanService.getWorkoutPlansOfCustomer(page, size, uuid);
-        SearchWorkoutPlansDTO response = workoutPlanMapper.WorkoutPlansToDTO(searchInfo);
+        SearchWorkoutPlansDTO response = workoutPlanMapper.toDTO(searchInfo);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 }

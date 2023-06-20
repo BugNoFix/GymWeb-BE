@@ -6,5 +6,5 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface FeedbackRepository extends JpaRepository<Feedback, Long> {
-    Page<Feedback> findByUserId(long id, Pageable pageSetting);
+    Page<Feedback> findByUsersId(long id, Pageable pageSetting);
 }

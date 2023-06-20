@@ -20,8 +20,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.List;
-
 @CrossOrigin
 @RestController
 @RequestMapping("/api/v1/room")
@@ -39,9 +37,9 @@ public class RoomController {
     @OnlyAdminAccess
     @PostMapping()
     public ResponseEntity<RoomDTO> room(@RequestBody RoomDTO roomDTO) throws RoomException {
-        Room room = roomMapper.DTOToRoom(roomDTO);
+        Room room = roomMapper.toRoom(roomDTO);
         Room roomDB = roomService.createRoom(room);
-        RoomDTO response = roomMapper.roomToDTO(roomDB);
+        RoomDTO response = roomMapper.toDTO(roomDB);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
@@ -51,9 +49,9 @@ public class RoomController {
     @OnlyAdminAccess
     @PostMapping("/update")
     public ResponseEntity<RoomDTO> roomUpdate(@RequestBody RoomDTO roomDTO) throws RoomException {
-        Room room = roomMapper.DTOToRoom(roomDTO);
+        Room room = roomMapper.toRoom(roomDTO);
         Room roomDB = roomService.updateRoom(room);
-        RoomDTO response = roomMapper.roomToDTO(roomDB);
+        RoomDTO response = roomMapper.toDTO(roomDB);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
@@ -64,7 +62,7 @@ public class RoomController {
     @GetMapping("/all")
     public ResponseEntity<SearchRoomDTO> allRooms(@RequestParam(name = "page", defaultValue = "0") int page, @RequestParam(name = "size", defaultValue = "5") int size)  {
         Page<Room> searchInfo = roomService.allRooms(page, size);
-        SearchRoomDTO response = roomMapper.roomsToDTO(searchInfo);
+        SearchRoomDTO response = roomMapper.toDTO(searchInfo);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 

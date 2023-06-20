@@ -6,16 +6,15 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class UserRequestDTO {
-//TODO: vedere se accopiarlo con userResponseDTO
+public class UserDTO {
     private String name;
 
     private String surname;
+
     private String email;
 
     private LocalDate subscriptionStart;
@@ -23,11 +22,14 @@ public class UserRequestDTO {
     private LocalDate subscriptionEnd;
 
     private Role role;
-    private String password;
 
     private boolean privacy;
 
+    boolean active = true;
+
     String uuidPt;
 
-    Boolean active = true;
+    private String password;
+
+    private String uuid;
 }

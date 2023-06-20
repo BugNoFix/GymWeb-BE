@@ -78,7 +78,7 @@ public class BookingService {
             customers = (int) bookings.stream().filter(b -> dateIsAfterOrEqual(slot.get(),b.getStartTime()) && dateIsBeforeOrEqual(slot.get().plusMinutes(15),b.getEndTime())).count();
             slots.put(slot.get(), customers);
         }
-        // Check if for each slot time the users is minor of room size
+        // Check if for each slot time the user is minor of room size
         List<LocalDateTime> timeSlotFull = slots.keySet().stream()
                 .filter(key -> slots.get(key) >= room.getSize()) // Get time slot when the room is full
                 .toList();
