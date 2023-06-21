@@ -3,7 +3,6 @@ package com.marcominaudo.gymweb.controller;
 import com.marcominaudo.gymweb.controller.dto.feedback.FeedbackDTO;
 import com.marcominaudo.gymweb.controller.dto.feedback.FeedbackMapper;
 import com.marcominaudo.gymweb.controller.dto.feedback.SearchFeedbackDTO;
-import com.marcominaudo.gymweb.exception.exceptions.FeedbackCreationException;
 import com.marcominaudo.gymweb.exception.exceptions.FeedbackException;
 import com.marcominaudo.gymweb.exception.exceptions.UserException;
 import com.marcominaudo.gymweb.model.Feedback;
@@ -39,7 +38,7 @@ public class FeedbackController {
     */
     @OnlyCustomerAccess
     @PostMapping()
-    public ResponseEntity<FeedbackDTO> feedback(@RequestBody FeedbackDTO feedbackDTO) throws FeedbackCreationException {
+    public ResponseEntity<FeedbackDTO> feedback(@RequestBody FeedbackDTO feedbackDTO) throws FeedbackException {
         String text = feedbackDTO.getText();
         Feedback feedback = feedbackService.save(text);
         FeedbackDTO response = feedbackMapper.toDTO(feedback);

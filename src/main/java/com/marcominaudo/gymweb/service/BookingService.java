@@ -50,16 +50,14 @@ public class BookingService {
 
     private boolean bookingValid(LocalDateTime startDate, LocalDateTime endDate, long roomId) throws BookingException, RoomException {
         // Check id date is valis
-        if(startDate.isAfter(endDate))
-            throw new BookingException("Start time is after end time");
-        if(startDate.isBefore(LocalDateTime.now()))
-            throw new BookingException("Date invalid");
+        if(startDate.isAfter(endDate) || startDate.isBefore(LocalDateTime.now()))
+            throw new BookingException(BookingException.ExceptionCodes.INVALID_DATE_RANGE);
 
         // Check if the slot time is valid
         int startMinute = startDate.getMinute();
         int endMinute = endDate.getMinute();
         if(startMinute % 15 != 0 || endMinute % 15 != 0)
-            throw new BookingException("Minute slot is invalid");
+            throw new BookingException(BookingException.ExceptionCodes.INVALID_TIME_RANGE);
 
         // Check is room is valid
         roomService.roomIsValid(roomId);
@@ -83,14 +81,14 @@ public class BookingService {
                 .filter(key -> slots.get(key) >= room.getSize()) // Get time slot when the room is full
                 .toList();
         if(!timeSlotFull.isEmpty())
-            throw new BookingException("Booking over room limit", timeSlotFull);
+            throw new BookingException(BookingException.ExceptionCodes.ROOM_IS_FULL, timeSlotFull);
 
         // Check if the user has a booking in the same period
 
         User user = utils.getUser();
         long bookingsOfUser = bookingRepository.findAllByUserIdAndBetweenBookingDate(user.getId(), startDate, endDate);
         if(bookingsOfUser > 0)
-            throw new BookingException("User is already booked");
+            throw new BookingException(BookingException.ExceptionCodes.USER_ALREADY_BOOKED);
 
         return true;
 

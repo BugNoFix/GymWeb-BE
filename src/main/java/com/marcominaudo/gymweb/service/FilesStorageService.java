@@ -22,7 +22,7 @@ public class FilesStorageService {
         try {
             Files.createDirectories(directory);
         } catch (IOException e) {
-            throw new FileStorageException("Directory not created");
+            throw new FileStorageException(FileStorageException.ExceptionCodes.DIRECTORY_NOT_CREATED);
         }
     }
 
@@ -36,7 +36,7 @@ public class FilesStorageService {
         try {
             Files.copy(file.getInputStream(), pathFile);
         } catch (Exception e) {
-            throw new FileStorageException("File not saved");
+            throw new FileStorageException(FileStorageException.ExceptionCodes.FILE_NOT_SAVED);
         }
         return Paths.get(uuid, fileName).toString();
     }
@@ -50,12 +50,12 @@ public class FilesStorageService {
                 resource = new UrlResource(completePath.toUri());
             }
             catch (Exception e){
-                throw new FileStorageException("File not exist");
+                throw new FileStorageException(FileStorageException.ExceptionCodes.FILE_NOT_EXIST);
             }
             if (resource.exists() || resource.isReadable()) {
                 return resource;
             }
-            throw new FileStorageException("Can't load the file");
+            throw new FileStorageException(FileStorageException.ExceptionCodes.FILE_NOT_LOADED);
     }
 }
 

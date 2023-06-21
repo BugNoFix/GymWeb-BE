@@ -1,6 +1,5 @@
 package com.marcominaudo.gymweb.service;
 
-import com.marcominaudo.gymweb.exception.exceptions.FeedbackCreationException;
 import com.marcominaudo.gymweb.exception.exceptions.FeedbackException;
 import com.marcominaudo.gymweb.exception.exceptions.UserException;
 import com.marcominaudo.gymweb.model.Feedback;
@@ -25,10 +24,10 @@ public class FeedbackService {
     @Autowired
     Utils utils;
 
-    public Feedback save(String body) throws FeedbackCreationException {
+    public Feedback save(String body) throws FeedbackException {
         User pt = utils.getPtOfCustomer();
         if (pt == null)
-            throw new FeedbackCreationException("The association pt user not exist");
+            throw new FeedbackException(FeedbackException.ExceptionCodes.PT_MISSING);
         Feedback feedback = new Feedback();
         feedback.setText(body);
         feedback.setUsers(Arrays.asList(utils.getUser(), pt));
@@ -38,7 +37,7 @@ public class FeedbackService {
     public Page<Feedback> getsAll(String uuidPt, int page, int size) throws FeedbackException, UserException {
         User pt = utils.getUserByUuid(uuidPt);
         if(!pt.getRole().equals(Role.PT))
-            throw new FeedbackException("It is't a pt");
+            throw new FeedbackException(FeedbackException.ExceptionCodes.USER_ROLE_INVALID);
         Pageable pageSetting = PageRequest.of(page, size, Sort.by("createdTime").descending());
         return feedbackRepository.findByUsersId(pt.getId(), pageSetting);
     }

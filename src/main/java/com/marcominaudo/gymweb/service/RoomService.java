@@ -20,24 +20,24 @@ public class RoomService {
     public boolean roomIsValid(long roomId) throws RoomException {
         Room room = getRoom(roomId);
         if(!room.isActive())
-            throw new RoomException("Room not active");
+            throw new RoomException(RoomException.ExceptionCodes.INACTIVE_ROOM);
         return true;
     }
 
     public Room getRoom(long roomId) throws RoomException {
-        return roomRepository.findById(roomId).orElseThrow(()-> new RoomException("Room not exist"));
+        return roomRepository.findById(roomId).orElseThrow(()-> new RoomException(RoomException.ExceptionCodes.ROOM_NOT_EXIST));
     }
 
     public Room createRoom(Room room) throws RoomException {
         if(room.getSize() <= 0 )
-            throw new RoomException("Size not valid data");
+            throw new RoomException(RoomException.ExceptionCodes.SIZE_NOT_VALID);
         if(room.getName().isEmpty())
-            throw new RoomException("Missing data");
+            throw new RoomException(RoomException.ExceptionCodes.MISSING_DATA);
         return roomRepository.save(room);
     }
 
     public Room updateRoom(Room room) throws RoomException {
-        Room roomDB = roomRepository.findById(room.getId()).orElseThrow(() ->new RoomException("Room not valid"));
+        Room roomDB = roomRepository.findById(room.getId()).orElseThrow(() ->new RoomException(RoomException.ExceptionCodes.INVALID_ROOM));
         roomDB.setActive(room.isActive());
         roomDB.setName(room.getName());
         roomDB.setSize(room.getSize());

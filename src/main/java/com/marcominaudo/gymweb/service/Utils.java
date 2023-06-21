@@ -25,6 +25,6 @@ public class Utils {
     }
 
     public User getUserByUuid(String uuid) throws UserException {
-       return userRepository.findByUuid(uuid).orElseThrow(() -> new UserException("User not exist"));
+       return userRepository.findByUuid(uuid).orElseThrow(() -> new UserException(UserException.ExceptionCodes.USER_NOT_FOUND));
     }
 }

@@ -71,13 +71,13 @@ public class JWTUtil {
             Jwts.parser().setSigningKey(getSignInKey()).parseClaimsJws(jwt);
         }
         catch (io.jsonwebtoken.security.SecurityException | MalformedJwtException e) {
-            throw new JWTException("Invalid JWT signature.");
+            throw new JWTException(JWTException.ExceptionCodes.INVALID_JWT_SIGNATURE);
         }
         catch (ExpiredJwtException e) {
-            throw new JWTException("Expired JWT token");
+            throw new JWTException(JWTException.ExceptionCodes.EXPIRED_JWT_TOKEN);
         }
         catch (UnsupportedJwtException e) {
-            throw new JWTException("Unsupported JWT token.");
+            throw new JWTException(JWTException.ExceptionCodes.UNSUPPORTED_JWT_TOKEN);
         }
     }
     private Key getSignInKey() {

@@ -46,11 +46,11 @@ public class UserService {
 
     private void registerFormValidator(User user) throws InvalidRegisterFormException {
         if (user.getEmail() == null || user.getName() == null || user.getSurname() == null || user.getPassword() == null || user.getRole() == null)
-            throw new InvalidRegisterFormException("Missing required values");
+            throw new InvalidRegisterFormException(InvalidRegisterFormException.ExceptionCodes.MISSING_REQUIRED_VALUE);
         if(!EmailValidator.getInstance().isValid(user.getEmail()))
-            throw new InvalidRegisterFormException("Invalid email");
+            throw new InvalidRegisterFormException(InvalidRegisterFormException.ExceptionCodes.EMAIL_INVALID);
         if(userRepository.findByEmail(user.getEmail()).isPresent())
-            throw new InvalidRegisterFormException("User already exist");
+            throw new InvalidRegisterFormException(InvalidRegisterFormException.ExceptionCodes.USER_ALREADY_EXIST);
     }
 
     public Page<UserBodyDetails> getBodyDetails(int page, int size) {
@@ -75,7 +75,7 @@ public class UserService {
     public Page<UserBodyDetails> getBodyDetailsOfCustomer(int page, int size, String uuid) throws BodyDetailsException, UserException {
         User user = utils.getUserByUuid(uuid);
         if(BooleanUtils.isFalse(user.getPrivacy()))
-            throw new BodyDetailsException("The customer has not consented to the display of their data");
+            throw new BodyDetailsException(BodyDetailsException.ExceptionCodes.PRIVACY_NOT_ENABLED);
         Pageable pageSetting = PageRequest.of(page, size);
         return userBodyDetailsRepository.findByUserId(user.getId(), pageSetting);
     }

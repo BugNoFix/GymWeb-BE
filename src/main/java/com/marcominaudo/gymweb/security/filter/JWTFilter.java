@@ -63,7 +63,7 @@ public class JWTFilter extends OncePerRequestFilter {
             UserDetails user = userDetailsService.loadUserByUsername(userEmail);
             // User not enabled
             if (!user.isEnabled()){
-                resolver.resolveException(request, response, null, new UserException("User is not enable"));
+                resolver.resolveException(request, response, null, new UserException(UserException.ExceptionCodes.USER_NOT_ENABLE));
                 return;
             }
             UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
