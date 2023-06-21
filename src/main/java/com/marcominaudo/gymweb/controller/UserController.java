@@ -7,7 +7,7 @@ import com.marcominaudo.gymweb.controller.dto.user.SearchUserDTO;
 import com.marcominaudo.gymweb.controller.dto.user.UserDTO;
 import com.marcominaudo.gymweb.controller.dto.user.UserMapper;
 import com.marcominaudo.gymweb.exception.exceptions.BodyDetailsException;
-import com.marcominaudo.gymweb.exception.exceptions.InvalidRegisterFormException;
+import com.marcominaudo.gymweb.exception.exceptions.InvalidRegisterException;
 import com.marcominaudo.gymweb.exception.exceptions.UserException;
 import com.marcominaudo.gymweb.model.User;
 import com.marcominaudo.gymweb.model.UserBodyDetails;
@@ -45,7 +45,7 @@ public class UserController {
 
     @OnlyAdminAccess
     @PostMapping("/create")
-    public ResponseEntity<UserDTO> register(@RequestBody UserDTO userDTO) throws InvalidRegisterFormException {
+    public ResponseEntity<UserDTO> register(@RequestBody UserDTO userDTO) throws InvalidRegisterException {
         User user = userMapper.toUser(userDTO);
         User userDB = userService.register(user);
 

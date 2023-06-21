@@ -1,5 +1,6 @@
 package com.marcominaudo.gymweb.security.controller;
 
+import com.marcominaudo.gymweb.exception.exceptions.InvalidRegisterException;
 import com.marcominaudo.gymweb.exception.exceptions.JWTException;
 import com.marcominaudo.gymweb.exception.exceptions.UserException;
 import com.marcominaudo.gymweb.model.User;
@@ -35,7 +36,7 @@ public class AuthController {
 
 
     @PostMapping(value = "/login", produces = "application/json")
-    public ResponseEntity<LoginResponseDTO> login(@RequestBody RequestDTO requestDTO) throws UserException {
+    public ResponseEntity<LoginResponseDTO> login(@RequestBody RequestDTO requestDTO) throws UserException, InvalidRegisterException {
         User user = securityMapper.toUser(requestDTO);
         String jwt = authService.login(user);
 

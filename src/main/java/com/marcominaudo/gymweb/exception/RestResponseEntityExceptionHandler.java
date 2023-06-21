@@ -1,8 +1,9 @@
 package com.marcominaudo.gymweb.exception;
 
+import com.marcominaudo.gymweb.exception.exceptions.BodyDetailsException;
 import com.marcominaudo.gymweb.exception.exceptions.BookingException;
 import com.marcominaudo.gymweb.exception.exceptions.FeedbackException;
-import com.marcominaudo.gymweb.exception.exceptions.InvalidRegisterFormException;
+import com.marcominaudo.gymweb.exception.exceptions.InvalidRegisterException;
 import com.marcominaudo.gymweb.exception.exceptions.JWTException;
 import com.marcominaudo.gymweb.exception.exceptions.MyCustomException;
 import com.marcominaudo.gymweb.exception.exceptions.RoomException;
@@ -11,9 +12,6 @@ import com.marcominaudo.gymweb.exception.model.ErrorMessage;
 import com.marcominaudo.gymweb.exception.model.builder.ErrorMessageBuilder;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.AccessDeniedException;
-import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.authentication.InternalAuthenticationServiceException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
@@ -23,7 +21,7 @@ import java.util.List;
 @RestControllerAdvice
 public class RestResponseEntityExceptionHandler {
 
-    @ExceptionHandler({AccessDeniedException.class, JWTException.class, FeedbackException.class, BadCredentialsException.class, InternalAuthenticationServiceException.class, InvalidRegisterFormException.class, RoomException.class, UserException.class})
+    @ExceptionHandler({ JWTException.class, FeedbackException.class, InvalidRegisterException.class, RoomException.class, UserException.class, FeedbackException.class, BodyDetailsException.class})
     public ResponseEntity<ErrorMessage> exceptions(MyCustomException ex){
         ErrorMessage errorMessage = createErrorMessage(ex);
         return new ResponseEntity<>(errorMessage, HttpStatus.BAD_REQUEST);

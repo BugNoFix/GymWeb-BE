@@ -1,7 +1,7 @@
 package com.marcominaudo.gymweb.service;
 
 import com.marcominaudo.gymweb.exception.exceptions.BodyDetailsException;
-import com.marcominaudo.gymweb.exception.exceptions.InvalidRegisterFormException;
+import com.marcominaudo.gymweb.exception.exceptions.InvalidRegisterException;
 import com.marcominaudo.gymweb.exception.exceptions.UserException;
 import com.marcominaudo.gymweb.model.Role;
 import com.marcominaudo.gymweb.model.User;
@@ -38,19 +38,19 @@ public class UserService {
         return utils.getUser();
     }
 
-    public User register(User user) throws InvalidRegisterFormException {
+    public User register(User user) throws InvalidRegisterException {
         registerFormValidator(user);
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         return userRepository.save(user);
     }
 
-    private void registerFormValidator(User user) throws InvalidRegisterFormException {
+    private void registerFormValidator(User user) throws InvalidRegisterException {
         if (user.getEmail() == null || user.getName() == null || user.getSurname() == null || user.getPassword() == null || user.getRole() == null)
-            throw new InvalidRegisterFormException(InvalidRegisterFormException.ExceptionCodes.MISSING_REQUIRED_VALUE);
+            throw new InvalidRegisterException(InvalidRegisterException.ExceptionCodes.MISSING_REQUIRED_VALUE);
         if(!EmailValidator.getInstance().isValid(user.getEmail()))
-            throw new InvalidRegisterFormException(InvalidRegisterFormException.ExceptionCodes.EMAIL_INVALID);
+            throw new InvalidRegisterException(InvalidRegisterException.ExceptionCodes.EMAIL_INVALID);
         if(userRepository.findByEmail(user.getEmail()).isPresent())
-            throw new InvalidRegisterFormException(InvalidRegisterFormException.ExceptionCodes.USER_ALREADY_EXIST);
+            throw new InvalidRegisterException(InvalidRegisterException.ExceptionCodes.USER_ALREADY_EXIST);
     }
 
     public Page<UserBodyDetails> getBodyDetails(int page, int size) {
