@@ -7,6 +7,7 @@ import com.marcominaudo.gymweb.exception.exceptions.InvalidRegisterException;
 import com.marcominaudo.gymweb.exception.exceptions.UserException;
 import com.marcominaudo.gymweb.model.Role;
 import com.marcominaudo.gymweb.model.User;
+import com.marcominaudo.gymweb.model.UserBodyDetails;
 import com.marcominaudo.gymweb.repository.UserBodyDetailsRepository;
 import com.marcominaudo.gymweb.repository.UserRepository;
 import com.marcominaudo.gymweb.service.UserService;
@@ -21,6 +22,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertAll;
@@ -300,7 +302,7 @@ public class UserServiceTest {
         userBeforeUpdate.setSubscriptionEnd(LocalDate.now());
         when(utils.getUserByUuid(any(String.class))).thenReturn(userBeforeUpdate);
         when(userRepository.save(any(User.class))).then(returnsFirstArg());
-        
+
         // No changes
         User userChanges =  new User();
         User userUpdated = userService.updateUser(userChanges, "uuid", "uuidPt");
@@ -308,7 +310,74 @@ public class UserServiceTest {
         // Test
         assertEquals(userUpdated, userBeforeUpdate);
     }
+    // --------------------------------
 
+    // --------- Other ----------
+    @Test
+    void getBodyDetails() {
+        // Mock
+        User user = utilsTest.getUser();
+        when(utils.getUser()).thenReturn(user);
+        when(userBodyDetailsRepository.findByUserId(any(Long.class), any(Pageable.class))).thenReturn(Page.empty());
+
+        // Test
+        assertAll(() -> userService.getBodyDetails(0, 5));
+    }
+
+    @Test
+    void setBodyDetails(){
+        // Mock
+        User user = utilsTest.getUser();
+        when(utils.getUser()).thenReturn(user);
+        when(userBodyDetailsRepository.save(any(UserBodyDetails.class))).then(returnsFirstArg());
+
+        // Test
+        UserBodyDetails userBodyDetails = new UserBodyDetails(1, 80, 20, 180, 80, 35, 130, 80, LocalDateTime.now(), user);
+        UserBodyDetails actual = userService.setBodyDetails(userBodyDetails);
+        assertEquals(userBodyDetails, actual);
+    }
+
+    @Test
+    void setPrivacy(){
+        // Mock
+        User user = utilsTest.getUser();
+        user.setPrivacy(false);
+        when(utils.getUser()).thenReturn(user);
+        when(userRepository.save(any(User.class))).then(returnsFirstArg());
+
+        // Test
+        User userUpdated = userService.setPrivacy(true);
+        assertEquals(true, userUpdated.getPrivacy());
+    }
+
+    @Test
+    void allUserOfPt() throws UserException {
+        // Mock
+        User pt = utilsTest.getPt("Giovanni", "Peluso", "GiovanniPt@gymweb.com");
+        when(utils.getUserByUuid(any(String.class))).thenReturn(pt);
+        when(userRepository.findCustomersByPtId(any(Long.class), any(Pageable.class))).thenReturn(Page.empty());
+
+        // Test
+        assertAll(() -> userService.allUserOfPt("uuidPt", 0, 5));
+    }
+
+    @Test
+    void getAllUser(){
+        // Mock
+        when(userRepository.findAll(any(Pageable.class))).thenReturn(Page.empty());
+
+        // Test
+        assertAll(() -> userService.getAllUser(0, 5));
+    }
+
+    @Test
+    void getAllPt(){
+        // Mock
+        when(userRepository.findByRole(any(Role.class), any(Pageable.class))).thenReturn(Page.empty());
+
+        // Test
+        assertAll(() -> userService.getAllPt(0, 5));
+    }
     // --------------------------------
 
 }
