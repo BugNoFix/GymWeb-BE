@@ -27,7 +27,7 @@ public class WebSecurityConfig {
         http
             .csrf().disable()
                 .cors().and()
-                //.and().exceptionHandling().authenticationEntryPoint(authEntryPoint)
+                .exceptionHandling().authenticationEntryPoint(authEntryPoint).and()
                 .authorizeHttpRequests()
                 .requestMatchers("/api/v1/auth/**").permitAll()
                 .requestMatchers("/download/**").permitAll()

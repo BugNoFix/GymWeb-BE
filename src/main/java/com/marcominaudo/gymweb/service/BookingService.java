@@ -9,25 +9,23 @@ import com.marcominaudo.gymweb.model.Room;
 import com.marcominaudo.gymweb.model.User;
 import com.marcominaudo.gymweb.model.builder.BookingBuilder;
 import com.marcominaudo.gymweb.repository.BookingRepository;
-import com.marcominaudo.gymweb.utilis.object.Shift;
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.lang.reflect.Array;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicReference;
 
 
 @Service
+@AllArgsConstructor
 public class BookingService {
     @Autowired
     RoomService roomService;
@@ -84,14 +82,12 @@ public class BookingService {
             throw new BookingException(BookingException.ExceptionCodes.ROOM_IS_FULL, timeSlotFull);
 
         // Check if the user has a booking in the same period
-
         User user = utils.getUser();
         long bookingsOfUser = bookingRepository.findAllByUserIdAndBetweenBookingDate(user.getId(), startDate, endDate);
         if(bookingsOfUser > 0)
             throw new BookingException(BookingException.ExceptionCodes.USER_ALREADY_BOOKED);
 
         return true;
-
 
     }
 

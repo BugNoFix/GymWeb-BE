@@ -21,7 +21,7 @@ import java.util.List;
 @RestControllerAdvice
 public class RestResponseEntityExceptionHandler {
 
-    @ExceptionHandler({ JWTException.class, FeedbackException.class, InvalidRegisterException.class, RoomException.class, UserException.class, FeedbackException.class, BodyDetailsException.class})
+    @ExceptionHandler({JWTException.class, FeedbackException.class, InvalidRegisterException.class, RoomException.class, UserException.class, FeedbackException.class, BodyDetailsException.class, Exception.class})
     public ResponseEntity<ErrorMessage> exceptions(MyCustomException ex){
         ErrorMessage errorMessage = createErrorMessage(ex);
         return new ResponseEntity<>(errorMessage, HttpStatus.BAD_REQUEST);

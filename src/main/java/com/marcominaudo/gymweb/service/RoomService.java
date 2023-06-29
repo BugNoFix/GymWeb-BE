@@ -9,13 +9,13 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
-
+import org.thymeleaf.util.StringUtils;
+// Path coverage
 @Service
 public class RoomService {
 
     @Autowired
     RoomRepository roomRepository;
-
 
     public boolean roomIsValid(long roomId) throws RoomException {
         Room room = getRoom(roomId);
@@ -29,15 +29,15 @@ public class RoomService {
     }
 
     public Room createRoom(Room room) throws RoomException {
-        if(room.getSize() <= 0 )
+        if(room.getSize() <= 0)
             throw new RoomException(RoomException.ExceptionCodes.SIZE_NOT_VALID);
-        if(room.getName().isEmpty())
+        if(StringUtils.isEmpty(room.getName()))
             throw new RoomException(RoomException.ExceptionCodes.MISSING_DATA);
         return roomRepository.save(room);
     }
 
     public Room updateRoom(Room room) throws RoomException {
-        Room roomDB = roomRepository.findById(room.getId()).orElseThrow(() ->new RoomException(RoomException.ExceptionCodes.INVALID_ROOM));
+        Room roomDB = roomRepository.findById(room.getId()).orElseThrow(() -> new RoomException(RoomException.ExceptionCodes.INVALID_ROOM));
         roomDB.setActive(room.isActive());
         roomDB.setName(room.getName());
         roomDB.setSize(room.getSize());
@@ -49,8 +49,5 @@ public class RoomService {
         Pageable pageSetting = PageRequest.of(page, size, Sort.by("id").descending());
         return roomRepository.findAll(pageSetting);
     }
-
-
-
 
 }

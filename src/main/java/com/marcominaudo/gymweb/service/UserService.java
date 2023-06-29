@@ -17,6 +17,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.thymeleaf.util.StringUtils;
 
 
 @Service
@@ -45,7 +46,7 @@ public class UserService {
     }
 
     private void registerFormValidator(User user) throws InvalidRegisterException {
-        if (user.getEmail() == null || user.getName() == null || user.getSurname() == null || user.getPassword() == null || user.getRole() == null)
+        if (StringUtils.isEmpty(user.getEmail()) || StringUtils.isEmpty(user.getName()) || StringUtils.isEmpty(user.getSurname()) || StringUtils.isEmpty(user.getPassword())|| user.getRole() == null)
             throw new InvalidRegisterException(InvalidRegisterException.ExceptionCodes.MISSING_REQUIRED_VALUE);
         if(!EmailValidator.getInstance().isValid(user.getEmail()))
             throw new InvalidRegisterException(InvalidRegisterException.ExceptionCodes.EMAIL_INVALID);
@@ -93,8 +94,8 @@ public class UserService {
         if(user.getSurname() != null && !user.getSurname().isEmpty())
             userDB.setSurname(user.getSurname());
         if(user.getEmail() != null && !user.getEmail().isEmpty())
-            userDB.setSurname(user.getSurname());
-        if(uuidPt != null && uuidPt.isEmpty()){
+            userDB.setEmail(user.getEmail());
+        if(uuidPt != null && !uuidPt.isEmpty()){
             User pt = utils.getUserByUuid(uuidPt);
             userDB.setPt(pt);
         }
