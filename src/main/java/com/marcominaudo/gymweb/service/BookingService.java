@@ -17,7 +17,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -109,10 +108,12 @@ public class BookingService {
 
     public List<Booking> bookingInfo(long roomId, LocalDateTime day, Role role) {
         List<Booking> bookings = bookingRepository.findByRoomIdAndDay(roomId, day);
-        List<Booking> bookingPts = bookings.stream().filter(b -> b.getUser().getRole() == role).toList();
+        List<Booking> bookingRole = bookings.stream().filter(b -> b.getUser().getRole() == role).toList();
 
+        // TODO: remove if not util
+        /*
         List<Booking> bookingsInfo = new ArrayList<>();
-        bookingPts.stream().forEach(b -> {
+        bookingRole.forEach(b -> {
             Booking booking = new BookingBuilder()
                     .startTime(b.getStartTime())
                     .endTime(b.getEndTime())
@@ -120,7 +121,9 @@ public class BookingService {
                     .build();
             bookingsInfo.add(booking);
         });
-        return bookingsInfo;
+
+         */
+        return bookingRole;
     }
 
     public Page<Booking> bookingOfCustomer(String uuidCustomer, int size, int page, LocalDateTime day) throws UserException {

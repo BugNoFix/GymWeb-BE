@@ -1,9 +1,12 @@
-package com.marcominaudo.gymweb.unitTest;
+package com.marcominaudo.gymweb.unitTest.service;
 
 import com.marcominaudo.gymweb.UtilsTest;
 import com.marcominaudo.gymweb.exception.exceptions.BookingException;
 import com.marcominaudo.gymweb.exception.exceptions.RoomException;
+import com.marcominaudo.gymweb.exception.exceptions.UserException;
 import com.marcominaudo.gymweb.model.Booking;
+import com.marcominaudo.gymweb.model.Role;
+import com.marcominaudo.gymweb.model.User;
 import com.marcominaudo.gymweb.repository.BookingRepository;
 import com.marcominaudo.gymweb.service.BookingService;
 import com.marcominaudo.gymweb.service.RoomService;
@@ -13,8 +16,11 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -25,7 +31,7 @@ import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 //Path coverage
-public class BookingTest {
+public class BookingServiceTest {
 
     @Mock
     RoomService roomService;
@@ -42,6 +48,7 @@ public class BookingTest {
     LocalDateTime today = LocalDateTime.now().plusYears(1).withHour(6).withMinute(0);
     UtilsTest utilsTest = new UtilsTest(today);
 
+    // --------- New Booking ----------
     @Test
     void bookingConfirm() throws RoomException {
         // Room mock
@@ -117,5 +124,53 @@ public class BookingTest {
         BookingException thrown = assertThrows(BookingException.class, () -> bookingService.newBooking(booking, 1));
         assertEquals(BookingException.ExceptionCodes.USER_ALREADY_BOOKED.name(), thrown.getMessage());
     }
+    // ----------------------------------------
+
+    // --------- Info Booking ----------
+    @Test
+    void bookingInfoPt() {
+        // Mock
+        List<Booking> bookings = utilsTest.get3Booking();
+        bookings.get(0).getUser().setRole(Role.PT);
+        bookings.get(1).getUser().setRole(Role.PT);
+        bookings.get(2).getUser().setRole(Role.CUSTOMER);
+        when(bookingRepository.findByRoomIdAndDay(any(Long.class), any(LocalDateTime.class))).thenReturn(bookings);
+
+
+        // Test: get all booking of pt
+        List<Booking> result = bookingService.bookingInfo(1, LocalDateTime.now(), Role.PT);
+        assertEquals(2, result.size());
+    }
+
+    @Test
+    void bookingInfoCustomer() {
+        // Mock
+        List<Booking> bookings = utilsTest.get3Booking();
+        bookings.get(0).getUser().setRole(Role.PT);
+        bookings.get(1).getUser().setRole(Role.CUSTOMER);
+        bookings.get(2).getUser().setRole(Role.CUSTOMER);
+        when(bookingRepository.findByRoomIdAndDay(any(Long.class), any(LocalDateTime.class))).thenReturn(bookings);
+
+
+        // Test: get all booking of customer
+        List<Booking> result = bookingService.bookingInfo(1, LocalDateTime.now(), Role.CUSTOMER);
+        assertEquals(2, result.size());
+    }
+    // ----------------------------------------
+
+    // --------- Other ----------
+    @Test
+    void bookingOfCustomer() throws UserException {
+        // Mock
+        when(bookingRepository.findAllBookingOfUserInOneDay(any(Long.class), any(Pageable.class), any(LocalDateTime.class))).thenReturn(Page.empty());
+        User customer = utilsTest.getCustomer("Marco", "Minaudo", "marco@gmail.com", true, null);
+        when(utils.getUserByUuid(any(String.class))).thenReturn(customer);
+
+
+        // Test: get all booking of customer
+        assertAll(()-> bookingService.bookingOfCustomer("uuidCustomer", 5, 0, LocalDateTime.now()));
+    }
+    // ----------------------------------------
+
 
 }

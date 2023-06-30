@@ -34,7 +34,7 @@ public class FeedbackService {
         return feedbackRepository.save(feedback);
     }
 
-    public Page<Feedback> getsAll(String uuidPt, int page, int size) throws FeedbackException, UserException {
+    public Page<Feedback> getsAllFeedbackOfPt(String uuidPt, int page, int size) throws FeedbackException, UserException {
         User pt = utils.getUserByUuid(uuidPt);
         if(!pt.getRole().equals(Role.PT))
             throw new FeedbackException(FeedbackException.ExceptionCodes.USER_ROLE_INVALID);

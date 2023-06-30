@@ -51,7 +51,7 @@ public class FeedbackController {
     @FreeAccess
     @GetMapping("/{uuidPt}")
     public ResponseEntity<SearchFeedbackDTO> feedbackOfPt(@PathVariable("uuidPt") String uuidPt, @RequestParam(name = "page", defaultValue = "0") int page, @RequestParam(name = "size", defaultValue = "5") int size) throws FeedbackException, UserException {
-        Page<Feedback> feedback = feedbackService.getsAll(uuidPt, page, size);
+        Page<Feedback> feedback = feedbackService.getsAllFeedbackOfPt(uuidPt, page, size);
         SearchFeedbackDTO response = feedbackMapper.toDTO(feedback);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
