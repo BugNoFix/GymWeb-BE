@@ -4,14 +4,17 @@ import com.marcominaudo.gymweb.model.Booking;
 import com.marcominaudo.gymweb.model.Role;
 import com.marcominaudo.gymweb.model.Room;
 import com.marcominaudo.gymweb.model.User;
+import com.marcominaudo.gymweb.model.WorkoutPlan;
 import com.marcominaudo.gymweb.model.builder.BookingBuilder;
 import com.marcominaudo.gymweb.model.builder.UserBuilder;
+import com.marcominaudo.gymweb.model.builder.WorkoutPlanBuilder;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
@@ -126,5 +129,26 @@ public class UtilsTest {
         bookings.add(getBooking(-30, 30, getUser()));
         bookings.add(getBooking(-15, 30, getUser()));
         return bookings;
+    }
+
+    public List<WorkoutPlan> getWorkoutPlans(){
+        List<WorkoutPlan> workoutPlans = new ArrayList<>();
+        User pt = getPt("giovanni", "suriano", "giovaPt@gymweb.com");
+        User customer = getCustomer("Marco", "Minaudo", "Marco@gmailcom", true, pt);
+        WorkoutPlan workoutPlan = new WorkoutPlanBuilder()
+                .path("/uploads/file")
+                .id(1)
+                .user(Arrays.asList(customer, pt))
+                .uploadTime(LocalDateTime.now().plusMonths(-1))
+                .build();
+        workoutPlans.add(workoutPlan);
+        workoutPlan = new WorkoutPlanBuilder()
+                .path("/uploads/file2")
+                .id(2)
+                .user(Arrays.asList(customer, pt))
+                .uploadTime(LocalDateTime.now())
+                .build();
+        workoutPlans.add(workoutPlan);
+        return workoutPlans;
     }
 }

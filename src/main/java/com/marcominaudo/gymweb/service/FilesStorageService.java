@@ -50,12 +50,12 @@ public class FilesStorageService {
                 resource = new UrlResource(completePath.toUri());
             }
             catch (Exception e){
-                throw new FileStorageException(FileStorageException.ExceptionCodes.FILE_NOT_EXIST);
+                throw new FileStorageException(FileStorageException.ExceptionCodes.URI_INVALID);
             }
             if (resource.exists() || resource.isReadable()) {
                 return resource;
             }
-            throw new FileStorageException(FileStorageException.ExceptionCodes.FILE_NOT_LOADED);
+            throw new FileStorageException(FileStorageException.ExceptionCodes.FILE_NOT_EXIST);
     }
 }
 
