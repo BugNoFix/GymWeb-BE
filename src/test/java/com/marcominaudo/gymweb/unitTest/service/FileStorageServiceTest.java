@@ -34,9 +34,6 @@ public class FileStorageServiceTest {
     @Mock
     MultipartFile multipartFile;
 
-    //@Spy
-    //Resource urlResource;
-
     @InjectMocks
     FilesStorageService filesStorageService;
 
