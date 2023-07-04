@@ -3,7 +3,6 @@ package com.marcominaudo.gymweb.integration;
 
 import com.marcominaudo.gymweb.UtilsTest;
 import com.marcominaudo.gymweb.exception.exceptions.InvalidRegisterException;
-import com.marcominaudo.gymweb.exception.exceptions.UserException;
 import com.marcominaudo.gymweb.model.Role;
 import com.marcominaudo.gymweb.model.User;
 import com.marcominaudo.gymweb.repository.UserRepository;
@@ -14,8 +13,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertAll;
@@ -84,20 +81,5 @@ public class UserTest {
 
         Optional<User> actual = userRepository.findByEmail("newEmail@gmail.com");
         assertAll(() -> actual.orElseThrow());
-    }
-
-    //@Test
-    void getAllCustomersOfPt() throws UserException {
-        User pt = userRepository.findByEmail("pt@gmail.com").get();
-
-        // Create customer
-        List<User> customers = new ArrayList<>();
-        customers.add(utilsTest.getCustomer("Francesco", "Gigliotti", "fra@gmail.com", true, pt));
-        customers.add(utilsTest.getCustomer("Fabio", "Messina", "fab@gmail.com", true, pt));
-        customers.add(utilsTest.getCustomer("Fabrizio", "Fontana", "ffontana@gmail.com", true, pt));
-        userRepository.saveAll(customers);
-
-        long customersOfPt = userService.allUserOfPt(pt.getUuid(),0, 10).getTotalElements();
-        assertEquals(3, customersOfPt);
     }
 }

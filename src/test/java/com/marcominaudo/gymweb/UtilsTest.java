@@ -9,6 +9,7 @@ import com.marcominaudo.gymweb.model.builder.BookingBuilder;
 import com.marcominaudo.gymweb.model.builder.UserBuilder;
 import com.marcominaudo.gymweb.model.builder.WorkoutPlanBuilder;
 import lombok.AllArgsConstructor;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -21,9 +22,11 @@ import java.util.UUID;
 @Component
 @AllArgsConstructor
 @NoArgsConstructor
+@Getter
 public class UtilsTest {
 
-    LocalDateTime today = LocalDateTime.now();
+    LocalDateTime today = LocalDateTime.of(2022, 12, 12, 12, 30);
+
     public Room getRoom(String name, boolean isActive){
         return new Room(1,name, isActive, 3);
     }
@@ -96,16 +99,21 @@ public class UtilsTest {
                 .build();
     }
 
-    public Booking getBooking(int addStartMinutes, int AddEndMinutes, User user){
+    public Booking getBooking(int addStartMinutes, int addEndMinutes, User user){
         return new BookingBuilder()
             .user(user)
             .startTime(today.plusMinutes(addStartMinutes))
-            .endTime(today.plusMinutes(AddEndMinutes))
+            .endTime(today.plusMinutes(addEndMinutes))
             .subscriptionTime(today)
             .id(1)
             .build();
     }
-
+    public Booking getBooking(long id, int addStartMinutes, int addEndMinutes, User user, Room room){
+        Booking booking = getBooking(addStartMinutes, addEndMinutes, user);
+        booking.setRoom(room);
+        booking.setId(id);
+        return booking;
+    }
     public Booking getBooking(LocalDateTime start, LocalDateTime end, User user){
         return new BookingBuilder()
                 .user(user)
