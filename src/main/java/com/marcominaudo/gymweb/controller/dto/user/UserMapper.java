@@ -29,7 +29,7 @@ public class UserMapper {
         List<UserDTO> userResponseDTOs = searchUsers.getContent().stream().map(this::toDTO).toList();
 
         searchUserDTO.setUsers(userResponseDTOs);
-        searchUserDTO.setTotalPages(searchUserDTO.getTotalPages());
+        searchUserDTO.setTotalPages(searchUsers.getTotalPages());
         searchUserDTO.setTotalElements(searchUsers.getTotalElements());
         return searchUserDTO;
     }

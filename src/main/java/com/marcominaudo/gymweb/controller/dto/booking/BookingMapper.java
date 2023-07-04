@@ -2,13 +2,10 @@ package com.marcominaudo.gymweb.controller.dto.booking;
 
 import com.marcominaudo.gymweb.model.Booking;
 import com.marcominaudo.gymweb.model.builder.BookingBuilder;
-import com.marcominaudo.gymweb.utilis.object.Shift;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 @Component
 public class BookingMapper {
@@ -17,9 +14,10 @@ public class BookingMapper {
         BookingDTO bookingDTO = new BookingDTO();
         bookingDTO.setStartTime(booking.getStartTime());
         bookingDTO.setEndTime(booking.getEndTime());
-        bookingDTO.setSubscriptionTime(booking.getSubscriptionTime());
-        bookingDTO.setSurname(booking.getUser().getSurname());
-        bookingDTO.setName(booking.getUser().getName());
+        if(booking.getUser() != null) {
+            bookingDTO.setSurname(booking.getUser().getSurname());
+            bookingDTO.setName(booking.getUser().getName());
+        }
         if(booking.getRoom() != null)
             bookingDTO.setRoomId(booking.getRoom().getId());
         return bookingDTO;

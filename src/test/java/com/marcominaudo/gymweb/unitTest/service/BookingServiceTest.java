@@ -71,6 +71,12 @@ public class BookingServiceTest {
     }
 
     @Test
+    void bookingThrowMissingData(){
+        BookingException thrown = assertThrows(BookingException.class, () -> bookingService.newBooking(new Booking(), 1));
+        assertEquals(BookingException.ExceptionCodes.MISSING_DATA.name(), thrown.getMessage());
+    }
+
+    @Test
     void bookingInvalidDate() {
         // Start date is after end date
         Booking booking = utilsTest.getBooking(50, 0, utilsTest.getUser());

@@ -22,6 +22,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicReference;
 
+import static com.marcominaudo.gymweb.exception.exceptions.BookingException.ExceptionCodes.MISSING_DATA;
+
 
 @Service
 @AllArgsConstructor
@@ -45,7 +47,11 @@ public class BookingService {
         return bookingRepository.save(newBooking);
     }
 
-    private boolean bookingValid(LocalDateTime startDate, LocalDateTime endDate, long roomId) throws BookingException, RoomException {
+    private void bookingValid(LocalDateTime startDate, LocalDateTime endDate, long roomId) throws BookingException, RoomException {
+        //Check data
+        if(startDate == null || endDate == null)
+            throw new BookingException(MISSING_DATA);
+
         // Check id date is valis
         if(startDate.isAfter(endDate) || startDate.isBefore(LocalDateTime.now()))
             throw new BookingException(BookingException.ExceptionCodes.INVALID_DATE_RANGE);
@@ -85,8 +91,6 @@ public class BookingService {
         long bookingsOfUser = bookingRepository.findAllByUserIdAndBetweenBookingDate(user.getId(), startDate, endDate);
         if(bookingsOfUser > 0)
             throw new BookingException(BookingException.ExceptionCodes.USER_ALREADY_BOOKED);
-
-        return true;
 
     }
 

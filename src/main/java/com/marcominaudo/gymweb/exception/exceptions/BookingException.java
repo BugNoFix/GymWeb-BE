@@ -1,6 +1,5 @@
 package com.marcominaudo.gymweb.exception.exceptions;
 
-import lombok.Data;
 import lombok.Getter;
 import org.springframework.http.HttpStatus;
 
@@ -15,9 +14,9 @@ public class BookingException extends MyCustomException {
         INVALID_DATE_RANGE(HttpStatus.BAD_REQUEST),
         INVALID_TIME_RANGE(HttpStatus.BAD_REQUEST),
         ROOM_IS_FULL(HttpStatus.BAD_REQUEST),
+        MISSING_DATA(HttpStatus.BAD_REQUEST),
         USER_ALREADY_BOOKED(HttpStatus.BAD_REQUEST);
         private final HttpStatus httpStatus;
-
         ExceptionCodes(HttpStatus httpStatus) {
             this.httpStatus = httpStatus;
         }

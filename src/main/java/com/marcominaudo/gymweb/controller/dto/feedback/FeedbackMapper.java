@@ -42,10 +42,4 @@ public class FeedbackMapper {
         return searchFeedbackDTO;
     }
 
-    public Feedback toFeedback(FeedbackDTO feedbackDTO){
-        Feedback feedback = new Feedback();
-        feedback.setText(feedbackDTO.getText());
-        feedback.setCreatedTime(feedbackDTO.getCreatedTime());
-        return feedback;
-    }
 }
