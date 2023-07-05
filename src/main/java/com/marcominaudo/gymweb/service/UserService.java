@@ -61,9 +61,13 @@ public class UserService {
         return userBodyDetailsRepository.findByUserId(id, pageSetting);
     }
 
-    public UserBodyDetails setBodyDetails(UserBodyDetails userBodyDetails) {
+    public UserBodyDetails setBodyDetails(UserBodyDetails userBodyDetails) throws BodyDetailsException {
         User user = utils.getUser();
-        userBodyDetails.setUser(user);
+        if(userBodyDetails.getBodyfat() < 0 || userBodyDetails.getChest() < 0 || userBodyDetails.getHeight() < 0 ||
+        userBodyDetails.getShoulders() < 0 || userBodyDetails.getUpperArm() < 0 || userBodyDetails.getWaist() < 0 ||
+        userBodyDetails.getWeight() < 0)
+            throw new BodyDetailsException(BodyDetailsException.ExceptionCodes.DATA_NOT_VALID);
+            userBodyDetails.setUser(user);
         return userBodyDetailsRepository.save(userBodyDetails);
     }
 

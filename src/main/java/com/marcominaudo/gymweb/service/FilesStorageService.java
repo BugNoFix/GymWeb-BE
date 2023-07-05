@@ -43,19 +43,19 @@ public class FilesStorageService {
 
     @SneakyThrows
     public Resource load(String folder, String filename) {
-            Path folderNamePath = Paths.get(folder, filename);
-            Path completePath = root.resolve(folderNamePath);
-            Resource resource = null;
-            try {
-                resource = new UrlResource(completePath.toUri());
-            }
-            catch (Exception e){
-                throw new FileStorageException(FileStorageException.ExceptionCodes.URI_INVALID);
-            }
-            if (resource.exists() || resource.isReadable()) {
-                return resource;
-            }
-            throw new FileStorageException(FileStorageException.ExceptionCodes.FILE_NOT_EXIST);
+        Path folderNamePath = Paths.get(folder, filename);
+        Path completePath = root.resolve(folderNamePath);
+        Resource resource = null;
+        try {
+            resource = new UrlResource(completePath.toUri());
+        }
+        catch (Exception e){
+            throw new FileStorageException(FileStorageException.ExceptionCodes.URI_INVALID);
+        }
+        if (resource.exists() || resource.isReadable()) {
+            return resource;
+        }
+        throw new FileStorageException(FileStorageException.ExceptionCodes.FILE_NOT_EXIST);
     }
 }
 

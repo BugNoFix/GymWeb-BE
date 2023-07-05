@@ -26,6 +26,7 @@ import java.time.LocalDateTime;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.AdditionalAnswers.returnsFirstArg;
@@ -333,8 +334,21 @@ public class UserServiceTest {
 
         // Test
         UserBodyDetails userBodyDetails = new UserBodyDetails(1, 80, 20, 180, 80, 35, 130, 80, LocalDateTime.now(), user);
-        UserBodyDetails actual = userService.setBodyDetails(userBodyDetails);
+        UserBodyDetails actual = assertDoesNotThrow(() -> userService.setBodyDetails(userBodyDetails));
         assertEquals(userBodyDetails, actual);
+    }
+
+    @Test
+    void setBodyDetailsThrow(){
+        // Mock
+        User user = utilsTest.getUser();
+        when(utils.getUser()).thenReturn(user);
+
+        // Test
+        UserBodyDetails userBodyDetails = new UserBodyDetails(1, -80, 20, 180, 80, 35, 130, 80, LocalDateTime.now(), user);
+        BodyDetailsException thrown = assertThrows(BodyDetailsException.class, () -> userService.setBodyDetails(userBodyDetails));
+        assertEquals(BodyDetailsException.ExceptionCodes.DATA_NOT_VALID.name(), thrown.getMessage());
+
     }
 
     @Test

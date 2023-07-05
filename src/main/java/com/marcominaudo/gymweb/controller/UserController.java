@@ -48,7 +48,6 @@ public class UserController {
     public ResponseEntity<UserDTO> register(@RequestBody UserDTO userDTO) throws InvalidRegisterException {
         User user = userMapper.toUser(userDTO);
         User userDB = userService.register(user);
-
         UserDTO response = userMapper.toDTO(userDB);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
@@ -102,7 +101,7 @@ public class UserController {
     * */
     @OnlyCustomerAccess
     @PostMapping("/bodyDetails")
-    public ResponseEntity<UserBodyDetailsDTO> bodyDetails(@RequestBody UserBodyDetailsDTO userBodyDetailsDTO){
+    public ResponseEntity<UserBodyDetailsDTO> bodyDetails(@RequestBody UserBodyDetailsDTO userBodyDetailsDTO) throws BodyDetailsException {
         UserBodyDetails userBodyDetails = bodyDetailsMapper.toBodyDetails(userBodyDetailsDTO);
         UserBodyDetails body = userService.setBodyDetails(userBodyDetails);
         UserBodyDetailsDTO response = bodyDetailsMapper.toDTO(body);

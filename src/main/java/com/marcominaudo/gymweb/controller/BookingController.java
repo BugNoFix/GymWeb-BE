@@ -56,7 +56,7 @@ public class BookingController {
     * */
     @FreeAccess
     @PostMapping("/pt")
-    public ResponseEntity<List<BookingDTO>> allPtBookingOfDay(@RequestBody BookingDTO bookingDTO) {
+    public ResponseEntity<List<BookingDTO>> allPtBookingOfDay(@RequestBody BookingDTO bookingDTO) throws BookingException {
         LocalDateTime startTime = bookingDTO.getStartTime();
         long roomId = bookingDTO.getRoomId();
         List<Booking> booking = bookingService.bookingInfo(roomId, startTime, Role.PT);
@@ -69,7 +69,7 @@ public class BookingController {
     * */
     @AdminAndPtAccess
     @PostMapping("/customers") //TODO implement searchdto
-    public ResponseEntity<List<BookingDTO>> allCustomersBookingOfDay(@RequestBody BookingDTO bookingDTO) {
+    public ResponseEntity<List<BookingDTO>> allCustomersBookingOfDay(@RequestBody BookingDTO bookingDTO) throws BookingException {
         LocalDateTime startTime = bookingDTO.getStartTime();
         long roomId = bookingDTO.getRoomId();
         List<Booking> booking = bookingService.bookingInfo(roomId, startTime, Role.CUSTOMER); //TODO: test it

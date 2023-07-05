@@ -110,7 +110,9 @@ public class BookingService {
         return false;
     }
 
-    public List<Booking> bookingInfo(long roomId, LocalDateTime day, Role role) {
+    public List<Booking> bookingInfo(long roomId, LocalDateTime day, Role role) throws BookingException {
+        if (day == null)
+            throw new BookingException(MISSING_DATA);
         List<Booking> bookings = bookingRepository.findByRoomIdAndDay(roomId, day);
         List<Booking> bookingRole = bookings.stream().filter(b -> b.getUser().getRole() == role).toList();
 

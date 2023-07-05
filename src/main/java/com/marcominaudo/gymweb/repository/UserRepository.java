@@ -13,7 +13,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
     Optional<User> findByEmail(String username);
 
     @Query("SELECT u FROM User u WHERE u.id = :customerId")
-    User findPtByCustomerId(long customerId);
+    User findCustomerById(long customerId);
 
     //@Query("SELECT u FROM User u join fetch u.pt WHERE u.pt.id = :ptId") JPQL
     @Query(value = "SELECT u.* FROM User u inner join User pt on pt.id = u.pt_id WHERE pt.id = :ptId", nativeQuery = true)

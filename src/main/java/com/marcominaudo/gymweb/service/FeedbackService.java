@@ -25,6 +25,8 @@ public class FeedbackService {
     Utils utils;
 
     public Feedback save(String body) throws FeedbackException {
+        if (body == null)
+            throw new FeedbackException(FeedbackException.ExceptionCodes.MISSING_DATA);
         User pt = utils.getPtOfCustomer();
         if (pt == null)
             throw new FeedbackException(FeedbackException.ExceptionCodes.PT_MISSING);
@@ -35,6 +37,8 @@ public class FeedbackService {
     }
 
     public Page<Feedback> getsAllFeedbackOfPt(String uuidPt, int page, int size) throws FeedbackException, UserException {
+        if (uuidPt == null)
+            throw new FeedbackException(FeedbackException.ExceptionCodes.MISSING_DATA);
         User pt = utils.getUserByUuid(uuidPt);
         if(!pt.getRole().equals(Role.PT))
             throw new FeedbackException(FeedbackException.ExceptionCodes.USER_ROLE_INVALID);

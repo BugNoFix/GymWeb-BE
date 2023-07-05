@@ -23,6 +23,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.AdditionalAnswers.returnsFirstArg;
@@ -134,7 +135,7 @@ public class BookingServiceTest {
 
     // --------- Info Booking ----------
     @Test
-    void bookingInfoPt() {
+    void bookingInfoPt(){
         // Mock
         List<Booking> bookings = utilsTest.get3Booking();
         bookings.get(0).getUser().setRole(Role.PT);
@@ -144,8 +145,22 @@ public class BookingServiceTest {
 
 
         // Test: get all booking of pt
-        List<Booking> result = bookingService.bookingInfo(1, LocalDateTime.now(), Role.PT);
+        List<Booking> result = assertDoesNotThrow(() -> bookingService.bookingInfo(1, LocalDateTime.now(), Role.PT));
         assertEquals(2, result.size());
+    }
+
+    @Test
+    void bookingInfoThrowMissingData(){
+        // Data
+        List<Booking> bookings = utilsTest.get3Booking();
+        bookings.get(0).getUser().setRole(Role.PT);
+        bookings.get(1).getUser().setRole(Role.PT);
+        bookings.get(2).getUser().setRole(Role.CUSTOMER);
+
+        // Test: get all booking of pt
+        BookingException thrown = assertThrows(BookingException.class, () -> bookingService.bookingInfo(1, null, Role.PT));
+        assertEquals(BookingException.ExceptionCodes.MISSING_DATA.name(), thrown.getMessage());
+
     }
 
     @Test
@@ -159,7 +174,7 @@ public class BookingServiceTest {
 
 
         // Test: get all booking of customer
-        List<Booking> result = bookingService.bookingInfo(1, LocalDateTime.now(), Role.CUSTOMER);
+        List<Booking> result = assertDoesNotThrow(() -> bookingService.bookingInfo(1, LocalDateTime.now(), Role.CUSTOMER));
         assertEquals(2, result.size());
     }
     // ----------------------------------------

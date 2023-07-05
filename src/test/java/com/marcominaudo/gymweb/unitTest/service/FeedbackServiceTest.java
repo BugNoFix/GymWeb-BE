@@ -51,6 +51,14 @@ public class FeedbackServiceTest {
     }
 
     @Test
+    // Case: Missing body feedback
+    void saveExMissingData() {
+        // Test
+        FeedbackException thrown = assertThrows(FeedbackException.class, () -> feedbackService.save(null));
+        assertEquals(FeedbackException.ExceptionCodes.MISSING_DATA.name(), thrown.getMessage());
+    }
+
+    @Test
     void saveSuccessful() {
         // Mock
         User pt = utilsTest.getPt("Mario", "rossi", "marioRossiPt@gymweb.com");
@@ -78,6 +86,14 @@ public class FeedbackServiceTest {
         // Test
         FeedbackException thrown = assertThrows(FeedbackException.class, () -> feedbackService.getsAllFeedbackOfPt("uuid Customer", 0 ,5));
         assertEquals(FeedbackException.ExceptionCodes.USER_ROLE_INVALID.name(), thrown.getMessage());
+    }
+
+    @Test
+        // Case: Get feedback of user isn't a pt
+    void getsAllFeedbackOfPtExMissingData() {
+        // Test
+        FeedbackException thrown = assertThrows(FeedbackException.class, () -> feedbackService.getsAllFeedbackOfPt(null, 0 ,5));
+        assertEquals(FeedbackException.ExceptionCodes.MISSING_DATA.name(), thrown.getMessage());
     }
 
     @Test

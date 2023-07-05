@@ -9,7 +9,9 @@ public class FeedbackException extends MyCustomException{
     public enum ExceptionCodes {
         USER_ROLE_INVALID(HttpStatus.FORBIDDEN),
 
-        PT_MISSING(HttpStatus.FORBIDDEN);
+        PT_MISSING(HttpStatus.FORBIDDEN),
+
+        MISSING_DATA(HttpStatus.BAD_REQUEST);
         private final HttpStatus httpStatus;
 
         ExceptionCodes(HttpStatus httpStatus) {

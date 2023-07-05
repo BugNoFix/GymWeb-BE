@@ -10,6 +10,8 @@ public class FileStorageException extends MyCustomException{
         DIRECTORY_NOT_CREATED(HttpStatus.INTERNAL_SERVER_ERROR),
         FILE_NOT_EXIST(HttpStatus.BAD_REQUEST),
         FILE_NOT_SAVED(HttpStatus.INTERNAL_SERVER_ERROR),
+
+        MISSING_DATA(HttpStatus.BAD_REQUEST),
         URI_INVALID(HttpStatus.INTERNAL_SERVER_ERROR);
         private final HttpStatus httpStatus;
 

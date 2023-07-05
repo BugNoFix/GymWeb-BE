@@ -3,7 +3,6 @@ package com.marcominaudo.gymweb.service;
 import com.marcominaudo.gymweb.exception.exceptions.UserException;
 import com.marcominaudo.gymweb.model.User;
 import com.marcominaudo.gymweb.repository.UserRepository;
-import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
@@ -21,7 +20,7 @@ public class Utils {
 
     public User getPtOfCustomer(){
         long customerId = getUser().getId();
-        return userRepository.findPtByCustomerId(customerId).getPt();
+        return userRepository.findCustomerById(customerId).getPt();
     }
 
     public User getUserByUuid(String uuid) throws UserException {
