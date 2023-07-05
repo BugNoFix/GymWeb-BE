@@ -20,6 +20,7 @@ public interface BookingRepository extends JpaRepository<Booking, Long> {
     @Query("SELECT b FROM Booking b WHERE :customerId = b.user.id AND CAST(b.startTime AS date) = CAST(:day AS date) order by b.startTime asc")
     Page<Booking> findAllBookingOfUserInOneDay(long customerId, Pageable pageSetting, LocalDateTime day);
 
-    @Query("SELECT count(b) FROM Booking b WHERE b.startTime >= :startDate and b.endTime <= :endDate and :userId = b.user.id")
+    //@Query("SELECT count(b) FROM Booking b WHERE b.startTime >= :startDate and b.endTime <= :endDate and :userId = b.user.id")
+    @Query("SELECT count(b) FROM Booking b WHERE ((:startDate >= b.startTime and :startDate < b.endTime) or (:endDate > b.startTime and :endDate <= b.endTime)or (:startDate <= b.startTime and  :endDate >= b.endTime)) and :userId = b.user.id")
     long findAllByUserIdAndBetweenBookingDate(long userId, LocalDateTime startDate, LocalDateTime endDate);
 }

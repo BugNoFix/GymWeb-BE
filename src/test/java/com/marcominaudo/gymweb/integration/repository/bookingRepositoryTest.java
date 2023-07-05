@@ -1,4 +1,4 @@
-package com.marcominaudo.gymweb.unitTest.repository;
+package com.marcominaudo.gymweb.integration.repository;
 
 import com.marcominaudo.gymweb.UtilsTest;
 import com.marcominaudo.gymweb.model.Booking;

@@ -68,7 +68,7 @@ public class BookingController {
     * Gets all customer booked of one day
     * */
     @AdminAndPtAccess
-    @PostMapping("/customers") //TODO implement searchdto
+    @PostMapping("/customers")
     public ResponseEntity<List<BookingDTO>> allCustomersBookingOfDay(@RequestBody BookingDTO bookingDTO) throws BookingException {
         LocalDateTime startTime = bookingDTO.getStartTime();
         long roomId = bookingDTO.getRoomId();
