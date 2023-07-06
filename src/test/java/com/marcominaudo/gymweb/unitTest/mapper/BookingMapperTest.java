@@ -41,7 +41,7 @@ public class BookingMapperTest {
         BookingDTO bookingDTO = bookingMapper.toDTO(booking);
 
         // Test
-        assertNull(bookingDTO.getSubscriptionTime());
+        assertEquals(subscriptionTime, bookingDTO.getSubscriptionTime());
         assertEquals(startTime, bookingDTO.getStartTime());
         assertEquals(endTime, bookingDTO.getEndTime());
         assertEquals(user.getSurname(), bookingDTO.getSurname());

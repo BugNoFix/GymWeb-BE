@@ -14,6 +14,7 @@ public class BookingMapper {
         BookingDTO bookingDTO = new BookingDTO();
         bookingDTO.setStartTime(booking.getStartTime());
         bookingDTO.setEndTime(booking.getEndTime());
+        bookingDTO.setSubscriptionTime(booking.getSubscriptionTime());
         if(booking.getUser() != null) {
             bookingDTO.setSurname(booking.getUser().getSurname());
             bookingDTO.setName(booking.getUser().getName());

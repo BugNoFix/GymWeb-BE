@@ -11,6 +11,9 @@ import com.marcominaudo.gymweb.repository.BookingRepository;
 import com.marcominaudo.gymweb.service.BookingService;
 import com.marcominaudo.gymweb.service.RoomService;
 import com.marcominaudo.gymweb.service.Utils;
+import com.marcominaudo.gymweb.service.bookingSearch.BookingSearchCustomer;
+import com.marcominaudo.gymweb.service.bookingSearch.BookingSearchPt;
+import com.marcominaudo.gymweb.service.bookingSearch.BookingStrategyFactory;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -43,8 +46,12 @@ public class BookingServiceTest {
     @Mock
     BookingRepository bookingRepository;
 
+    @Mock
+    BookingStrategyFactory bookingStrategyFactory;
+
     @InjectMocks
     BookingService bookingService;
+
 
     LocalDateTime today = LocalDateTime.now().plusYears(1).withHour(6).withMinute(0);
     UtilsTest utilsTest = new UtilsTest(today);
@@ -140,13 +147,14 @@ public class BookingServiceTest {
         List<Booking> bookings = utilsTest.get3Booking();
         bookings.get(0).getUser().setRole(Role.PT);
         bookings.get(1).getUser().setRole(Role.PT);
-        bookings.get(2).getUser().setRole(Role.CUSTOMER);
-        when(bookingRepository.findByRoomIdAndDay(any(Long.class), any(LocalDateTime.class))).thenReturn(bookings);
+        bookings.get(1).getUser().setRole(Role.PT);
+        when(bookingRepository.findPtByRoomIdAndDay(any(Long.class), any(LocalDateTime.class))).thenReturn(bookings);
+        when(bookingStrategyFactory.getStrategy(any())).thenReturn(new BookingSearchPt(bookingRepository));
 
 
         // Test: get all booking of pt
-        List<Booking> result = assertDoesNotThrow(() -> bookingService.bookingInfo(1, LocalDateTime.now(), Role.PT));
-        assertEquals(2, result.size());
+        List<Booking> result = assertDoesNotThrow(() -> bookingService.bookingInfo(1, LocalDateTime.now(), Role.CUSTOMER));
+        assertEquals(3, result.size());
     }
 
     @Test
@@ -167,15 +175,16 @@ public class BookingServiceTest {
     void bookingInfoCustomer() {
         // Mock
         List<Booking> bookings = utilsTest.get3Booking();
-        bookings.get(0).getUser().setRole(Role.PT);
+        bookings.get(0).getUser().setRole(Role.CUSTOMER);
         bookings.get(1).getUser().setRole(Role.CUSTOMER);
         bookings.get(2).getUser().setRole(Role.CUSTOMER);
-        when(bookingRepository.findByRoomIdAndDay(any(Long.class), any(LocalDateTime.class))).thenReturn(bookings);
+        when(bookingRepository.findCustomerByRoomIdAndDay(any(Long.class), any(LocalDateTime.class))).thenReturn(bookings);
+        when(bookingStrategyFactory.getStrategy(any())).thenReturn(new BookingSearchCustomer(bookingRepository));
 
 
         // Test: get all booking of customer
-        List<Booking> result = assertDoesNotThrow(() -> bookingService.bookingInfo(1, LocalDateTime.now(), Role.CUSTOMER));
-        assertEquals(2, result.size());
+        List<Booking> result = assertDoesNotThrow(() -> bookingService.bookingInfo(1, LocalDateTime.now(), Role.PT));
+        assertEquals(3, result.size());
     }
     // ----------------------------------------
 

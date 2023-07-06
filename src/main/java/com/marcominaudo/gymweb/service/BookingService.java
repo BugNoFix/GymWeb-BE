@@ -9,6 +9,8 @@ import com.marcominaudo.gymweb.model.Room;
 import com.marcominaudo.gymweb.model.User;
 import com.marcominaudo.gymweb.model.builder.BookingBuilder;
 import com.marcominaudo.gymweb.repository.BookingRepository;
+import com.marcominaudo.gymweb.service.bookingSearch.BookingSearchType;
+import com.marcominaudo.gymweb.service.bookingSearch.BookingStrategyFactory;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -36,6 +38,9 @@ public class BookingService {
 
     @Autowired
     BookingRepository bookingRepository;
+
+
+
     public Booking newBooking(Booking booking, long idRoom) throws BookingException, RoomException {
         bookingValid(booking.getStartTime(), booking.getEndTime(), idRoom);
         Booking newBooking = new BookingBuilder().builder()
@@ -69,7 +74,9 @@ public class BookingService {
         Room room = roomService.getRoom(roomId);
 
         // Check if the number of user is greater of room size
+        //TODO: potrebbe non andare per i casi particolari
         List<Booking> bookings = bookingRepository.findAllBetweenBookingDate(startDate, endDate, roomId);
+
         // Create map for count number of user booked in one slot time (15 minutes)
         Map<LocalDateTime, Integer> slots = new HashMap<>();
         int customers;
@@ -110,11 +117,19 @@ public class BookingService {
         return false;
     }
 
+    @Autowired
+    BookingStrategyFactory bookingStrategyFactory;
+
     public List<Booking> bookingInfo(long roomId, LocalDateTime day, Role role) throws BookingException {
         if (day == null)
             throw new BookingException(MISSING_DATA);
-        List<Booking> bookings = bookingRepository.findByRoomIdAndDay(roomId, day);
-        List<Booking> bookingRole = bookings.stream().filter(b -> b.getUser().getRole() == role).toList();
+        if(role.equals(Role.PT))
+            return bookingStrategyFactory.getStrategy(BookingSearchType.CUSTOMER).search(roomId, day);
+        else
+            return bookingStrategyFactory.getStrategy(BookingSearchType.PT).search(roomId, day);
+
+        //List<Booking> bookings = bookingRepository.findByRoomIdAndDay(roomId, day);
+        //List<Booking> bookingRole = bookings.stream().filter(b -> b.getUser().getRole() == role).toList();
 
         // TODO: remove if not util
         /*
@@ -129,7 +144,7 @@ public class BookingService {
         });
 
          */
-        return bookingRole;
+        //return bookingRole;
     }
 
     public Page<Booking> bookingOfCustomer(String uuidCustomer, int size, int page, LocalDateTime day) throws UserException {

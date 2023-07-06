@@ -47,6 +47,7 @@ public class bookingRepositoryTest {
         userRepository.deleteAll();
     }
     @Test
+    //TODO: Rifare il test
     void findAllBetweenBookingDate(){
         // Add data to h2 db
         User user = userRepository.save(utilsTest.getUser());
@@ -67,24 +68,44 @@ public class bookingRepositoryTest {
     }
 
     @Test
-    void findByRoomIdAndDay(){
+    void findCustomerByRoomIdAndDay(){
         // Add data to h2 db
-        User user = userRepository.save(utilsTest.getUser());
+        User customer = userRepository.save(utilsTest.getUser());
+        User pt = userRepository.save(utilsTest.getPt("Marco", "Minaudo", "marco@gmail.com"));
         Room room = new Room(1, "Generic room", true, 5);
         room = roomRepository.save(room);
         List<Booking> bookingList = new ArrayList<>();
-        bookingList.add(utilsTest.getBooking(1, 0, 30, user, room));
-        bookingList.add(utilsTest.getBooking(2, -30, 30, user, room));
-        bookingList.add(utilsTest.getBooking(3, -15, 30, user, room));
-        bookingList.add(utilsTest.getBooking(4, 0, 45, user, room));
+        bookingList.add(utilsTest.getBooking(1, 0, 30, customer, room));
+        bookingList.add(utilsTest.getBooking(2, -30, 0, customer, room));
+        bookingList.add(utilsTest.getBooking(3, 0, 30, pt, room));
+        bookingList.add(utilsTest.getBooking(4, -15, 0, pt, room));
         bookingRepository.saveAll(bookingList);
 
         //Test
         LocalDateTime today = utilsTest.getToday();
-        List<Booking> result = bookingRepository.findByRoomIdAndDay(room.getId(), today);
-        assertEquals(4, result.size());
+        List<Booking> result = bookingRepository.findCustomerByRoomIdAndDay(room.getId(), today);
+        assertEquals(2, result.size());
     }
 
+    @Test
+    void findPtByRoomIdAndDay(){
+        // Add data to h2 db
+        User customer = userRepository.save(utilsTest.getUser());
+        User pt = userRepository.save(utilsTest.getPt("Marco", "Minaudo", "marco@gmail.com"));
+        Room room = new Room(1, "Generic room", true, 5);
+        room = roomRepository.save(room);
+        List<Booking> bookingList = new ArrayList<>();
+        bookingList.add(utilsTest.getBooking(1, 0, 30, customer, room));
+        bookingList.add(utilsTest.getBooking(2, -30, 0, customer, room));
+        bookingList.add(utilsTest.getBooking(3, 0, 30, pt, room));
+        bookingList.add(utilsTest.getBooking(4, -15, 0, pt, room));
+        bookingRepository.saveAll(bookingList);
+
+        //Test
+        LocalDateTime today = utilsTest.getToday();
+        List<Booking> result = bookingRepository.findPtByRoomIdAndDay(room.getId(), today);
+        assertEquals(2, result.size());
+    }
     @Test
     void findAllBookingOfUserInOneDay(){
         // Add data to h2 db
@@ -93,15 +114,13 @@ public class bookingRepositoryTest {
         room = roomRepository.save(room);
         List<Booking> bookingList = new ArrayList<>();
         bookingList.add(utilsTest.getBooking(1, 0, 30, user, room));
-        bookingList.add(utilsTest.getBooking(2, -30, 30, user, room));
-        bookingList.add(utilsTest.getBooking(3, -15, 30, user, room));
-        bookingList.add(utilsTest.getBooking(4, 0, 45, user, room));
+        bookingList.add(utilsTest.getBooking(2, -30, 0, user, room));
         bookingRepository.saveAll(bookingList);
 
         //Test
         LocalDateTime today = utilsTest.getToday();
         Page<Booking> result = bookingRepository.findAllBookingOfUserInOneDay(user.getId(), Pageable.unpaged(), today);
-        assertEquals(4, result.getTotalElements());
+        assertEquals(2, result.getTotalElements());
     }
 
     @Test
@@ -113,14 +132,12 @@ public class bookingRepositoryTest {
         room = roomRepository.save(room);
         List<Booking> bookingList = new ArrayList<>();
         bookingList.add(utilsTest.getBooking(1, 0, 30, user1, room));
-        bookingList.add(utilsTest.getBooking(2, -30, 30, user1, room));
-        bookingList.add(utilsTest.getBooking(3, -15, 30, user2, room));
-        bookingList.add(utilsTest.getBooking(4, 0, 45, user2, room));
+        bookingList.add(utilsTest.getBooking(2, -30, 0, user1, room));
         bookingRepository.saveAll(bookingList);
 
         //Test
         LocalDateTime today = utilsTest.getToday();
         long result = bookingRepository.findAllByUserIdAndBetweenBookingDate(user1.getId(), today.plusMinutes(-15), today.plusMinutes(30));
-        assertEquals(1, result);
+        assertEquals(2, result);
     }
 }

@@ -14,9 +14,14 @@ public interface BookingRepository extends JpaRepository<Booking, Long> {
     @Query("SELECT b FROM Booking b join fetch b.room WHERE b.startTime >= :startDate and b.endTime <= :endDate and b.room.id = :roomId")
     List<Booking> findAllBetweenBookingDate(LocalDateTime startDate, LocalDateTime endDate, long roomId);
 
-    @Query("SELECT b FROM Booking b WHERE :roomId = b.room.id AND CAST(b.startTime AS date) = CAST(:day AS date) order by b.startTime asc")
-    List<Booking> findByRoomIdAndDay(long roomId, LocalDateTime day);
+    //@Query("SELECT b FROM Booking b WHERE :roomId = b.room.id AND CAST(b.startTime AS date) = CAST(:day AS date) order by b.startTime asc")
+    //List<Booking> findByRoomIdAndDay(long roomId, LocalDateTime day);
 
+    @Query("SELECT b FROM Booking b WHERE :roomId = b.room.id AND b.user.role = 'CUSTOMER' AND CAST(b.startTime AS date) = CAST(:day AS date) order by b.startTime asc")
+    List<Booking> findCustomerByRoomIdAndDay(long roomId, LocalDateTime day);
+
+    @Query("SELECT b FROM Booking b WHERE :roomId = b.room.id AND b.user.role = 'CUSTOMER' AND CAST(b.startTime AS date) = CAST(:day AS date) order by b.startTime asc")
+    List<Booking> findPtByRoomIdAndDay(long roomId, LocalDateTime day);
     @Query("SELECT b FROM Booking b WHERE :customerId = b.user.id AND CAST(b.startTime AS date) = CAST(:day AS date) order by b.startTime asc")
     Page<Booking> findAllBookingOfUserInOneDay(long customerId, Pageable pageSetting, LocalDateTime day);
 
