@@ -16,8 +16,8 @@ public class BookingSearchPt implements BookingSearchStrategy {
     @Autowired
     BookingRepository bookingRepository;
     @Override
-    public List<Booking> search(long roomId, LocalDateTime day) {
-        List<Booking> bookings = bookingRepository.findPtByRoomIdAndDay(roomId, day);
+    public List<Booking> search(long roomId, LocalDateTime startDatetime, LocalDateTime endDatetime) {
+        List<Booking> bookings = bookingRepository.findPtByRoomIdAndDay(roomId, startDatetime, endDatetime);
         return bookings;
     }
 

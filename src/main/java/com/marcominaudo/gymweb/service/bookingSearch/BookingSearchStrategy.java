@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface BookingSearchStrategy {
 
-    List<Booking> search(long roomId, LocalDateTime day);
+    List<Booking> search(long roomId, LocalDateTime startDatetime, LocalDateTime endDatetime);
 
     BookingSearchType getTypeSearch();
 }

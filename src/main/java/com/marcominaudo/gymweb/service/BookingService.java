@@ -120,13 +120,13 @@ public class BookingService {
     @Autowired
     BookingStrategyFactory bookingStrategyFactory;
 
-    public List<Booking> bookingInfo(long roomId, LocalDateTime day, Role role) throws BookingException {
-        if (day == null)
+    public List<Booking> bookingInfo(long roomId, LocalDateTime startDatetime, LocalDateTime endDatetime, Role roleSearch) throws BookingException {
+        if (startDatetime == null || endDatetime == null)
             throw new BookingException(MISSING_DATA);
-        if(role.equals(Role.PT))
-            return bookingStrategyFactory.getStrategy(BookingSearchType.CUSTOMER).search(roomId, day);
+        if(roleSearch.equals(Role.PT))
+            return bookingStrategyFactory.getStrategy(BookingSearchType.PT).search(roomId, startDatetime, endDatetime);
         else
-            return bookingStrategyFactory.getStrategy(BookingSearchType.PT).search(roomId, day);
+            return bookingStrategyFactory.getStrategy(BookingSearchType.CUSTOMER).search(roomId, startDatetime, endDatetime);
     }
 
     public Page<Booking> bookingOfCustomer(String uuidCustomer, int size, int page, LocalDateTime day) throws UserException {

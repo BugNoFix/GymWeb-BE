@@ -57,9 +57,10 @@ public class BookingController {
     @FreeAccess
     @PostMapping("/pt")
     public ResponseEntity<List<BookingDTO>> allPtBookingOfDay(@RequestBody BookingDTO bookingDTO) throws BookingException {
-        LocalDateTime startTime = bookingDTO.getStartTime();
+        LocalDateTime startDatetime = bookingDTO.getStartTime();
+        LocalDateTime endDatetime = bookingDTO.getEndTime();
         long roomId = bookingDTO.getRoomId();
-        List<Booking> booking = bookingService.bookingInfo(roomId, startTime, Role.PT);
+        List<Booking> booking = bookingService.bookingInfo(roomId, startDatetime, endDatetime, Role.PT);
         List<BookingDTO> bookingDTOs = booking.stream().map(b -> bookingMapper.toDTO(b)).toList();
         return new ResponseEntity<>(bookingDTOs, HttpStatus.OK);
     }
@@ -70,9 +71,10 @@ public class BookingController {
     @AdminAndPtAccess
     @PostMapping("/customers")
     public ResponseEntity<List<BookingDTO>> allCustomersBookingOfDay(@RequestBody BookingDTO bookingDTO) throws BookingException {
-        LocalDateTime startTime = bookingDTO.getStartTime();
+        LocalDateTime startDatetime = bookingDTO.getStartTime();
+        LocalDateTime endDatetime = bookingDTO.getEndTime();
         long roomId = bookingDTO.getRoomId();
-        List<Booking> booking = bookingService.bookingInfo(roomId, startTime, Role.CUSTOMER);
+        List<Booking> booking = bookingService.bookingInfo(roomId, startDatetime, endDatetime, Role.CUSTOMER);
         List<BookingDTO> bookingDTOs = booking.stream().map(b -> bookingMapper.toDTO(b)).toList();
         return new ResponseEntity<>(bookingDTOs, HttpStatus.OK);
     }

@@ -23,8 +23,8 @@ public class BookingSearchCustomer implements BookingSearchStrategy {
     }
 
     @Override
-    public List<Booking> search(long roomId, LocalDateTime day) {
-        List<Booking> bookings = bookingRepository.findCustomerByRoomIdAndDay(roomId, day);
+    public List<Booking> search(long roomId, LocalDateTime startDatetime, LocalDateTime endDatetime) {
+        List<Booking> bookings = bookingRepository.findCustomerByRoomIdAndDay(roomId, startDatetime, endDatetime);
         bookings.forEach(b -> b.setSubscriptionTime(null));
         return bookings;
     }
