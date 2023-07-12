@@ -5,8 +5,6 @@ import com.marcominaudo.gymweb.model.User;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 
 public class UserBuilder {
 
@@ -32,8 +30,8 @@ public class UserBuilder {
 
     private Role role;
 
-    boolean isActive = true;
-    User pt;
+    private boolean isActive = true;
+    private User pt;
 
     public UserBuilder builder(){
         return new UserBuilder();

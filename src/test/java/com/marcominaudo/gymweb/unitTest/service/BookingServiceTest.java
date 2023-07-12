@@ -64,7 +64,7 @@ public class BookingServiceTest {
         when(roomService.roomIsValid(any(Long.class))).thenReturn(true);
 
         //Utils mock
-        when(utils.getUser()).thenReturn(utilsTest.getUser());
+        when(utils.getLoggedUser()).thenReturn(utilsTest.getUser());
 
         //Booking repository mock
         when(bookingRepository.findAllBetweenBookingDate(any(LocalDateTime.class), any(LocalDateTime.class), any(Long.class)))
@@ -85,7 +85,7 @@ public class BookingServiceTest {
     }
 
     @Test
-    void bookingInvalidDate() {
+    void bookingThrowInvalidDate() {
         // Start date is after end date
         Booking booking = utilsTest.getBooking(50, 0, utilsTest.getUser());
         BookingException thrown = assertThrows(BookingException.class, () -> bookingService.newBooking(booking, 1));
@@ -98,7 +98,7 @@ public class BookingServiceTest {
     }
 
     @Test
-    void bookingExInvalidTimeSlot() {
+    void bookingThrowInvalidTimeSlot() {
         // Minutes slots are invalid
         Booking booking = utilsTest.getBooking(0, 12, utilsTest.getUser());
         BookingException thrown = assertThrows(BookingException.class, () -> bookingService.newBooking(booking, 1));
@@ -106,7 +106,7 @@ public class BookingServiceTest {
     }
 
     @Test
-    void bookingExRoomIsFull() throws RoomException {
+    void bookingThrowRoomIsFull() throws RoomException {
         // Room mock
         when(roomService.getRoom(any(Long.class))).thenReturn(utilsTest.getRoom("crossfit", true));
         when(roomService.roomIsValid(any(Long.class))).thenReturn(true);
@@ -121,7 +121,7 @@ public class BookingServiceTest {
     }
 
     @Test
-    void bookingExUserAlreadyBooked() throws RoomException {
+    void bookingThrowUserAlreadyBooked() throws RoomException {
         // Room mock
         when(roomService.getRoom(any(Long.class))).thenReturn(utilsTest.getRoom("crossfit", true));
         when(roomService.roomIsValid(any(Long.class))).thenReturn(true);
@@ -131,7 +131,7 @@ public class BookingServiceTest {
                 .thenReturn(1L);
 
         // Utils mock
-        when(utils.getUser()).thenReturn(utilsTest.getUser());
+        when(utils.getLoggedUser()).thenReturn(utilsTest.getUser());
 
         // Test: User already booked in the same period
         Booking booking = utilsTest.getBooking(0, 30, utilsTest.getUser());

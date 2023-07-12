@@ -69,9 +69,9 @@ public class User implements UserDetails {
     //Piu clienti hanno un solo pt
     @ManyToOne
     @JoinColumn(name = "pt_id")
-    User pt;
+    private User pt;
 
-    Boolean isActive = true;
+    private Boolean isActive = true;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

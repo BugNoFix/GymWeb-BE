@@ -32,7 +32,7 @@ public class FeedbackService {
             throw new FeedbackException(FeedbackException.ExceptionCodes.PT_MISSING);
         Feedback feedback = new Feedback();
         feedback.setText(body);
-        feedback.setUsers(Arrays.asList(utils.getUser(), pt));
+        feedback.setUsers(Arrays.asList(utils.getLoggedUser(), pt));
         return feedbackRepository.save(feedback);
     }
 

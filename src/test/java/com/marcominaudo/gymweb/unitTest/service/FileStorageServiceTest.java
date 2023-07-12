@@ -39,7 +39,7 @@ public class FileStorageServiceTest {
 
     // --------- Init (Create directory) ----------
     @Test
-    void initExDirectoryNotCreated(){
+    void initThrowDirectoryNotCreated(){
         try (MockedStatic<Files> utilities = Mockito.mockStatic(Files.class)) {
             utilities.when(() -> Files.createDirectories(any(Path.class))).thenThrow(new IOException());
             FileStorageException thrown = assertThrows(FileStorageException.class, () -> filesStorageService.init(Paths.get("uploads")));
@@ -61,7 +61,7 @@ public class FileStorageServiceTest {
     // --------- Save file ----------
     @Test
     // Case: directory non exist and IOEXCEPTION throwed for generic error
-    void saveFileExFileNotSaved(){
+    void saveFileThrowFileNotSaved(){
         try (MockedStatic<Files> utilities = Mockito.mockStatic(Files.class)) {
             utilities.when(() -> Files.exists(any(Path.class))).thenReturn(false);
             utilities.when(() -> Files.copy(any(Path.class), any(OutputStream.class))).thenThrow(new IOException());
@@ -72,7 +72,7 @@ public class FileStorageServiceTest {
     }
     @Test
     // Case: directory exist and IOEXCEPTION throwed for generic error
-    void saveFileExFileNotSaved2(){
+    void saveFileThrowFileNotSaved2(){
         try (MockedStatic<Files> utilities = Mockito.mockStatic(Files.class)) {
             utilities.when(() -> Files.exists(any(Path.class))).thenReturn(true);
             utilities.when(() -> Files.copy(any(Path.class), any(OutputStream.class))).thenThrow(new IOException());
@@ -105,13 +105,13 @@ public class FileStorageServiceTest {
 
     // --------- Load File ----------
     @Test
-    void loadFileExFileNotExist() {
+    void loadFileThrowFileNotExist() {
         FileStorageException thrown = assertThrows(FileStorageException.class, () -> filesStorageService.load("folder", "filename"));
         assertEquals(FileStorageException.ExceptionCodes.FILE_NOT_EXIST.name(), thrown.getMessage());
     }
 
     @Test
-    void loadFileExUriInvalid(){
+    void loadFileThrowUriInvalid(){
         try (MockedConstruction<UrlResource> mocked = mockConstruction(UrlResource.class, (mock, context) -> {
             when(mock).thenThrow(new FileStorageException(FileStorageException.ExceptionCodes.URI_INVALID));
         })) {

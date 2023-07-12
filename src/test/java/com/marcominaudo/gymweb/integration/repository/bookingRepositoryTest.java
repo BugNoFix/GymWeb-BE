@@ -47,7 +47,6 @@ public class bookingRepositoryTest {
         userRepository.deleteAll();
     }
     @Test
-    //TODO: Rifare il test
     void findAllBetweenBookingDate(){
         // Add data to h2 db
         User user = userRepository.save(utilsTest.getUser());

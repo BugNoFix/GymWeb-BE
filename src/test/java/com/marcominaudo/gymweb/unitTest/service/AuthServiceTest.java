@@ -1,6 +1,7 @@
 package com.marcominaudo.gymweb.unitTest.service;
 
 import com.marcominaudo.gymweb.UtilsTest;
+import com.marcominaudo.gymweb.exception.exceptions.InvalidRegisterException;
 import com.marcominaudo.gymweb.exception.exceptions.UserException;
 import com.marcominaudo.gymweb.model.User;
 import com.marcominaudo.gymweb.repository.UserRepository;
@@ -13,6 +14,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.core.Authentication;
 
@@ -52,15 +54,23 @@ public class AuthServiceTest {
         UserException thrown = assertThrows(UserException.class, () -> authService.login(utilsTest.getUser()));
         assertEquals(UserException.ExceptionCodes.USER_NOT_ENABLE.name(), thrown.getMessage());
     }
-
     @Test
     void loginThrowBadCredentials(){
+        // Mock
+        when(authenticationManager.authenticate(any(Authentication.class))).thenThrow(new BadCredentialsException(""));
+
+        // Test
+        InvalidRegisterException thrown = assertThrows(InvalidRegisterException.class, () -> authService.login(utilsTest.getUser()));
+        assertEquals(InvalidRegisterException.ExceptionCodes.BAD_CREDENTIALS.name(), thrown.getMessage());
+    }
+    @Test
+    void loginComplete(){
         // Mock
         when(authenticationManager.authenticate(any(Authentication.class))).thenReturn(null);
         when(userRepository.findByEmail(any(String.class))).thenReturn(Optional.of(utilsTest.getUser()));
         when(jwtUtil.generateToken(any(User.class))).thenReturn("token");
 
         // Test
-        assertDoesNotThrow( () -> authService.login(utilsTest.getUser()));
+        assertDoesNotThrow(() -> authService.login(utilsTest.getUser()));
     }
 }

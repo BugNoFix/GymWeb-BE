@@ -13,7 +13,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Arrays;
-import java.util.List;
 
 @Service
 public class WorkoutPlanService {
@@ -27,19 +26,19 @@ public class WorkoutPlanService {
     Utils utils;
 
     public WorkoutPlan getWorkoutPlan() {
-        User user = utils.getUser();
+        User user = utils.getLoggedUser();
         return workoutPlanRepository.findFirstByUserIdOrderByUploadTime(user.getId());
     }
 
     public Page<WorkoutPlan> getWorkoutPlans(int page, int size) {
-        User user = utils.getUser();
+        User user = utils.getLoggedUser();
         Pageable pageSetting = PageRequest.of(page, size);
         return workoutPlanRepository.findByUserIdOrderByUploadTime(user.getId(), pageSetting);
     }
 
     public WorkoutPlan saveFile(MultipartFile file, String uuid) throws UserException {
         User customer = utils.getUserByUuid(uuid);
-        User pt = utils.getUser();
+        User pt = utils.getLoggedUser();
         String path = filesStorageService.save(file, customer.getUuid());
         WorkoutPlan workoutPlan = new WorkoutPlanBuilder().builder()
                 .path(path)

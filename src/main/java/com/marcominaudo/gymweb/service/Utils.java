@@ -13,13 +13,13 @@ public class Utils {
     @Autowired
     UserRepository userRepository;
 
-    public User getUser(){
+    public User getLoggedUser(){
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         return userRepository.findByEmail(user.getEmail()).get();
     }
 
     public User getPtOfCustomer(){
-        long customerId = getUser().getId();
+        long customerId = getLoggedUser().getId();
         return userRepository.findCustomerById(customerId).getPt();
     }
 

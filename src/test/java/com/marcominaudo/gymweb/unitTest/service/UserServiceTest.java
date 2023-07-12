@@ -55,7 +55,7 @@ public class UserServiceTest {
 
     // --------- Register ----------
     @Test
-    void registerExMissingRequiredValue() {
+    void registerThrowMissingRequiredValue() {
         // Test
         User user = utilsTest.getUser(null, Role.CUSTOMER, true);
         InvalidRegisterException thrown = assertThrows(InvalidRegisterException.class, () -> userService.register(user));
@@ -63,7 +63,7 @@ public class UserServiceTest {
     }
 
     @Test
-    void registerExEmailInvalid() {
+    void registerThrowEmailInvalid() {
         // Test
         User user = utilsTest.getUser("marco@", Role.CUSTOMER, true);
         InvalidRegisterException thrown = assertThrows(InvalidRegisterException.class, () -> userService.register(user));
@@ -71,7 +71,7 @@ public class UserServiceTest {
     }
 
     @Test
-    void registerExUserAlreadyExist() {
+    void registerThrowUserAlreadyExist() {
         // Mock
         User userMock = utilsTest.getUser("marco@gmail.com", Role.CUSTOMER, true);
         when(userRepository.findByEmail(any(String.class))).thenReturn(Optional.ofNullable(userMock));
@@ -98,7 +98,7 @@ public class UserServiceTest {
 
     // --------- getBodyDetailsOfCustomer ----------
     @Test
-    void getBodyDetailsOfCustomerExPrivacyNotEnabled() throws UserException {
+    void getBodyDetailsOfCustomerThrowPrivacyNotEnabled() throws UserException {
         // Mock
         User user = utilsTest.getUser("marco@gmail.com", Role.CUSTOMER, false);
         when(utils.getUserByUuid(any(String.class))).thenReturn(user);
@@ -318,7 +318,7 @@ public class UserServiceTest {
     void getBodyDetails() {
         // Mock
         User user = utilsTest.getUser();
-        when(utils.getUser()).thenReturn(user);
+        when(utils.getLoggedUser()).thenReturn(user);
         when(userBodyDetailsRepository.findByUserId(any(Long.class), any(Pageable.class))).thenReturn(Page.empty());
 
         // Test
@@ -329,7 +329,7 @@ public class UserServiceTest {
     void setBodyDetails(){
         // Mock
         User user = utilsTest.getUser();
-        when(utils.getUser()).thenReturn(user);
+        when(utils.getLoggedUser()).thenReturn(user);
         when(userBodyDetailsRepository.save(any(UserBodyDetails.class))).then(returnsFirstArg());
 
         // Test
@@ -342,7 +342,7 @@ public class UserServiceTest {
     void setBodyDetailsThrow(){
         // Mock
         User user = utilsTest.getUser();
-        when(utils.getUser()).thenReturn(user);
+        when(utils.getLoggedUser()).thenReturn(user);
 
         // Test
         UserBodyDetails userBodyDetails = new UserBodyDetails(1, -80, 20, 180, 80, 35, 130, 80, LocalDateTime.now(), user);
@@ -356,7 +356,7 @@ public class UserServiceTest {
         // Mock
         User user = utilsTest.getUser();
         user.setPrivacy(false);
-        when(utils.getUser()).thenReturn(user);
+        when(utils.getLoggedUser()).thenReturn(user);
         when(userRepository.save(any(User.class))).then(returnsFirstArg());
 
         // Test

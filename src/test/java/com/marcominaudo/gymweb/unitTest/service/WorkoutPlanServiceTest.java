@@ -50,7 +50,7 @@ public class WorkoutPlanServiceTest {
         // Mock
         WorkoutPlan workoutPlanDB = utilsTest.getWorkoutPlans().get(0);
         when(workoutPlanRepository.findFirstByUserIdOrderByUploadTime(any(Long.class))).thenReturn(workoutPlanDB);
-        when(utils.getUser()).thenReturn(utilsTest.getUser());
+        when(utils.getLoggedUser()).thenReturn(utilsTest.getUser());
 
         // Test
         WorkoutPlan workoutPlan = assertDoesNotThrow(()-> workoutPlanService.getWorkoutPlan());
@@ -62,7 +62,7 @@ public class WorkoutPlanServiceTest {
         // Mock
         List<WorkoutPlan> workoutPlansDB = utilsTest.getWorkoutPlans();
         when(workoutPlanRepository.findByUserIdOrderByUploadTime(any(Long.class), any(Pageable.class))).thenReturn(new PageImpl<>(workoutPlansDB));
-        when(utils.getUser()).thenReturn(utilsTest.getUser());
+        when(utils.getLoggedUser()).thenReturn(utilsTest.getUser());
 
         // Test
         Page<WorkoutPlan> workoutPlans = assertDoesNotThrow(()-> workoutPlanService.getWorkoutPlans(0, 5));
@@ -84,7 +84,7 @@ public class WorkoutPlanServiceTest {
     @Test
     void saveFileSuccessful() throws UserException {
         // Mock
-        when(utils.getUser()).thenReturn(utilsTest.getUser());
+        when(utils.getLoggedUser()).thenReturn(utilsTest.getUser());
         when(filesStorageService.save(any(), any(String.class))).thenReturn("upload/");
         when(utils.getUserByUuid(anyString())).thenReturn(utilsTest.getUser());
         when(workoutPlanRepository.save(any())).then(returnsFirstArg());

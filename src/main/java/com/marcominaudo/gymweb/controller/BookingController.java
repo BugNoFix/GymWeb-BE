@@ -72,7 +72,7 @@ public class BookingController {
     public ResponseEntity<List<BookingDTO>> allCustomersBookingOfDay(@RequestBody BookingDTO bookingDTO) throws BookingException {
         LocalDateTime startTime = bookingDTO.getStartTime();
         long roomId = bookingDTO.getRoomId();
-        List<Booking> booking = bookingService.bookingInfo(roomId, startTime, Role.CUSTOMER); //TODO: test it
+        List<Booking> booking = bookingService.bookingInfo(roomId, startTime, Role.CUSTOMER);
         List<BookingDTO> bookingDTOs = booking.stream().map(b -> bookingMapper.toDTO(b)).toList();
         return new ResponseEntity<>(bookingDTOs, HttpStatus.OK);
     }

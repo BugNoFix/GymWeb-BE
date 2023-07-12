@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
 import java.util.List;
-@Component //TODO: Check remove component
+@Component
 @AllArgsConstructor
 @NoArgsConstructor
 public class BookingSearchPt implements BookingSearchStrategy {

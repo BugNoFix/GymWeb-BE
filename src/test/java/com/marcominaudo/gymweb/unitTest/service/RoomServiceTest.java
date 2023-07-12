@@ -31,14 +31,14 @@ public class RoomServiceTest {
 
     // --------- Create room ----------
     @Test
-    void roomExSizeNotValid() {
+    void roomThrowSizeNotValid() {
         Room room = new Room(1, "room 1", true, 0);
         RoomException thrown = assertThrows(RoomException.class, () -> roomService.createRoom(room));
         assertEquals(RoomException.ExceptionCodes.SIZE_NOT_VALID.name(), thrown.getMessage());
     }
 
     @Test
-    void roomExMissingName() {
+    void roomThrowMissingName() {
         Room room = new Room(1, null, true, 2);
         RoomException thrown = assertThrows(RoomException.class, () -> roomService.createRoom(room));
         assertEquals(RoomException.ExceptionCodes.MISSING_DATA.name(), thrown.getMessage());
@@ -54,7 +54,7 @@ public class RoomServiceTest {
 
     // --------- Room is valid ----------
     @Test
-    void roomExInactiveRoom() {
+    void roomThrowInactiveRoom() {
         // Mock
         Optional<Room> room = Optional.of( new Room(1, "room 1", false, 3));
         when(roomRepository.findById(any(Long.class))).thenReturn(room);

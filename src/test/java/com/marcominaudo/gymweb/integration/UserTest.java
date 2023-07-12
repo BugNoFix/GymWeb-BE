@@ -50,7 +50,7 @@ public class UserTest {
     }
 
     @Test
-    void registerExMissingRequiredValue(){
+    void registerThrowMissingRequiredValue(){
         // Missing surname
         User user = utilsTest.getUser();
         user.setSurname("");

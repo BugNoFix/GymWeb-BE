@@ -35,11 +35,11 @@ public class Booking {
 
     @ManyToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "userId", nullable = false)
-    User user;
+    private User user;
 
     @ManyToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "roomId", nullable = false)
-    Room room;
+    private Room room;
 
     @PrePersist
     public void prePersist() {

@@ -1,6 +1,5 @@
 package com.marcominaudo.gymweb.model;
 
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -9,7 +8,6 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
-import jakarta.persistence.ManyToOne;
 import jakarta.persistence.PrePersist;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -39,7 +37,7 @@ public class WorkoutPlan {
             name = "workoutPlan_user",
             joinColumns = @JoinColumn(name = "workoutPlanId"),
             inverseJoinColumns = @JoinColumn(name = "userId"))
-    List<User> user = new ArrayList<>();
+    private List<User> user = new ArrayList<>();
 
     @PrePersist
     public void prePersist() {

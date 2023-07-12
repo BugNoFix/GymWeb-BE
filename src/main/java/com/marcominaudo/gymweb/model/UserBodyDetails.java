@@ -43,7 +43,7 @@ public class UserBodyDetails {
 
     @ManyToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "userId", nullable = false)
-    User user;
+    private User user;
 
     @PrePersist
     public void prePersist() {

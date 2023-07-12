@@ -45,7 +45,7 @@ public class BookingService {
         bookingValid(booking.getStartTime(), booking.getEndTime(), idRoom);
         Booking newBooking = new BookingBuilder().builder()
                 .room(roomService.getRoom(idRoom))
-                .user(utils.getUser())
+                .user(utils.getLoggedUser())
                 .startTime(booking.getStartTime())
                 .endTime(booking.getEndTime())
                 .build();
@@ -94,7 +94,7 @@ public class BookingService {
             throw new BookingException(BookingException.ExceptionCodes.ROOM_IS_FULL, timeSlotFull);
 
         // Check if the user has a booking in the same period
-        User user = utils.getUser();
+        User user = utils.getLoggedUser();
         long bookingsOfUser = bookingRepository.findAllByUserIdAndBetweenBookingDate(user.getId(), startDate, endDate);
         if(bookingsOfUser > 0)
             throw new BookingException(BookingException.ExceptionCodes.USER_ALREADY_BOOKED);
@@ -127,24 +127,6 @@ public class BookingService {
             return bookingStrategyFactory.getStrategy(BookingSearchType.CUSTOMER).search(roomId, day);
         else
             return bookingStrategyFactory.getStrategy(BookingSearchType.PT).search(roomId, day);
-
-        //List<Booking> bookings = bookingRepository.findByRoomIdAndDay(roomId, day);
-        //List<Booking> bookingRole = bookings.stream().filter(b -> b.getUser().getRole() == role).toList();
-
-        // TODO: remove if not util
-        /*
-        List<Booking> bookingsInfo = new ArrayList<>();
-        bookingRole.forEach(b -> {
-            Booking booking = new BookingBuilder()
-                    .startTime(b.getStartTime())
-                    .endTime(b.getEndTime())
-                    .user(b.getUser())
-                    .build();
-            bookingsInfo.add(booking);
-        });
-
-         */
-        //return bookingRole;
     }
 
     public Page<Booking> bookingOfCustomer(String uuidCustomer, int size, int page, LocalDateTime day) throws UserException {

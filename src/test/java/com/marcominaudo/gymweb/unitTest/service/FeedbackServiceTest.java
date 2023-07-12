@@ -41,7 +41,7 @@ public class FeedbackServiceTest {
     // --------- Save Feedback ----------
     @Test
     // Case: User haven't a pt
-    void saveExMissingPt() {
+    void saveThrowMissingPt() {
         // Mock
         when(utils.getPtOfCustomer()).thenReturn(null);
 
@@ -52,7 +52,7 @@ public class FeedbackServiceTest {
 
     @Test
     // Case: Missing body feedback
-    void saveExMissingData() {
+    void saveThrowMissingData() {
         // Test
         FeedbackException thrown = assertThrows(FeedbackException.class, () -> feedbackService.save(null));
         assertEquals(FeedbackException.ExceptionCodes.MISSING_DATA.name(), thrown.getMessage());
@@ -64,7 +64,7 @@ public class FeedbackServiceTest {
         User pt = utilsTest.getPt("Mario", "rossi", "marioRossiPt@gymweb.com");
         User customer = utilsTest.getCustomer("Marco", "Minaudo", "marco.minaudo@gmail.com", true, pt);
         when(utils.getPtOfCustomer()).thenReturn(pt);
-        when(utils.getUser()).thenReturn(customer);
+        when(utils.getLoggedUser()).thenReturn(customer);
         when(feedbackRepository.save(any(Feedback.class))).then(returnsFirstArg());
 
         // Test
@@ -77,7 +77,7 @@ public class FeedbackServiceTest {
     // --------- Get all feedback ----------
     @Test
     // Case: Get feedback of user isn't a pt
-    void getsAllFeedbackOfPtExUserNotValid() throws UserException {
+    void getsAllFeedbackOfPtThrowUserNotValid() throws UserException {
         // Mock
         User customer = new User();
         customer.setRole(Role.CUSTOMER);
@@ -90,7 +90,7 @@ public class FeedbackServiceTest {
 
     @Test
         // Case: Get feedback of user isn't a pt
-    void getsAllFeedbackOfPtExMissingData() {
+    void getsAllFeedbackOfPtThrowMissingData() {
         // Test
         FeedbackException thrown = assertThrows(FeedbackException.class, () -> feedbackService.getsAllFeedbackOfPt(null, 0 ,5));
         assertEquals(FeedbackException.ExceptionCodes.MISSING_DATA.name(), thrown.getMessage());

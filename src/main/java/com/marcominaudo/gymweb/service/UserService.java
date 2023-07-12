@@ -36,7 +36,7 @@ public class UserService {
     private PasswordEncoder passwordEncoder;
 
     public User getUser(){
-        return utils.getUser();
+        return utils.getLoggedUser();
     }
 
     public User register(User user) throws InvalidRegisterException {
@@ -55,14 +55,14 @@ public class UserService {
     }
 
     public Page<UserBodyDetails> getBodyDetails(int page, int size) {
-        User user = utils.getUser();
+        User user = utils.getLoggedUser();
         long id = user.getId();
         Pageable pageSetting = PageRequest.of(page, size, Sort.by("uploadTime").descending());
         return userBodyDetailsRepository.findByUserId(id, pageSetting);
     }
 
     public UserBodyDetails setBodyDetails(UserBodyDetails userBodyDetails) throws BodyDetailsException {
-        User user = utils.getUser();
+        User user = utils.getLoggedUser();
         if(userBodyDetails.getBodyfat() < 0 || userBodyDetails.getChest() < 0 || userBodyDetails.getHeight() < 0 ||
         userBodyDetails.getShoulders() < 0 || userBodyDetails.getUpperArm() < 0 || userBodyDetails.getWaist() < 0 ||
         userBodyDetails.getWeight() < 0)
@@ -72,7 +72,7 @@ public class UserService {
     }
 
     public User setPrivacy(boolean value) {
-        User user = utils.getUser();
+        User user = utils.getLoggedUser();
         user.setPrivacy(value);
         return userRepository.save(user);
     }
