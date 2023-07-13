@@ -63,8 +63,11 @@ public class FileStorageServiceTest {
     // Case: directory non exist and IOEXCEPTION throwed for generic error
     void saveFileThrowFileNotSaved(){
         try (MockedStatic<Files> utilities = Mockito.mockStatic(Files.class)) {
+            // Mock
             utilities.when(() -> Files.exists(any(Path.class))).thenReturn(false);
             utilities.when(() -> Files.copy(any(Path.class), any(OutputStream.class))).thenThrow(new IOException());
+
+            // Test
             FileStorageException thrown = assertThrows(FileStorageException.class, () -> filesStorageService.save(null, "uuid"));
             assertEquals(FileStorageException.ExceptionCodes.FILE_NOT_SAVED.name(), thrown.getMessage());
 
@@ -74,8 +77,11 @@ public class FileStorageServiceTest {
     // Case: directory exist and IOEXCEPTION throwed for generic error
     void saveFileThrowFileNotSaved2(){
         try (MockedStatic<Files> utilities = Mockito.mockStatic(Files.class)) {
+            // Mock
             utilities.when(() -> Files.exists(any(Path.class))).thenReturn(true);
             utilities.when(() -> Files.copy(any(Path.class), any(OutputStream.class))).thenThrow(new IOException());
+
+            // Test
             FileStorageException thrown = assertThrows(FileStorageException.class, () -> filesStorageService.save(null, "uuid"));
             assertEquals(FileStorageException.ExceptionCodes.FILE_NOT_SAVED.name(), thrown.getMessage());
 
@@ -86,8 +92,11 @@ public class FileStorageServiceTest {
     // Case: directory not exist
     void saveFileSuccessful(){
         try (MockedStatic<Files> utilities = Mockito.mockStatic(Files.class)) {
+            // Mock
             utilities.when(() -> Files.exists(any(Path.class))).thenReturn(false);
             utilities.when(() -> Files.copy(any(Path.class), any(OutputStream.class))).thenReturn(1L);
+
+            // Test
             assertDoesNotThrow(() -> filesStorageService.save(multipartFile, "uuid"));
         }
     }
@@ -96,8 +105,11 @@ public class FileStorageServiceTest {
     // Case: directory exist
     void saveFileSuccessful2() {
         try (MockedStatic<Files> utilities = Mockito.mockStatic(Files.class)) {
+            // Mock
             utilities.when(() -> Files.exists(any(Path.class))).thenReturn(true);
             utilities.when(() -> Files.copy(any(Path.class), any(OutputStream.class))).thenReturn(1L);
+
+            // Test
             assertDoesNotThrow(() -> filesStorageService.save(multipartFile, "uuid"));
         }
     }
@@ -115,6 +127,7 @@ public class FileStorageServiceTest {
         try (MockedConstruction<UrlResource> mocked = mockConstruction(UrlResource.class, (mock, context) -> {
             when(mock).thenThrow(new FileStorageException(FileStorageException.ExceptionCodes.URI_INVALID));
         })) {
+            // Test
             FileStorageException thrown = assertThrows(FileStorageException.class, () -> filesStorageService.load("folder", "filename"));
             assertEquals(FileStorageException.ExceptionCodes.URI_INVALID.name(), thrown.getMessage());
         }
@@ -125,6 +138,7 @@ public class FileStorageServiceTest {
         try (MockedConstruction<UrlResource> mocked = mockConstruction(UrlResource.class, (mock, context) -> {
             when(mock.exists()).thenReturn(true);
         })) {
+            // Test
             assertDoesNotThrow(() -> filesStorageService.load("folder", "filename"));
         }
     }

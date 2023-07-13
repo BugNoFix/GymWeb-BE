@@ -8,7 +8,9 @@ public class UserException extends MyCustomException{
     @Getter
     public enum ExceptionCodes {
         USER_NOT_FOUND(HttpStatus.NOT_FOUND),
+
         USER_NOT_ENABLE(HttpStatus.FORBIDDEN);
+
         private final HttpStatus httpStatus;
 
         ExceptionCodes(HttpStatus httpStatus) {

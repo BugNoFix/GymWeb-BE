@@ -34,7 +34,7 @@ public class FeedbackMapper {
 
     public SearchFeedbackDTO toDTO(Page<Feedback> searchInfo){
         SearchFeedbackDTO searchFeedbackDTO = new SearchFeedbackDTO();
-        List<FeedbackDTO> feedbacks = searchInfo.getContent().stream().map(this::toDTO).toList();
+        List<FeedbackDTO> feedbacks = searchInfo.getContent().stream().map(this::toDTO).toList(); // Convert each feedback in feedbackDTO
 
         searchFeedbackDTO.setFeedbacks(feedbacks);
         searchFeedbackDTO.setTotalPages(searchInfo.getTotalPages());

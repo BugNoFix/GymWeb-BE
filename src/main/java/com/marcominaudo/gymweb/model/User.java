@@ -62,11 +62,6 @@ public class User implements UserDetails {
     @Enumerated(EnumType.STRING)
     private Role role;
 
-    // Un personal trainer ha piu clienti
-    //@OneToMany
-    //List<User> customers = new ArrayList<>();
-
-    //Piu clienti hanno un solo pt
     @ManyToOne
     @JoinColumn(name = "pt_id")
     private User pt;

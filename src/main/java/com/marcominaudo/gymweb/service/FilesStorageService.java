@@ -18,6 +18,7 @@ public class FilesStorageService {
     private final Path root = Paths.get("uploads");
 
     @SneakyThrows
+    // Create directory if not exist
     public void init(Path directory) {
         try {
             Files.createDirectories(directory);

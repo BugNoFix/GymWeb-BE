@@ -37,6 +37,7 @@ public class BookingBuilder {
         this.startTime = startTime;
         return this;
     }
+
     public BookingBuilder user(User user){
         this.user = user;
         return this;

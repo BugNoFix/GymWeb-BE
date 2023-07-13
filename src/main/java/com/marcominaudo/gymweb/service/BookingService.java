@@ -39,8 +39,6 @@ public class BookingService {
     @Autowired
     BookingRepository bookingRepository;
 
-
-
     public Booking newBooking(Booking booking, long idRoom) throws BookingException, RoomException {
         bookingValid(booking.getStartTime(), booking.getEndTime(), idRoom);
         Booking newBooking = new BookingBuilder().builder()
@@ -57,7 +55,7 @@ public class BookingService {
         if(startDate == null || endDate == null)
             throw new BookingException(MISSING_DATA);
 
-        // Check id date is valis
+        // Check id date is valid
         if(startDate.isAfter(endDate) || startDate.isBefore(LocalDateTime.now()))
             throw new BookingException(BookingException.ExceptionCodes.INVALID_DATE_RANGE);
 
@@ -67,16 +65,14 @@ public class BookingService {
         if(startMinute % 15 != 0 || endMinute % 15 != 0)
             throw new BookingException(BookingException.ExceptionCodes.INVALID_TIME_RANGE);
 
-        // Check is room is valid
+        // Check if room is valid
         roomService.roomIsValid(roomId);
 
         // Get room
         Room room = roomService.getRoom(roomId);
 
-        // Check if the number of user is greater of room size
-        //TODO: potrebbe non andare per i casi particolari
+        // Get bookings for check if the number of user is greater of room size
         List<Booking> bookings = bookingRepository.findAllBetweenBookingDate(startDate, endDate, roomId);
-
         // Create map for count number of user booked in one slot time (15 minutes)
         Map<LocalDateTime, Integer> slots = new HashMap<>();
         int customers;
@@ -120,6 +116,7 @@ public class BookingService {
     @Autowired
     BookingStrategyFactory bookingStrategyFactory;
 
+    //Get user booked in one day
     public List<Booking> bookingInfo(long roomId, LocalDateTime startDatetime, LocalDateTime endDatetime, Role roleSearch) throws BookingException {
         if (startDatetime == null || endDatetime == null)
             throw new BookingException(MISSING_DATA);

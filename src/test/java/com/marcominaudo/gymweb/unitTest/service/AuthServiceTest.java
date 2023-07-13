@@ -7,7 +7,6 @@ import com.marcominaudo.gymweb.model.User;
 import com.marcominaudo.gymweb.repository.UserRepository;
 import com.marcominaudo.gymweb.security.jwt.JWTUtil;
 import com.marcominaudo.gymweb.security.service.AuthService;
-import com.marcominaudo.gymweb.service.Utils;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -38,13 +37,11 @@ public class AuthServiceTest {
     @Mock
     AuthenticationManager authenticationManager;
 
-    @Mock
-    Utils utils;
-
     @InjectMocks
     AuthService authService;
 
     UtilsTest utilsTest = new UtilsTest();
+
     @Test
     void loginThrowUserNotEnable(){
         // Mock

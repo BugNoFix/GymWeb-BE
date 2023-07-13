@@ -64,10 +64,11 @@ public class UserService {
     public UserBodyDetails setBodyDetails(UserBodyDetails userBodyDetails) throws BodyDetailsException {
         User user = utils.getLoggedUser();
         if(userBodyDetails.getBodyfat() < 0 || userBodyDetails.getChest() < 0 || userBodyDetails.getHeight() < 0 ||
-        userBodyDetails.getShoulders() < 0 || userBodyDetails.getUpperArm() < 0 || userBodyDetails.getWaist() < 0 ||
-        userBodyDetails.getWeight() < 0)
+            userBodyDetails.getShoulders() < 0 || userBodyDetails.getUpperArm() < 0 || userBodyDetails.getWaist() < 0 ||
+            userBodyDetails.getWeight() < 0) {
             throw new BodyDetailsException(BodyDetailsException.ExceptionCodes.DATA_NOT_VALID);
-            userBodyDetails.setUser(user);
+        }
+        userBodyDetails.setUser(user);
         return userBodyDetailsRepository.save(userBodyDetails);
     }
 
@@ -123,7 +124,6 @@ public class UserService {
         Pageable pageSetting = PageRequest.of(page, size);
         return userRepository.findAll(pageSetting);
     }
-
 
     public Page<User> getAllPt(int page, int size) {
         Pageable pageSetting = PageRequest.of(page, size);

@@ -34,7 +34,6 @@ public class AuthController {
     @Autowired
     JWTUtil jwtUtil;
 
-
     @PostMapping(value = "/login", produces = "application/json")
     public ResponseEntity<LoginResponseDTO> login(@RequestBody RequestDTO requestDTO) throws UserException, InvalidRegisterException {
         User user = securityMapper.toUser(requestDTO);

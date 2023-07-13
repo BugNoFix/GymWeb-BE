@@ -23,6 +23,7 @@ public class WorkoutPlanBuilder {
         this.id = id;
         return this;
     }
+
     public WorkoutPlanBuilder path(String path){
         this.path = path;
         return this;

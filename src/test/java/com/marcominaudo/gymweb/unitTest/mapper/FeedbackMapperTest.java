@@ -51,13 +51,16 @@ public class FeedbackMapperTest {
 
     @Test
     void toDTOPage(){
+        // Data
         ArrayList<Feedback> feedbacks = new ArrayList<>();
         feedbacks.add(new Feedback());
         feedbacks.add(new Feedback());
 
+        //Mapping to dto
         Page<Feedback> page = new PageImpl<>(feedbacks);
         SearchFeedbackDTO searchFeedbackDTO = feedbackMapper.toDTO(page);
 
+        // Test
         assertEquals(1, searchFeedbackDTO.getTotalPages());
         assertEquals(2, searchFeedbackDTO.getTotalElements());
     }

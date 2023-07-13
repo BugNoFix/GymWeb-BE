@@ -94,13 +94,16 @@ public class UserMapperTest {
     @Test
     // Case: toDTO(Page<User>)
     void toDTOPage(){
+        // Data
         ArrayList<User> users = new ArrayList<>();
         users.add(utilsTest.getUser());
         users.add(utilsTest.getUser());
 
+        // Convert to DTO
         Page<User> page = new PageImpl<>(users);
         SearchUserDTO searchUserDTO = userMapper.toDTO(page);
 
+        // Test
         assertEquals(1 ,searchUserDTO.getTotalPages());
         assertEquals(2 ,searchUserDTO.getTotalElements());
     }

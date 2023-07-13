@@ -36,7 +36,6 @@ public class Feedback {
             name = "feedback_user",
             joinColumns = @JoinColumn(name = "feedbackId"),
             inverseJoinColumns = @JoinColumn(name = "userId"))
-    //@JoinColumn(name = "userId", nullable = false)
     private List<User> users;
 
     @PrePersist

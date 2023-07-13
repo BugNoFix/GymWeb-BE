@@ -55,13 +55,16 @@ public class BodyDetailsMapperTest {
 
     @Test
     void toDTOPage(){
+        // Data
         ArrayList<UserBodyDetails> userBodyDetailsList = new ArrayList<>();
         userBodyDetailsList.add(new UserBodyDetails());
         userBodyDetailsList.add(new UserBodyDetails());
 
+        // Mapping to dto
         Page<UserBodyDetails> page = new PageImpl<>(userBodyDetailsList);
         SearchUserBodyDetailsDTO searchUserBodyDetailsDTO = bodyDetailsMapper.toDTO(page);
 
+        // Test
         assertEquals(1 ,searchUserBodyDetailsDTO.getTotalPages());
         assertEquals(2 ,searchUserBodyDetailsDTO.getTotalElements());
     }

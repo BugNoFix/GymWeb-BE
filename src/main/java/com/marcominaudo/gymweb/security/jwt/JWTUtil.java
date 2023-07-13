@@ -9,12 +9,8 @@ import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.UnsupportedJwtException;
 import io.jsonwebtoken.security.Keys;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
-import org.springframework.web.servlet.HandlerExceptionResolver;
 
 import java.security.Key;
 import java.util.Date;
@@ -28,7 +24,6 @@ public class JWTUtil {
     private String secretKey;
     @Value("${application.security.jwt.expiration}")
     private long jwtExpiration;
-
 
     private Claims extractAllClaims(String token) {
         return Jwts

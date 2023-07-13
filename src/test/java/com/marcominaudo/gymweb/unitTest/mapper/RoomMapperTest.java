@@ -40,13 +40,16 @@ public class RoomMapperTest {
 
     @Test
     void toDTOPage(){
+        // Data
         ArrayList<Room> rooms = new ArrayList<>();
         rooms.add(new Room());
         rooms.add(new Room());
 
+        // Mapping to dto
         Page<Room> page = new PageImpl<>(rooms);
         SearchRoomDTO searchRoomDTO = roomMapper.toDTO(page);
 
+        // Test
         assertEquals(1, searchRoomDTO.getTotalPages());
         assertEquals(2, searchRoomDTO.getTotalElements());
     }

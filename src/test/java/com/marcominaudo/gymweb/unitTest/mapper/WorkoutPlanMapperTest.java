@@ -47,13 +47,16 @@ public class WorkoutPlanMapperTest {
 
     @Test
     void toDTOPage(){
+        // Data
         ArrayList<WorkoutPlan> workoutPlans = new ArrayList<>();
         workoutPlans.add(new WorkoutPlan());
         workoutPlans.add(new WorkoutPlan());
 
+        // Mapping to dto
         Page<WorkoutPlan> page = new PageImpl<>(workoutPlans);
         SearchWorkoutPlansDTO searchWorkoutPlansDTO = workoutPlanMapper.toDTO(page);
 
+        // Test
         assertEquals(1, searchWorkoutPlansDTO.getTotalPages());
         assertEquals(2, searchWorkoutPlansDTO.getTotalElements());
     }

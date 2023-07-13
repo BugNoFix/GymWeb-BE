@@ -12,6 +12,7 @@ public class FeedbackException extends MyCustomException{
         PT_MISSING(HttpStatus.FORBIDDEN),
 
         MISSING_DATA(HttpStatus.BAD_REQUEST);
+
         private final HttpStatus httpStatus;
 
         ExceptionCodes(HttpStatus httpStatus) {

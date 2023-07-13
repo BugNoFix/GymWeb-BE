@@ -286,7 +286,6 @@ public class UserServiceTest {
         when(utils.getUserByUuid(any(String.class))).thenReturn(userBeforeUpdate);
         when(userRepository.save(any(User.class))).then(returnsFirstArg());
 
-
         // Change SubscriptionStart
         User userChanges =  new User();
         userChanges.setSubscriptionEnd(LocalDate.now().plusMonths(-1));

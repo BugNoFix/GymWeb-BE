@@ -34,7 +34,6 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-//Path coverage
 public class BookingServiceTest {
 
     @Mock
@@ -52,8 +51,8 @@ public class BookingServiceTest {
     @InjectMocks
     BookingService bookingService;
 
-
     LocalDateTime today = LocalDateTime.now().plusYears(1).withHour(6).withMinute(0);
+
     UtilsTest utilsTest = new UtilsTest(today);
 
     // --------- New Booking ----------
@@ -110,9 +109,11 @@ public class BookingServiceTest {
         // Room mock
         when(roomService.getRoom(any(Long.class))).thenReturn(utilsTest.getRoom("crossfit", true));
         when(roomService.roomIsValid(any(Long.class))).thenReturn(true);
+
         // Booking repository mock
         when(bookingRepository.findAllBetweenBookingDate(any(LocalDateTime.class), any(LocalDateTime.class), any(Long.class)))
                 .thenReturn(utilsTest.get3Booking());
+
 
         // Test: Room is full
         Booking booking = utilsTest.getBooking(0, 30, utilsTest.getUser());
@@ -148,12 +149,11 @@ public class BookingServiceTest {
         bookings.get(0).getUser().setRole(Role.PT);
         bookings.get(1).getUser().setRole(Role.PT);
         bookings.get(1).getUser().setRole(Role.PT);
-        when(bookingRepository.findPtByRoomIdAndDay(any(Long.class), any(LocalDateTime.class))).thenReturn(bookings);
+        when(bookingRepository.findPtByRoomIdAndDay(any(Long.class), any(LocalDateTime.class), any(LocalDateTime.class))).thenReturn(bookings);
         when(bookingStrategyFactory.getStrategy(any())).thenReturn(new BookingSearchPt(bookingRepository));
 
-
         // Test: get all booking of pt
-        List<Booking> result = assertDoesNotThrow(() -> bookingService.bookingInfo(1, LocalDateTime.now(), Role.CUSTOMER));
+        List<Booking> result = assertDoesNotThrow(() -> bookingService.bookingInfo(1, LocalDateTime.now(), LocalDateTime.now().plusMinutes(30), Role.CUSTOMER));
         assertEquals(3, result.size());
     }
 
@@ -166,7 +166,7 @@ public class BookingServiceTest {
         bookings.get(2).getUser().setRole(Role.CUSTOMER);
 
         // Test: get all booking of pt
-        BookingException thrown = assertThrows(BookingException.class, () -> bookingService.bookingInfo(1, null, Role.PT));
+        BookingException thrown = assertThrows(BookingException.class, () -> bookingService.bookingInfo(1, null, null, Role.PT));
         assertEquals(BookingException.ExceptionCodes.MISSING_DATA.name(), thrown.getMessage());
 
     }
@@ -178,12 +178,11 @@ public class BookingServiceTest {
         bookings.get(0).getUser().setRole(Role.CUSTOMER);
         bookings.get(1).getUser().setRole(Role.CUSTOMER);
         bookings.get(2).getUser().setRole(Role.CUSTOMER);
-        when(bookingRepository.findCustomerByRoomIdAndDay(any(Long.class), any(LocalDateTime.class))).thenReturn(bookings);
+        when(bookingRepository.findCustomerByRoomIdAndDay(any(Long.class), any(LocalDateTime.class), any(LocalDateTime.class))).thenReturn(bookings);
         when(bookingStrategyFactory.getStrategy(any())).thenReturn(new BookingSearchCustomer(bookingRepository));
 
-
         // Test: get all booking of customer
-        List<Booking> result = assertDoesNotThrow(() -> bookingService.bookingInfo(1, LocalDateTime.now(), Role.PT));
+        List<Booking> result = assertDoesNotThrow(() -> bookingService.bookingInfo(1, LocalDateTime.now(), LocalDateTime.now().plusMinutes(30), Role.PT));
         assertEquals(3, result.size());
     }
     // ----------------------------------------

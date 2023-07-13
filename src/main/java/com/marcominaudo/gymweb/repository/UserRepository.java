@@ -15,7 +15,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
     @Query("SELECT u FROM User u WHERE u.id = :customerId")
     User findCustomerById(long customerId);
 
-    //@Query("SELECT u FROM User u join fetch u.pt WHERE u.pt.id = :ptId") JPQL
     @Query(value = "SELECT u.* FROM User u inner join User pt on pt.id = u.pt_id WHERE pt.id = :ptId", nativeQuery = true)
     Page<User> findCustomersByPtId(long ptId, Pageable pageSetting);
 

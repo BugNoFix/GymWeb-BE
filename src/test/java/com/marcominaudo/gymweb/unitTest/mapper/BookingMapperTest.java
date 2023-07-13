@@ -69,13 +69,16 @@ public class BookingMapperTest {
 
     @Test
     void toDTOPage(){
+        // Data
         ArrayList<Booking> bookings = new ArrayList<>();
         bookings.add(new Booking());
         bookings.add(new Booking());
 
+        // Mapping to dto
         Page<Booking> page = new PageImpl<>(bookings);
         SearchBookingDTO searchBookingDTO = bookingMapper.toDTO(page);
 
+        // Test
         assertEquals(1 ,searchBookingDTO.getTotalPages());
         assertEquals(2 ,searchBookingDTO.getTotalElements());
     }

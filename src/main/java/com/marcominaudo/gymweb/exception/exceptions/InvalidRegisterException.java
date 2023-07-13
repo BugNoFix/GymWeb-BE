@@ -8,9 +8,13 @@ public class InvalidRegisterException extends MyCustomException{
     @Getter
     public enum ExceptionCodes {
         USER_ALREADY_EXIST(HttpStatus.BAD_REQUEST),
+
         MISSING_REQUIRED_VALUE(HttpStatus.BAD_REQUEST),
+
         EMAIL_INVALID(HttpStatus.BAD_REQUEST),
+
         BAD_CREDENTIALS(HttpStatus.UNAUTHORIZED);
+
         private final HttpStatus httpStatus;
 
         ExceptionCodes(HttpStatus httpStatus) {

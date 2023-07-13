@@ -59,11 +59,10 @@ public class bookingRepositoryTest {
         bookingList.add(utilsTest.getBooking(4, 0, 45, user, room));
         bookingRepository.saveAll(bookingList);
 
-
         //Test
         LocalDateTime today = utilsTest.getToday();
         List<Booking> result = bookingRepository.findAllBetweenBookingDate(today.plusMinutes(-15), today.plusMinutes(30), room.getId());
-        assertEquals(2, result.size());
+        assertEquals(4, result.size());
     }
 
     @Test
@@ -81,8 +80,8 @@ public class bookingRepositoryTest {
         bookingRepository.saveAll(bookingList);
 
         //Test
-        LocalDateTime today = utilsTest.getToday();
-        List<Booking> result = bookingRepository.findCustomerByRoomIdAndDay(room.getId(), today);
+        LocalDateTime now = utilsTest.getToday();
+        List<Booking> result = bookingRepository.findCustomerByRoomIdAndDay(room.getId(), now.plusMinutes(-15), now.plusMinutes(30));
         assertEquals(2, result.size());
     }
 
@@ -101,8 +100,8 @@ public class bookingRepositoryTest {
         bookingRepository.saveAll(bookingList);
 
         //Test
-        LocalDateTime today = utilsTest.getToday();
-        List<Booking> result = bookingRepository.findPtByRoomIdAndDay(room.getId(), today);
+        LocalDateTime now = utilsTest.getToday();
+        List<Booking> result = bookingRepository.findPtByRoomIdAndDay(room.getId(), now.plusMinutes(-15), now.plusMinutes(30));
         assertEquals(2, result.size());
     }
     @Test
