@@ -59,5 +59,6 @@ public class WorkoutPlanMapperTest {
         // Test
         assertEquals(1, searchWorkoutPlansDTO.getTotalPages());
         assertEquals(2, searchWorkoutPlansDTO.getTotalElements());
+        assertEquals(2, searchWorkoutPlansDTO.getWorkoutPlans().size());
     }
 }

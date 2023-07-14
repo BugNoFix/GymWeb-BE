@@ -81,6 +81,7 @@ public class BookingMapperTest {
         // Test
         assertEquals(1 ,searchBookingDTO.getTotalPages());
         assertEquals(2 ,searchBookingDTO.getTotalElements());
+        assertEquals(2 ,searchBookingDTO.getBookings().size());
     }
 
     @Test

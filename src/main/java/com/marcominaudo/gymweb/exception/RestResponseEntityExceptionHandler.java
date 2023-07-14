@@ -24,13 +24,13 @@ public class RestResponseEntityExceptionHandler {
     @ExceptionHandler({JWTException.class, FeedbackException.class, InvalidRegisterException.class, RoomException.class, UserException.class, FeedbackException.class, BodyDetailsException.class, Exception.class})
     public ResponseEntity<ErrorMessage> exceptions(MyCustomException ex){
         ErrorMessage errorMessage = createErrorMessage(ex);
-        return new ResponseEntity<>(errorMessage, HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(errorMessage, ex.getHttpStatusCode());
     }
 
     @ExceptionHandler({BookingException.class})
     public ResponseEntity<ErrorMessage> exceptionsBooking(BookingException ex){
         ErrorMessage errorMessage = createErrorMessage(ex, ex.getSlotsTime(), HttpStatus.BAD_REQUEST);
-        return new ResponseEntity<>(errorMessage, HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(errorMessage, ex.getHttpStatusCode());
     }
 
 

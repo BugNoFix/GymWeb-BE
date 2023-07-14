@@ -106,6 +106,7 @@ public class UserMapperTest {
         // Test
         assertEquals(1 ,searchUserDTO.getTotalPages());
         assertEquals(2 ,searchUserDTO.getTotalElements());
+        assertEquals(2 ,searchUserDTO.getUsers().size());
     }
 
     @Test
@@ -137,5 +138,6 @@ public class UserMapperTest {
         assertEquals(privacy, user.getPrivacy());
         assertEquals(Role.CUSTOMER, user.getRole());
         assertEquals(isActive, user.getIsActive());
+        assertEquals(null, user.getUuid());
     }
 }

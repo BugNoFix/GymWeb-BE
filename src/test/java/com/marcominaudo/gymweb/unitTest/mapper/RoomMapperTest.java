@@ -52,6 +52,7 @@ public class RoomMapperTest {
         // Test
         assertEquals(1, searchRoomDTO.getTotalPages());
         assertEquals(2, searchRoomDTO.getTotalElements());
+        assertEquals(2, searchRoomDTO.getRooms().size());
     }
 
     @Test

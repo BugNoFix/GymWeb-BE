@@ -63,5 +63,6 @@ public class FeedbackMapperTest {
         // Test
         assertEquals(1, searchFeedbackDTO.getTotalPages());
         assertEquals(2, searchFeedbackDTO.getTotalElements());
+        assertEquals(2, searchFeedbackDTO.getFeedbacks().size());
     }
 }

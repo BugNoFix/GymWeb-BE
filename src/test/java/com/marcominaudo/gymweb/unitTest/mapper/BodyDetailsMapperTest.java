@@ -67,6 +67,7 @@ public class BodyDetailsMapperTest {
         // Test
         assertEquals(1 ,searchUserBodyDetailsDTO.getTotalPages());
         assertEquals(2 ,searchUserBodyDetailsDTO.getTotalElements());
+        assertEquals(2 ,searchUserBodyDetailsDTO.getUserBodyDetails().size());
     }
 
     @Test

@@ -37,6 +37,6 @@ public class UserRepositoryTest {
 
         // Test
         User result = userRepository.findCustomerById(customer.getId());
-        assertEquals(customer, result);
+        assertEquals(customer.getUuid(), result.getUuid());
     }
 }

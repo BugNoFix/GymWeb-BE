@@ -9,6 +9,8 @@ import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.UnsupportedJwtException;
 import io.jsonwebtoken.security.Keys;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -19,6 +21,8 @@ import java.util.Map;
 import java.util.function.Function;
 
 @Component
+@AllArgsConstructor
+@NoArgsConstructor
 public class JWTUtil {
     @Value("${application.security.jwt.secret-key}")
     private String secretKey;
@@ -44,9 +48,12 @@ public class JWTUtil {
         return extractClaim(token, Claims::getSubject);
     }
 
+    /*
     private boolean isTokenExpired(String token) {
         return extractClaim(token, Claims::getExpiration).before(new Date());
     }
+
+     */
 
     public String generateToken(User user) {
         Map<String, Object> extraClaims = new HashMap<>();

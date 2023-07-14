@@ -82,7 +82,7 @@ public class UserService {
         User user = utils.getUserByUuid(uuid);
         if(BooleanUtils.isFalse(user.getPrivacy()))
             throw new BodyDetailsException(BodyDetailsException.ExceptionCodes.PRIVACY_NOT_ENABLED);
-        Pageable pageSetting = PageRequest.of(page, size);
+        Pageable pageSetting = PageRequest.of(page, size, Sort.by("uploadTime").descending());
         return userBodyDetailsRepository.findByUserId(user.getId(), pageSetting);
     }
 

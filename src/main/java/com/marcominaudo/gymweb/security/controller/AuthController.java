@@ -43,17 +43,17 @@ public class AuthController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
+    /*
     @FreeAccess
     @GetMapping ("/validateToken/{token}")
     public ResponseEntity<Boolean> validateToken(@PathVariable("token") String token){
-        boolean response;
         try{
             jwtUtil.isTokenValid(token);
-            response = true;
+            return new ResponseEntity<>(true, HttpStatus.OK);
         }
         catch (JWTException e){
-            response = false;
+            return new ResponseEntity<>(false, HttpStatus.OK);
         }
-        return new ResponseEntity<>(response, HttpStatus.OK);
     }
+    */
 }
