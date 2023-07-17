@@ -39,6 +39,9 @@ public class BookingService {
     @Autowired
     BookingRepository bookingRepository;
 
+    @Autowired
+    BookingStrategyFactory bookingStrategyFactory;
+
     public Booking newBooking(Booking booking, long idRoom) throws BookingException, RoomException {
         bookingValid(booking.getStartTime(), booking.getEndTime(), idRoom);
         Booking newBooking = new BookingBuilder().builder()
@@ -113,8 +116,6 @@ public class BookingService {
         return false;
     }
 
-    @Autowired
-    BookingStrategyFactory bookingStrategyFactory;
 
     //Get user booked in one day
     public List<Booking> bookingInfo(long roomId, LocalDateTime startDatetime, LocalDateTime endDatetime, Role roleSearch) throws BookingException {

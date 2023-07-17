@@ -33,9 +33,9 @@ public class FilesStorageService {
         Path pathDirectory = root.resolve(uuid);
         Path pathFile = pathDirectory.resolve(fileName);
         if(!Files.exists(pathDirectory))
-            init(pathDirectory);
+            init(pathDirectory); // Create directory
         try {
-            Files.copy(file.getInputStream(), pathFile);
+            Files.copy(file.getInputStream(), pathFile); // Save
         } catch (Exception e) {
             throw new FileStorageException(FileStorageException.ExceptionCodes.FILE_NOT_SAVED);
         }
@@ -48,7 +48,7 @@ public class FilesStorageService {
         Path completePath = root.resolve(folderNamePath);
         Resource resource = null;
         try {
-            resource = new UrlResource(completePath.toUri());
+            resource = new UrlResource(completePath.toUri()); // Load file
         }
         catch (Exception e){
             throw new FileStorageException(FileStorageException.ExceptionCodes.URI_INVALID);
