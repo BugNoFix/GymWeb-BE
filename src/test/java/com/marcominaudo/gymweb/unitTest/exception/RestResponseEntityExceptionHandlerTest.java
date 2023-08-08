@@ -26,9 +26,11 @@ public class RestResponseEntityExceptionHandlerTest {
 
     @Test
     void ThrowBookingException(){
+        // Data
         List<LocalDateTime> slotsTime = new ArrayList<>();
         slotsTime.add(LocalDateTime.now());
 
+        // Logic
         BookingException bookingException = new BookingException(BookingException.ExceptionCodes.ROOM_IS_FULL, slotsTime);
         ResponseEntity<ErrorMessage> response = restResponseEntityExceptionHandler.exceptionsBooking(bookingException);
 
